@@ -1,0 +1,284 @@
+html,
+body {
+    height: 100%;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.wrap > .container {
+    padding: 70px 15px 20px;
+}
+
+.footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+/* align the logout "link" (button in form) of the navbar */
+.nav li > form > button.logout {
+    padding: 15px;
+    border: none;
+}
+
+@media(max-width:767px) {
+    .nav li > form > button.logout {
+        display:block;
+        text-align: left;
+        width: 100%;
+        padding: 10px 15px;
+    }
+}
+
+.nav > li > form > button.logout:focus,
+.nav > li > form > button.logout:hover {
+    text-decoration: none;
+}
+
+.nav > li > form > button.logout:focus {
+    outline: none;
+}
+
+/********************************************************************************************************************************/
+
+/*Color blanco de main header*/
+.skin-blue .main-header .logo {
+    background-color: #9D9D9D !important;
+}
+.skin-blue .main-header .navbar {
+    background-color: white !important;
+}
+.skin-blue .main-header .navbar .nav>li>a {
+    color: grey !important;
+}
+.skin-blue .main-header .navbar .sidebar-toggle {
+    color: grey !important;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+    background-color: white !important;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+    color: grey !important;
+}
+
+
+
+/*Menu izquierda:*/
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    color: white !important;
+    background-color: #F7931E;
+}
+
+.nav-stacked>li.active>a, .nav-stacked>li.active>a:hover {
+    background: #F7931E !important;
+    border-left-color: #F7931E !important;
+}
+        
+    .main-sidebar{
+         background-color: white !important;
+     }
+     
+     .skin-blue .sidebar-menu>li.header {
+        color: white !important;
+        background: #eea236 !important;
+        text-align: center !important;
+    }
+
+
+
+
+    /*Efecto zoom en la imagen*/
+       .zoom{
+            /* Aumentamos la anchura y altura durante 2 segundos */
+            transition: width 2s, height 2s, transform 2s;
+            -moz-transition: width 2s, height 2s, -moz-transform 2s;
+            -webkit-transition: width 2s, height 2s, -webkit-transform 2s;
+            -o-transition: width 2s, height 2s,-o-transform 2s;
+        }
+    .zoom:hover{
+        /* tranformamos el elemento al pasar el mouse por encima al doble de
+           su tamaño con scale(2). */
+        transform : scale(2);
+        -moz-transform : scale(2);      /* Firefox */
+        -webkit-transform : scale(2);   /* Chrome - Safari */
+        -o-transform : scale(2);        /* Opera */
+        }
+
+     
+     /*Color negro de texto*/
+    .skin-blue .sidebar a {
+        color: black !important;
+    }
+    
+    .skin-blue .sidebar a:hover {
+        color: #eea236 !important;
+         background-color: white !important;
+    }
+    
+    .skin-blue .treeview-menu>li>a {
+        color: black !important;
+    }
+    
+    .skin-blue .treeview-menu>li>a:hover {
+         color: #eea236 !important;
+         background-color: white !important;
+    }
+    
+    .skin-blue .sidebar-menu>li>.treeview-menu {
+        background: white !important;
+    }
+    
+    .skin-blue .sidebar-menu>li.active>a {
+        color: white;
+        background: #eea236 !important;
+    }
+    
+    skin-blue .sidebar a:active {
+     color: transparent !important; 
+}
+
+/*//Colores caracteristicos del sitio*/
+.texto_tomate{
+    color: #F7931E;
+}
+
+.seccion_tomate{
+    background-color: #F7931E;
+    color: white;
+    padding: 10px 10px;
+    font-size: 20px;
+}
+
+    .sombra {
+-webkit-box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
+-moz-box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
+box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
+    } 
+    
+        hr {
+        border-top: 1px solid #FF5515;
+    }
+    
+        .content-header{
+        display:none;
+    }
+    
+    
+/****************************Cajas de texto index********************************/
+
+.historial, .asesoria, .saldo, .cuenta{
+    width: 345px;
+    height:150px; 
+    padding: 10px 10px;
+    margin: 15px 15px;    
+    /*border: solid 1px red;*/  
+}
+
+.promociones{
+    width: 345px;
+    height:325px; 
+    padding: 5px 5px;
+     margin: 15px 15px;  
+    /*border: solid 1px blue;*/  
+}
+
+.historial{
+    background-color: #FEF7F1; 
+}
+
+.asesoria{
+    background-color: #FEEFE3;
+}
+
+.saldo{
+    background-color: #FEE9D9;
+}
+
+.cuenta{
+    background-color: #FDE4D0;
+}
+
+.iconos{
+    margin-top:20px;
+    font-size: 50px !important;
+    color: #F7931E;
+}
+
+/*.logo{
+    background-color: grey !important;
+}*/
