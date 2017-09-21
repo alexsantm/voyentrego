@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    font-family: Exo, sans-serif !important; 
 }
 
 .wrap {
@@ -115,10 +116,31 @@ a.desc:after {
 }
 
 /********************************************************************************************************************************/
+/********************************************************************************************************************************/
+/********************************************************************************************************************************/
+/********************************************************************************************************************************/
+/********************************************************************************************************************************/
+/********************************************************************************************************************************/
 
-/*Color blanco de main header*/
+/*Content pegado al sitio, y contenedor Principal con padding*/
+
+.content {    
+    padding: 1px 1px !important;
+}
+.contenedor_principal {    
+    padding: 15px 15px !important;
+    margin-left:10px;
+}
+
+
+
+.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
+    background-color: white !important;
+}
+
+/**************************************Color blanco de main header************************************/
 .skin-blue .main-header .logo {
-    background-color: #9D9D9D !important;
+    background-color: white !important;
 }
 .skin-blue .main-header .navbar {
     background-color: white !important;
@@ -136,7 +158,35 @@ a.desc:after {
     color: grey !important;
 }
 
+/*Icono circular con foto parte superior derecha*/
+.navbar-nav>.user-menu .user-image {
+    border: solid 1px #AAB5B1 !important;
+}
 
+.skin-blue .main-header .navbar {       /*Sombreado borde izquierdo de header*/
+    -webkit-box-shadow: inset 10px 10px 5px 0px rgba(102,102,102,1);
+    -moz-box-shadow: inset 10px 10px 5px 0px rgba(102,102,102,1);
+    box-shadow: inset 3px 0px 0px 0px rgba(0,0,0,0.15);
+    border-radius: 1px;
+}
+
+    .main-header > a{       /*Sombreado caja que alberga logo*/
+    -webkit-box-shadow: 0px 1px 34px 6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 1px 34px 6px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.15);
+    z-index: 9999999;
+    }
+
+    
+/*Header de usuario*/    
+.skin-blue .main-header li.user-header {
+    background-color: #F7931E !important;
+}
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header {
+    height: 135px !important;
+}
+    
+/**************************************Fin Color blanco de main header************************************/    
 
 /*Menu izquierda:*/
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
@@ -158,9 +208,14 @@ a.desc:after {
         background: #eea236 !important;
         text-align: center !important;
     }
-
-
-
+    /*Centrar glypicon*/
+    .fa {    
+       display: block !important;
+       padding: 10px 1px;
+        margin: 0 auto !important;
+    }
+    
+    
 
     /*Efecto zoom en la imagen*/
        .zoom{
@@ -179,24 +234,41 @@ a.desc:after {
         -o-transform : scale(2);        /* Opera */
         }
 
+    /*Sombra de Menu izquierdo y header*/    
+        .main-sidebar{          
+            -webkit-box-shadow: 10px 10px 5px 0px rgba(102,102,102,1);
+            -moz-box-shadow: 10px 10px 5px 0px rgba(102,102,102,1);
+            /*box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.15);*/
+            box-shadow: 3px 3px 3px rgba(0,0,0,0.25);
+
+        }
+        
      
      /*Color negro de texto*/
-    .skin-blue .sidebar a {
-        color: black !important;
+    .skin-blue .sidebar a {             /*Menu Principal*/
+        color: #666666 !important;
+        font-size: 16px;
     }
+    
+    .skin-blue .treeview-menu>li>a {    /*Submenu*/
+        color: #666666 !important;        
+        font-size: 16px !important ;
+    }
+    
+    .skin-blue .sidebar-menu>li>a{  /*Color plomo a las cajas del menu izquierdo*/
+        border: solid 1px #ECF0F5;
+    }
+    
     
     .skin-blue .sidebar a:hover {
         color: #eea236 !important;
          background-color: white !important;
     }
     
-    .skin-blue .treeview-menu>li>a {
-        color: black !important;
-    }
-    
+   
     .skin-blue .treeview-menu>li>a:hover {
          color: #eea236 !important;
-         background-color: white !important;
+         /*background-color: white !important;*/
     }
     
     .skin-blue .sidebar-menu>li>.treeview-menu {
@@ -216,18 +288,47 @@ a.desc:after {
 .texto_tomate{
     color: #F7931E;
 }
-
-.seccion_tomate{
-    background-color: #F7931E;
+.texto_azul{
+    color: #264E61;
+}
+.texto_blanco{
     color: white;
-    padding: 10px 10px;
-    font-size: 20px;
 }
 
+.seccion_tomate{
+/*    background-color: #F7931E;
+    color: white;
+    padding: 10px 10px;
+    font-size: 20px;*/
+    
+    background-color: #F7931E;
+    color: white; 
+    font-size: 20px;
+    padding: 40px 0px 20px 25px;
+    width: 100%;
+    max-height: 76px;
+}
+
+.seccion_azul{
+/*    background-color: #F7931E;
+    color: white;
+    padding: 10px 10px;
+    font-size: 20px;*/
+    
+    background-color: #264E61;
+    color: white; 
+    font-size: 20px;
+    padding: 40px 0px 20px 25px;
+    width: 100%;
+    max-height: 76px;
+}
+
+
+
     .sombra {
--webkit-box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
--moz-box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
-box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
+        -webkit-box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
+        -moz-box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
+        box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
     } 
     
         hr {
@@ -279,6 +380,18 @@ box-shadow: 10px 10px 5px 0px rgba(255,85,21,1);
     color: #F7931E;
 }
 
-/*.logo{
-    background-color: grey !important;
+
+/***************/
+/*CONTENEDOR PRINCIPAL*/
+/***************/
+.content-wrapper{
+    padding: 10px 13px;
+}
+
+/***************/
+/*ENVIO FORM*/
+/***************/
+/*.envio-form{
+    border: solid 2px red;
+    padding: 5px 5px;
 }*/

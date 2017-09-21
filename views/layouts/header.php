@@ -7,23 +7,34 @@ use yii\helpers\Html;
 
 <header class="main-header">
     <?php 
-    $user = Yii::$app->user->identity;
-    $profile = Yii::$app->user->identity->profile;
-    ?>
 
-    <?php // Html::a('<span class="logo-mini">APP</span><span class="logo-lg">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
-    <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg">' . Html::img(Yii::$app->request->baseUrl.'/images/logos/mainLogo.png', ['width'=>'200','height'=>'43']) . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
+    $rol = Yii::$app->user->identity['role_id']; 
+    $id_usuario = Yii::$app->user->identity['id'];
+
+    if(!empty($rol))   {
+        $profile = Yii::$app->user->identity->profile;
+        $user = Yii::$app->user->identity;
+            
+    ?><?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg">' . Html::img(Yii::$app->request->baseUrl.'/images/logos/mainLogo.png', ['width'=>'200','height'=>'43']) . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
     
     
     <nav class="navbar navbar-static-top" role="navigation">
 
+    <!--Diferenciacion de colores respecto a rol-->
+        <?php
+        if(empty($user->profile->full_name)){
+            ?><span id="bienvenido" class="alert alert-danger" style="font-size: 30px;margin-left: 20px;"> Ingrese sus datos personales</span><?php
+        }else if($rol==2){            
+            ?><span id="bienvenido" class="texto_tomate" style="font-size: 30px;margin-left: 20px;"> Bienvenid@ Usuario <?= $user->profile->full_name ?></span><?php
+        }else if($rol==3){
+            ?><span id="bienvenido" class="texto_azul" style="font-size: 30px;margin-left: 20px;">Mensajero: <?= $user->profile->full_name ?></span><?php
+        }
+        ?>
         
-        <span id="bienvenido" class="texto_tomate" style="font-size: 30px;margin-left: 20px;"> Bienvenid@ <?= $user->profile->full_name ?></span>
         
-        
-<!--        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
-        </a>-->
+        </a>
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
@@ -239,29 +250,41 @@ use yii\helpers\Html;
 <!--                        <img src="<? $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>-->
                         <?php //echo Html::img('@web/fotos/'.$user->foto, ['class' => 'user-image']); ?>
                         <?php if(!empty($profile->foto)){
-                                    echo Html::img('@web/fotos/'.$profile->foto, ['class' => 'user-image']); 
+                                    echo Html::img('@web/images/fotos/'.$profile->foto, ['class' => 'user-image']); 
                                 }
                                 else{
-                                    echo Html::img('@web/fotos/default.jpg', ['class' => 'user-image']);
+                                    echo Html::img('@web/images/fotos/default.jpg', ['class' => 'user-image']);
                                 }
                         ?>
-                        <span class="hidden-xs"><?php echo $profile->full_name;?></span>
+                        <!--<span class="hidden-xs"><?php // echo isset($user->username);?></span>-->
+                        
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <?php if(!empty($profile->foto)){
-                                    echo Html::img('@web/fotos/'.$profile->foto, ['class' => 'user-image', 'style'=>'width:110px; height:110px;']); 
-                                }
-                                else{
-                                    echo Html::img('@web/fotos/default.jpg', ['class' => 'user-image']);
-                                }
-                        ?>
-                                
-                            <p>
-                               <?php echo $profile->full_name;?>
-                                <small>Miembro desde: <?php setlocale(LC_ALL,"es_ES"); echo date("M j, Y", strtotime($user->created_at));  ?></small>
-                            </p>
+                            <!--<center><div class="col-lg-12">-->
+                                <?php if(!empty($profile->foto)){
+                                        echo Html::img('@web/images/fotos/'.$profile->foto, ['class' => 'user-image', 'style'=>'width:110px; height:110px;']);
+                                    }
+                                    else{
+                                        echo Html::img('@web/images/fotos/default.jpg', ['class' => 'user-image']);
+                                    }
+                                ?>
+<!--                            </div></center>    
+                            <center><div class="col-lg-12">-->
+                                <p>
+                                   <?php 
+                                   if(!empty($profile->full_name)){                                   
+                                   echo $profile->full_name;?>
+                                    <small>Miembro desde: <?php setlocale(LC_ALL,"es_ES"); echo date("M j, Y", strtotime($user->created_at));  ?></small>
+                                   <?php                                    
+                                   } 
+                                   else{ 
+                                    echo "Usuario";?>
+                                    <small>Miembro desde: <?php setlocale(LC_ALL,"es_ES"); echo date("M j, Y", strtotime($user->created_at));  ?></small>
+                                    <?php } ?>
+                                </p>
+                            <!--</div></center>-->
                         </li>
                         <!-- Menu Body -->
 <!--                        <li class="user-body">
@@ -304,6 +327,15 @@ use yii\helpers\Html;
         </div>
     </nav>
 </header>
+<?php
+}
+else{
+?>
+
+<h2>NO se ha logueado</h2>
+<?php
+}
+?>
 
 
 

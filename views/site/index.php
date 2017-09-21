@@ -9,7 +9,8 @@ $this->title = 'VoyVengo';
     <!--<h1>Estadísticas<small>Control panel</small></h1>-->
 
     <!-- Main content -->
-    <section class="content">
+<section class="content">
+        <section class="contenedor_principal">
         
         <div class="row">
 
@@ -72,8 +73,8 @@ $this->title = 'VoyVengo';
       <div class="row">
           <span class="iconos glyphicon glyphicon-road" aria-hidden="true"> <h2 class="texto_tomate" style="display:inline-block">ENVIOS EN CAMINO</h2></span>
       </div>
-
-    </section>
+      </section>
+</section>
     <!-- /.content -->
   <!--</div>-->
   

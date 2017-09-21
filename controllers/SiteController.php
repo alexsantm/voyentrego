@@ -59,10 +59,60 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+//        public function actionIndex()
+//    {
+//        //return $this->render('index');
+//        //return $this->redirect(['login']);
+//        if (Yii::$app->user->isGuest)
+//            return $this->redirect(['user/login']);
+//        else{
+//            return $this->render('index');
+//        }
+//    }
+    
+            public function actionIndex()
     {
-        return $this->render('index');
+        $rol = Yii::$app->user->identity['role_id'];      
+        if (Yii::$app->user->isGuest)
+            return $this->redirect(['user/login']);
+        else{            
+                if(!empty($rol) && ($rol==2)){    
+//                    print_r($rol);
+                    return $this->render('index');
+                }
+                 if(!empty($rol) && ($rol==3)){    
+//                    print_r($rol);
+                    return $this->render('indexmensajero');
+                }
+                else if(!empty($rol) && ($rol==1)){    
+                        return $this->render('index');    
+                }
+                else{        
+                        print_r("Hubo un error de autorizacion");
+                }
+        }
     }
+//            public function actionRegister()
+//    {
+//        
+//            return $this->redirect(['user/register']);
+//    }
+    
+    
+    
+    
+                public function actionIndexmensajero()
+    {
+        $rol = Yii::$app->user->identity['role_id'];      
+        if (Yii::$app->user->isGuest){
+            $layout=false;
+            return $this->redirect(['user/login']);
+        }    
+        else{            
+            return $this->render('indexmensajero');
+        }
+    }
+    
 
     /**
      * Login action.
@@ -125,5 +175,13 @@ class SiteController extends Controller
     }
     
     /****************************************************************/
+    
+    
+        
+            public function actionTestapi()
+    {
+        print_r("Esta es una prueba del api"); exit;
+        return $this->render('testapi');
+    }
 
 }

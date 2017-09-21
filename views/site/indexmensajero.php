@@ -3,6 +3,10 @@ $this->title = 'VoyVengo';
 ?>
 <!--<div class="container" style="border: solid 1px red;">-->
     <!-- Content Header (Page header) -->
+    <nav class="seccion_tomate">
+      Resumen de envíos realizados
+    </nav>    
+    
     <section class="content-header">
       <h1>Estadísticas
         <!--<small>Control panel</small>-->
@@ -10,7 +14,8 @@ $this->title = 'VoyVengo';
     </section>
 
     <!-- Main content -->
-    <section class="content">
+<section class="content">
+    <section class="contenedor_principal">
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-xs-6">
@@ -74,7 +79,7 @@ $this->title = 'VoyVengo';
         </div>
         <!-- ./col -->
       </div>
-
-    </section>
+    </section>  
+</section>
     <!-- /.content -->
   <!--</div>-->

@@ -8,7 +8,8 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'es',
-    'name'=>'VoyVengo',
+    'timeZone' => 'America/Guayaquil',
+    'name'=>'VoyEntrego',
     'components' => [
 //        'view' => [
 //         'theme' => [
@@ -17,7 +18,6 @@ $config = [
 //             ],
 //         ],
 //    ],
-        
         
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -37,13 +37,43 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
+//        'mailer' => [
+//            'class' => 'yii\swiftmailer\Mailer',
+//            // send all mails to a file by default. You have to set
+//            // 'useFileTransport' to false and configure a transport
+//            // for the mailer to send real emails.
+//            'useFileTransport' => true,
+//        ],
+//         'mailer' => [
+//            'class' => 'yii\swiftmailer\Mailer',
+//            'useFileTransport' => false,
+//            //'viewPath' => '@app/mail',
+//            'viewPath' => '@app/mail',
+//            'messageConfig' => [
+//                'from' => 'soporte@qariston.com' // sender address goes here
+//            ],
+//            'transport' => [
+//                'class' => 'Swift_SmtpTransport',
+//                'host' => '192.168.0.254',
+//                'username' => 'informatica',
+//                'password' => 'INFORMATICA2017**',
+//                'port' => '25',
+//            ],
+//        ],
+                'mailer' => [
+        'class' => 'yii\swiftmailer\Mailer',
+        'messageConfig' => [
+                'from' => 'alexsantm@gmail.com' // sender address goes here
+            ],    
+        'transport' => [
+            'class' => 'Swift_SmtpTransport',
+            'host' => 'smtp.gmail.com',
+            'username' => 'alexsantm@gmail.com',
+            'password' => 'enblanco2016.',
+            'port' => '587',
+            'encryption' => 'tls',
         ],
+    ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -80,6 +110,10 @@ $config = [
             'class' => 'amnah\yii2\user\Module',
             // set custom module properties here ...
         ],
+         'api' => [
+            'class' => 'app\modules\api\api',
+        ],    
+            
     ],
     
     
