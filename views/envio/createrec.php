@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
         
 
-$this->title = 'Nuevo Envio';
+$this->title = 'Nuevo Envio Recurrente';
 $this->params['breadcrumbs'][] = ['label' => 'Envios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('_formrec', [
         'model' => $model,
     ]) ?>
 

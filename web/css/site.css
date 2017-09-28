@@ -185,6 +185,22 @@ a.desc:after {
 .navbar-nav>.user-menu>.dropdown-menu>li.user-header {
     height: 135px !important;
 }
+
+/*.usuario{
+    height: 62px !important;
+}
+.usuario:hover{
+    background-color: #E5E5E5 !important;
+}*/
+
+.usuarioa{
+    /*border: solid 1px red;*/
+     height: 64px !important;
+}/*
+.usuario:hover{
+    background-color: #E5E5E5 !important;
+}*/
+
     
 /**************************************Fin Color blanco de main header************************************/    
 
@@ -309,6 +325,54 @@ a.desc:after {
     max-height: 76px;
 }
 
+.seccion_tomate_pasos{
+    /*//background-color: #FF5515;*/
+    background-color: #F7931E;
+    color: white; 
+    font-size: 20px;
+    padding: 40px 0px 20px 25px;
+    width: 100%;
+    max-height: 76px;
+}
+
+.seccion_tomate_detalles_mensajero{
+    /*//background-color: #FF5515;*/
+    background-color: #F7931E;
+    color: white; 
+    font-size: 20px;
+    padding: 10px 0px 20px 25px;
+    width: 100%;
+    max-height: 76px;
+}
+
+/*.numero_pasos{
+    font-size: 26px;
+    border-radius: 5px;
+    border: solid 1px white;
+}*/
+
+.numero_pasos{
+  height: 50px;
+  width: 50px;
+  display: table-cell;
+  text-align: center;
+  font-size:36px;
+  vertical-align: middle;
+  border-radius: 50%;
+  /*background: #FF5515;*/
+  background: #F7931E;
+  border: solid 2px white;
+  
+ text-align: center;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+
+
 .seccion_azul{
 /*    background-color: #F7931E;
     color: white;
@@ -386,6 +450,7 @@ a.desc:after {
 /***************/
 .content-wrapper{
     padding: 10px 13px;
+    height: auto !important;
 }
 
 /***************/

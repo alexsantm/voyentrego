@@ -37,8 +37,8 @@ use Yii;
 class Envio extends \yii\db\ActiveRecord
 {
         public $address;
-    public $longitude;
-    public $latitude;
+        public $longitude;
+        public $latitude;
     
     /**
      * @inheritdoc
@@ -54,7 +54,7 @@ class Envio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ciudad_id', 'user_id', 'remitente', 'direccion_origen', 'tipo_envio_id', 'dimensiones_id'], 'required'],
+            [['ciudad_id', 'user_id', 'remitente', 'direccion_origen', 'tipo_envio_id', 'dimensiones_id', 'fecha_registro'], 'required'],
             [['ciudad_id', 'user_id', 'estado_envio_id', 'tipo_envio_id', 'dimensiones_id', 'mensajero_id'], 'integer'],
             [['latitud', 'longitud', 'total_km', 'valor_total'], 'number'],
             [['remitente', 'direccion_origen', 'fecha_registro', 'fecha_fin_envio'], 'string', 'max' => 45],
@@ -158,4 +158,133 @@ class Envio extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'mensajero_id']);
     }
+    
+    
+    
+    
+    
+                    /**********************************************************************************************/
+                    /**********************************************************************************************/
+                    /**********************************************************************************************/
+    public function calculo_distancia($lat_orig, $long_orig, $lat_dest, $long_dest){
+        $latitud_origen = $lat_orig;
+        $longitud_origen = $long_orig;
+        $latitud_destino = $lat_dest;
+        $longitud_destino = $long_dest;
+        
+        $latlng_origin        = [$latitud_origen,$longitud_origen];
+        $latlng_destination   = [$latitud_destino,$longitud_destino];
+        $unit                 = 'km'; // 'miles' or 'km'
+        $distancia        = \Yii::$app->googleApi->getDistance($latlng_origin, $latlng_destination, $unit);
+        return $distancia;
+    }
+        
+    public function calculo_valores($tot){
+        $total = $tot;
+               //Tabla parametrizacion
+        $valores = Valores::find()         //extraigo tabla de Premios Por Transferencia
+                    ->asArray()->all(); 
+
+          foreach ($valores as $val) {        //Itero la tabla parametrizacion  premios y relaciono el porcentaje calculado
+                        $connection = Yii::$app->getDb();
+                        $command = $connection->createCommand('                                   
+                            select valor from valores where '. $total .' 
+                            between km_inicio and km_fin');
+                        $resul = $command->queryAll();
+                        $contador = count($resul);
+
+                        if($contador ==0){            
+                            $valor_km = 'No Existe Valor'; 
+                            return $valor_km;
+                        }
+                        else{
+                            foreach ($resul as $re) {
+                                $valor_km = $re['valor'];                                
+                            } 
+                            return $valor_km;
+                        }
+         }  
+    }
+    
+    
+    
+    
+    public function exact_distance($latitud1, $longitud1, $latitud2, $longitud2)
+    {
+        $lat1 = $latitud1;
+        $lat2 = $latitud2;
+        $lon1 = $longitud1;
+        $lon2 = $longitud2;
+        
+        $theta = $lon1 - $lon2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(
+                deg2rad($theta)
+            );
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+        
+        $distance = $miles * 1.609344;
+        return $distance;
+    }
+    
+    
+    /**********************************************************************************************/
+    public static function createMultiple($modelClass, $multipleModels = [])
+    {
+        $model    = new $modelClass;
+        $formName = $model->formName();
+        $post     = Yii::$app->request->post($formName);
+        $models   = [];
+
+        if (! empty($multipleModels)) {
+            $keys = array_keys(ArrayHelper::map($multipleModels, 'id', 'id'));
+            $multipleModels = array_combine($keys, $multipleModels);
+        }
+
+        if ($post && is_array($post)) {
+            foreach ($post as $i => $item) {
+                if (isset($item['id']) && !empty($item['id']) && isset($multipleModels[$item['id']])) {
+                    $models[] = $multipleModels[$item['id']];
+                } else {
+                    $models[] = new $modelClass;
+                }
+            }
+        }
+
+        unset($model, $formName, $post);
+
+        return $models;
+    }
+    
+    
+        public function detallesMensajero($id)
+    {
+        $mensajero_id = $id;
+        $det = \app\models\Profile::find()->where(['user_id'=>$mensajero_id])->asArray()->one();
+        $nombre = $det['full_name'];
+        $celular = $det['telefono'];
+        
+        if(empty($foto)){
+            $foto = Yii::$app->request->BaseUrl.'/images/fotos/default.jpg';
+        }else{
+//            $foto = $det['foto'];
+            $foto = Yii::$app->request->BaseUrl.'/images/fotos/'.$foto;
+        }
+        $htmlMsg = "
+                <center><br><div class='row' style='width:600px; background-color: white;'>
+                <div class='seccion_tomate_detalles_mensajero'><h3>Mensajero Encontrado</h3></div>
+                    <div class='col-lg-5'>
+                        <p><h3>Nombre:</h3> ".$nombre.".</p>
+                        <p><h3>Telefono:</h3> ".$celular.".</p>
+                    </div>
+                    <div class='col-lg-7' style='padding:10px 10px;'>
+                            <img src=".$foto." class='rounded sombra' alt='Responsive image' style='width:175px; height: 175px;'>
+                    </div><br>
+                </div></center>
+                ";
+        return $htmlMsg;
+    }    
 }
+
+//                        <img src=".Yii::$app->request->BaseUrl.'/images/fotos/'.$foto." class='rounded' alt='Responsive image'>

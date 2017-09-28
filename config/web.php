@@ -19,6 +19,45 @@ $config = [
 //         ],
 //    ],
         
+         'assetManager' => [
+            'bundles' => [
+                'dosamigos\google\maps\MapAsset' => [
+                    'options' => [
+                        'key' => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
+                        'libraries' => 'places',
+                        'v' => '3.exp',
+                        'sensor'=> 'false'
+                    ]
+                ]
+            ]
+        ],
+        'googleApi'   => [
+            'class'             => 'quexer\googleapi\GoogleApiLibrary',
+
+            // API Keys !!!
+            'staticmap_api_key' => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
+            'geocode_api_key'   => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
+
+            // Set basePath
+            'webroot'           => '@webroot',
+
+            // Image path and map iframe settings
+//            'map_image_path'    => '/images/google_map',
+            'map_type'          => 'terrain',
+            'map_size'          => '520x350',
+            'map_sensor'        => false,
+            'map_zoom'          => 9,
+            'map_scale'         => 1,
+            'map_marker_color'  => 'red',
+            'map_iframe_width'  => '100%', // %, px, em
+            'map_iframe_height' => '500px',  // %, px, em
+            'map_language'        => 'de',
+
+            // Debug
+            'quiet'             => false
+        ],
+        
+        
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'qY5E5eAMZ7Ih1RGojlDkIs8WbJjhA2Fx',
@@ -103,6 +142,10 @@ $config = [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ),
         ],
+        
+        
+        
+        
     ],
     
         'modules' => [
@@ -112,7 +155,16 @@ $config = [
         ],
          'api' => [
             'class' => 'app\modules\api\api',
-        ],    
+        ],  
+            
+           'gridview' =>  [
+        'class' => '\kartik\grid\Module'
+        // enter optional module parameters below - only if you need to  
+        // use your own export download action or custom translation 
+        // message source
+        // 'downloadAction' => 'gridview/export/download',
+        // 'i18n' => []
+    ]    
             
     ],
     

@@ -4,6 +4,12 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use dosamigos\ckeditor\CKEditor;
+//use yii\jui\DatePicker;
+//use kartik\date\DatePicker;
+//use kartik\widgets\DateTimePicker;
+use kartik\date\DatePicker;
+use yii\helpers\Url;
+use kartik\widgets\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Envio */
@@ -15,6 +21,7 @@ use dosamigos\ckeditor\CKEditor;
     <li>Digite la ubicación en el campo "Ubicación en el Mapa"</li>
     <li>Movilice el Marcador hasta el punto de origen del envío</li>
     <li>Complete el formulario, colocando una descripción para el Envío en el campo "Dirección Origen"</li>
+    <li>Seleccione una fecha y hora para completar el envío</li>
 </ul>
 
     <div class="panel panel-warning">
@@ -41,7 +48,42 @@ use dosamigos\ckeditor\CKEditor;
                                               'allowedContent' => true,
                                           ],])
                                 ?>	
-                        </div>          
+                        </div> 
+                    <fieldset class="retorno">
+                        <legend class="retorno_legend"><strong>Programación Recurrente</strong></legend>
+                      <small>Escoga una fecha de inicio y fin, y seleccione el o los dias en los que se programarán los envíos</small>
+                        <div class="col-lg-12">
+                                <?php
+                                    echo '<label class="control-label">Ingrese una fecha de inicio y fin</label>';
+                                    echo DatePicker::widget([
+                                        'name' => 'fecha_desde',
+                                        'type' => DatePicker::TYPE_RANGE,
+                                        'name2' => 'fecha_hasta',
+                                        'pluginOptions' => [
+                                            'autoclose' => true,
+                                            'format' => 'yyyy-mm-dd',
+                                            'required' => true
+                                        ]
+                                    ]);
+                                    ?>
+                            
+                                <?php
+                                // Without model and implementing a multiple select
+                                $data =   [ 1 => 'Lunes',2 => 'Martes', 3 => 'Miércoles', 4 => 'Jueves',5 => 'Viernes', 6 => 'Sábado',7 => 'Domingo',];
+                                echo '<br><label class="control-label">Seleccione el o los días</label>';
+                                echo Select2::widget([
+                                    'name' => 'dias',
+                                    'data' => $data,
+                                    'options' => [
+                                        'placeholder' => 'Selecione el/los dias ...',
+                                        'multiple' => true,
+                                        'required' => true
+                                    ],
+                                ]);
+                                ?>    
+                        </div> 
+                     </fieldset>
+                        
                         <!--//Parametrizar el Fecha Registro en el Controller-->
                         <!--//Parametrizar el Fecha fin Envio en el Controller-->
                         <!--//Parametrizar el EStado Envio en el Controller-->
@@ -63,12 +105,12 @@ use dosamigos\ckeditor\CKEditor;
                             'googleMapApiKey' => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
                         ])->label('Ubicación en el Mapa: ');
                         ?>
-                    </div>         
+                    </div>   
                 </div>
                         <div class="row">
                             <div class="col-lg-5">
                                 <div class="form-group">
-                                    <center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-primary']) ?></center>
+                                    <br><center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-primary']) ?></center>
                                 </div>
                             </div>
                         </div>    
@@ -79,3 +121,16 @@ use dosamigos\ckeditor\CKEditor;
     </div>
 
 
+<style>
+    fieldset.retorno {
+    border: solid 1px #DDD !important;
+    padding: 0 10px 10px 10px;
+    border-bottom: none;
+}
+
+legend.retorno_legend {
+    width: auto !important;
+    border: none;
+    font-size: 14px;
+}
+</style>    

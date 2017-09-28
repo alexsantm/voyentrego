@@ -28,6 +28,14 @@ $envio_id =$model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Envios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
+
+
+        /*****************************************************************/
+//        Traigo las fechas y los id de los registros para ingresarlos en cada destino
+            $get=Yii::$app->request->get(); 
+            $fechas=$get['fechas'];
+            $array_id=$get['array_id'];
+
 ?>
 <div class="envio-view">
 
@@ -99,7 +107,7 @@ if(!empty($destinos_completos)){
                             $longitud_destino = $ultimo_destino['longitud'];
 
 //                            echo '<h3>Direcciones</h3>';
-                            $coord = new LatLng(['lat' => $latitud_origen, 'lng' => $longitud_origen]);
+                            $coord = new LatLng(['lat' => $latitud_origen, 'lng' => $latitud_origen]);
                             $map = new Map([
                                 'center' => $coord,
                                 'zoom' => 15,
@@ -191,8 +199,12 @@ else{
 <!--/*****************************************************GRIDVIEW DE  DESTINOS**************************************************************/-->
 <div class="geo-destino-index">
     <br><br>
-    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
-            ['destino/create', 'id'=>$model->id],
+    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino Recurrente',
+            ['destino/createrec',
+                'id'=>$model->id,
+                'fechas'=>$fechas,
+                'array_id'=>$array_id
+            ],
             ['class'=>'btn btn-success btn-lg modalButton', 'title'=>'view/edit', ]
             );?>
     </p>
@@ -319,187 +331,115 @@ else{
                                         /************************************************************/
 if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un inicio
 
-    //    print_r("destinos_llenos");
-                        $primer_punto[] = [$destinos_completos[0]['latitud'] , $destinos_completos[0]['longitud']];
+//    print_r("destinos_llenos");
+                    $primer_punto[] = [$destinos_completos[0]['latitud'] , $destinos_completos[0]['longitud']];
 
-                            $total_distancias=0;
-                            foreach($primer_punto as $pp){
-                        //        print_r($pp);
-                                $lat_primer_punto = $pp[0];
-                                $long_primer_punto = $pp[1];
-                            }
+                        $total_distancias=0;
+                        foreach($primer_punto as $pp){
+                    //        print_r($pp);
+                            $lat_primer_punto = $pp[0];
+                            $long_primer_punto = $pp[1];
+                        }
 
-                        //Distancia desde origen hasta primer punto
-                        $latlng_origin        = [$latitud_origen,$longitud_origen];
-                        $latlng_destination   = [$lat_primer_punto,$long_primer_punto];
+                    //Distancia desde origen hasta primer punto
+                    $latlng_origin        = [$latitud_origen,$longitud_origen];
+                    $latlng_destination   = [$lat_primer_punto,$long_primer_punto];
 
-                        $dist_origen_primer_punto = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_primer_punto, $long_primer_punto);
+                    $dist_origen_primer_punto = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_primer_punto, $long_primer_punto);
+                    echo('<h2>'); echo('Distancia Origen al primer punto:');echo(round($dist_origen_primer_punto, 2));echo('</h2>');  
 
-    //                    echo('<h2>'); echo('Distancia Origen al primer punto:');echo(round($dist_origen_primer_punto, 2));echo('</h2>');  
+                     //Distancia entre puntos:   
+                        $unit = 'km'; // 'miles' or 'km'
+                        $punto[] = [$destinos_completos[0]['latitud'] , $destinos_completos[0]['longitud']];
+                        $lugar[] = [$destinos_completos[0]['direccion_destino']];
+                        $dist_resto_puntos=0;
+                        for($i = 0; $i<count($destinos_completos); $i++){          
+                                    $punto[] = [$destinos_completos[$i]['latitud'] , $destinos_completos[$i]['longitud']];
+                                    $lugar[] = [$destinos_completos[$i]['direccion_destino']];
+                                    $distance = \Yii::$app->googleApi->getDistance($punto[$i], $punto[$i+1], $unit);
+                                    if(is_nan($distance)){
+                                        $dist_resto_puntos ==0;
+                                    }else{
+                                    print_r($lugar[$i][0]); echo(' - '); print_r($lugar[$i+1][0]);; echo("Distancia: ".$distance);echo('<br>');
+                                    }
+                                    $dist_resto_puntos = $dist_resto_puntos +$distance;echo('<br>');                
+                        }
+                        if(is_nan($dist_resto_puntos)){
+                            $dist_resto_puntos ==0;
+                        }
+                        else{
+                            echo('<h2>'); echo('Distancia resto de puntos:');echo($dist_resto_puntos);echo('</h2>');
+                        }
 
-                         //Distancia entre puntos:   
-                            $unit = 'km'; // 'miles' or 'km'
-                            $punto[] = [$destinos_completos[0]['latitud'] , $destinos_completos[0]['longitud']];
-                            $lugar[] = [$destinos_completos[0]['direccion_destino']];
-                            $dist_resto_puntos=0;
-                            for($i = 0; $i<count($destinos_completos); $i++){          
-                                $punto[] = [$destinos_completos[$i]['latitud'] , $destinos_completos[$i]['longitud']];
-                                $lugar[] = [$destinos_completos[$i]['direccion_destino']];
-                                $distance = \Yii::$app->googleApi->getDistance($punto[$i], $punto[$i+1], $unit);
-                                if(is_nan($distance)){
-                                    $dist_resto_puntos ==0;
-                                }
-//                                else{
-    //                                    print_r($lugar[$i][0]); echo(' - '); print_r($lugar[$i+1][0]);; echo("Distancia: ".$distance);echo('<br>');
-//                                }
-                                $dist_resto_puntos = $dist_resto_puntos +$distance;echo('<br>');                
-                            }
-                            if(is_nan($dist_resto_puntos)){
-                                $dist_resto_puntos ==0;
-                            }
-                            else{
-    //                            echo('<h2>'); echo('Distancia resto de puntos:');echo($dist_resto_puntos);echo('</h2>');
-                            }
+                    //Calculo de retornos entre puntos
+                        $resultados = \app\models\Destino::find()->where(['!=', 'retorno_destino_id', 0])->andWhere(['envio_id'=>$model->id])->asArray()->all();
+                        $valor_distancia_retornos = 0;
+                        if(!empty($resultados)){
+                                    foreach($resultados as $r){
+                                            $id_retorno_origen = $r['id'];
+                                            $id_retorno_destino = $r['retorno_destino_id'];
 
-                        //Calculo de retornos entre puntos
-                            $resultados = \app\models\Destino::find()->where(['!=', 'retorno_destino_id', 0])->andWhere(['envio_id'=>$model->id])->asArray()->all();
-                            $valor_distancia_retornos = 0;
-                            if(!empty($resultados)){
-                                        foreach($resultados as $r){
-                                                $id_retorno_origen = $r['id'];
-                                                $id_retorno_destino = $r['retorno_destino_id'];
+                                    $coord_orig = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_origen])->one();
+                                        $lat_orig=$coord_orig['latitud'];    
+                                        $long_orig=$coord_orig['longitud'];    
+                                        $lugar_orig=$coord_orig['direccion_destino']; 
 
-                                        $coord_orig = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_origen])->one();
-                                            $lat_orig=$coord_orig['latitud'];    
-                                            $long_orig=$coord_orig['longitud'];    
-                                            $lugar_orig=$coord_orig['direccion_destino']; 
+                                    $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
+                                        $lat_dest= $coord_dest['latitud'];    
+                                        $long_dest= $coord_dest['longitud'];    
+                                        $lugar_dest=$coord_dest['direccion_destino']; 
 
-                                        $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
-                                            $lat_dest= $coord_dest['latitud'];    
-                                            $long_dest= $coord_dest['longitud'];    
-                                            $lugar_dest=$coord_dest['direccion_destino']; 
+                                    $valor_distancia_ret = $model->calculo_distancia($lat_orig, $long_orig, $lat_dest, $long_dest);
+                                    $valor_distancia_retornos = $valor_distancia_retornos + $valor_distancia_ret;
 
-                                        $valor_distancia_ret = $model->calculo_distancia($lat_orig, $long_orig, $lat_dest, $long_dest);
-                                        $valor_distancia_retornos = $valor_distancia_retornos + $valor_distancia_ret;
+                                    echo('<br>'); echo("<h3>Retornos : ". $valor_distancia_ret.'</h3>' );   
+                                   } 
+                                   echo('<br>'); echo("<h2>Valor de retornos es: ". $valor_distancia_retornos.'</h2>' );   
+                        }
+                        else{
+                                    $valor_distancia_retornos = 0;
+                                    print_r("no hay retornos");
+                        }
 
-    //                                    echo('<br>'); echo("<h3>Retornos : ". $valor_distancia_ret.'</h3>' );   
-                                       } 
-    //                                   echo('<br>'); echo("<h2>Valor de retornos es: ". $valor_distancia_retornos.'</h2>' );   
-                            }
-                            else{
-                                        $valor_distancia_retornos = 0;
-    //                                    print_r("no hay retornos");
-                            }
+                    //Calculo de retornos al inicio
+                        $resultados = \app\models\Destino::find()->where(['retorno_inicio'=> 1])->andWhere(['envio_id'=>$model->id])->asArray()->all();
+                        $valor_distancia_retorno_inicio = 0;
+                        print_r($resultados);
+                        if(!empty($resultados)){
+                                    foreach($resultados as $r){
+                                        //  $latitud_origen  coordenada de inicio
+                                        //  $longitud_origen coordenada de inicio
 
-                        //Calculo de retornos al inicio
-                            $resultados = \app\models\Destino::find()->where(['retorno_inicio'=> 1])->andWhere(['envio_id'=>$model->id])->asArray()->all();
-                            $valor_distancia_retorno_inicio = 0;
-    //                        print_r($resultados);
-                            if(!empty($resultados)){
-                                        foreach($resultados as $r){
-                                            //  $latitud_origen  coordenada de inicio
-                                            //  $longitud_origen coordenada de inicio
+                                    $coord_dest = \app\models\GeoDestino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
+                                        $lat_dest= $coord_dest['latitud'];    
+                                        $long_dest= $coord_dest['longitud'];    
+                                        $lugar_dest=$coord_dest['direccion_destino']; 
 
-                                        $coord_dest = \app\models\GeoDestino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
-                                            $lat_dest= $coord_dest['latitud'];    
-                                            $long_dest= $coord_dest['longitud'];    
-                                            $lugar_dest=$coord_dest['direccion_destino']; 
+                                    $valor_distancia_ret_ini = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_dest, $long_dest);
+                                    $valor_distancia_retorno_inicio = $valor_distancia_retorno_inicio + $valor_distancia_ret_ini;
 
-                                        $valor_distancia_ret_ini = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_dest, $long_dest);
-                                        $valor_distancia_retorno_inicio = $valor_distancia_retorno_inicio + $valor_distancia_ret_ini;
+                                    echo('<br>'); echo("<h3>Retorno al inicio : ". $valor_distancia_ret_ini.'</h3>' );   
+                                   } 
+                                   echo('<br>'); echo("<h2>Valor de retornos del inicio: ". $valor_distancia_retorno_inicio.'</h2>' );   
+                        }
+                        else{
+                                    $valor_distancia_retorno_inicio = 0;
+                                    print_r("no hay retorno al inicio");
+                        }
 
-    //                                    echo('<br>'); echo("<h3>Retorno al inicio : ". $valor_distancia_ret_ini.'</h3>' );   
-                                       } 
-    //                                   echo('<br>'); echo("<h2>Valor de retornos del inicio: ". $valor_distancia_retorno_inicio.'</h2>' );   
-                            }
-                            else{
-                                        $valor_distancia_retorno_inicio = 0;
-    //                                    print_r("no hay retorno al inicio");
-                            }
+                     //Distancia sumada de los 2 primeros puntos + el resto 
+                        if(is_nan($dist_resto_puntos)){
+                            $total = $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
+                        }
+                        else{
+                            $total = $dist_resto_puntos + $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
+                        }
+                        echo('<h2>'); echo('Distancia Total: ');echo($total);echo('</h2>');
 
-                         //Distancia sumada de los 2 primeros puntos + el resto 
-                            if(is_nan($dist_resto_puntos)){
-                                $total = $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
-                            }
-                            else{
-                                $total = $dist_resto_puntos + $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
-                            }
-    //                        echo('<h2>'); echo('Distancia Total: ');echo($total);echo('</h2>');
-
-                            $valor_km = $model->calculo_valores($total);
-    }    
-     //*****************Fin Calculo de Distancias******************
-
-    
-//    Detalle de Distancias y costos
-if(!empty($dist_origen_primer_punto) && !empty($dist_resto_puntos)){
-    ?>
-    <h2>Detalle de distancias y Costo referencial</h2>
-    <table class="table table-hover table-condensed">
-      <thead class="thead-inverse">
-        <tr>
-          <th class="warning"><h3>Item</h3></th>
-          <th class="warning"><h3>Valor</h3></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="table-warning">
-          <td>Distancia entre el Origen y el Primero Destino</td>
-          <td><?php echo(round($dist_origen_primer_punto, 2));?></td>
-        </tr>
-        <tr>
-          <td>Distancia en resto de Destinos</td>
-          <td><?php 
-                  if (is_nan($dist_resto_puntos)) {
-                      $dist_resto_puntos = 0;
-                      echo($dist_resto_puntos);
-                  } else {
-                      echo($dist_resto_puntos);
-                  }
-                  ?></td>
-        </tr>
-        <tr>
-          <td>Distancia de Retornos a Destinos determinados</td>
-          <td><?php echo($valor_distancia_retornos);?></td>
-        </tr>
-        <tr>
-          <td>Distancia de Retornos al Origen</td>
-          <td><?php echo($valor_distancia_retorno_inicio);?></td>
-        </tr>
-        <tr>
-          <td>Total de Kilómetros</td>
-          <td><?php echo($total);?></td>
-        </tr>
-        <tr>
-           <td class="warning"><strong>Costo Referencial (USD)</strong></td>
-           <td class="warning"><strong><?php echo($valor_km);?></strong></strong></td>
-        </tr>
-      </tbody>
-    </table>
-
-            <!---------------------------------------------CONTINUAR---------------------------------------------------------------->
-    <center>
-    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Continuar',
-                ['envio/detalles', 
-                    'dist_origen_primer_punto'=>$dist_origen_primer_punto,
-                    'dist_resto_puntos'=>$dist_resto_puntos,
-                    'valor_distancia_retornos'=>$valor_distancia_retornos,
-                    'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,
-                    'total'=>$total,
-                    'valor_km'=>$valor_km, 
-                    'latitud_origen'=>$latitud_origen,
-                    'longitud_origen'=>$longitud_origen,
-                ],
-                ['class'=>'btn btn-warning btn-lg', 'title'=>'Haga click para continuar', ]
-                );
-        ?>
-    </p>
-    </center>
-<?php
-}
-else{
-    echo('<center><h3 class="alert alert-danger">Agregue mas Destinos para poder visualizar detalle de distancia aproximada y costos</h3></center>');
-}
+                        $valor_km = $model->calculo_valores($total);
+                        echo('<br>'); echo("<h2>el valor a cobrar es: ". $valor_km.'</h2>' );
+}    
+ //*****************Fin Calculo de Distancias******************
 ?>
 <style>
     #gmap0-map-canvas{
@@ -552,6 +492,5 @@ else{
             });
         ");
 ?>
-
 
 

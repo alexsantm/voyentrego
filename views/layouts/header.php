@@ -246,11 +246,11 @@ use yii\helpers\Html;
                 <!-- User Account: style can be found in dropdown.less -->
 
                 <li class="dropdown user user-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle usuarioa" data-toggle="dropdown">
 <!--                        <img src="<? $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>-->
                         <?php //echo Html::img('@web/fotos/'.$user->foto, ['class' => 'user-image']); ?>
                         <?php if(!empty($profile->foto)){
-                                    echo Html::img('@web/images/fotos/'.$profile->foto, ['class' => 'user-image']); 
+                                     echo Html::img('@web/images/fotos/'.$profile->foto, ['class' => 'user-image', 'style'=>'width:42px; height:40px;']);
                                 }
                                 else{
                                     echo Html::img('@web/images/fotos/default.jpg', ['class' => 'user-image']);
@@ -261,7 +261,7 @@ use yii\helpers\Html;
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
-                        <li class="user-header">
+                        <li class="user-header" >
                             <!--<center><div class="col-lg-12">-->
                                 <?php if(!empty($profile->foto)){
                                         echo Html::img('@web/images/fotos/'.$profile->foto, ['class' => 'user-image', 'style'=>'width:110px; height:110px;']);

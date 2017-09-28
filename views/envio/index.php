@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EnvioSearch */
@@ -21,25 +21,28 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_WARNING
+        ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'ciudad_id',
             'user_id',
             'remitente',
             'direccion_origen',
-            // 'latitud',
-            // 'longitud',
+             'latitud',
+             'longitud',
             // 'celular',
-            // 'fecha_registro',
+             'fecha_registro',
             // 'fecha_fin_envio',
             // 'total_km',
             // 'valor_total',
-            // 'observacion',
-            // 'estado_envio_id',
-            // 'tipo_envio_id',
-            // 'dimensiones_id',
+             'observacion',
+//             'estado_envio_id',
+//             'tipo_envio_id',
+//             'dimensiones_id',
             // 'mensajero_id',
 
             ['class' => 'yii\grid\ActionColumn'],

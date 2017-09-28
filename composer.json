@@ -24,7 +24,16 @@
         "kartik-v/yii2-checkbox-x": "*",
         "yiisoft/yii2-httpclient": "*",
         "2amigos/yii2-ckeditor-widget": "^2.1",
-        "kalyabin/yii2-select-google-map-location": "*"
+        "kalyabin/yii2-select-google-map-location": "*",
+        "kartik-v/yii2-grid": "@dev",
+        "kartik-v/yii2-mpdf": "^1.0",
+        "yii2mod/yii2-google-maps-markers": "*",
+        "2amigos/yii2-google-maps-library": "*",
+        "quexer69/yii2-google-api": "2.0.*",
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "yiisoft/yii2-jui": "*",
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-field-range": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

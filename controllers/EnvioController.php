@@ -49,10 +49,51 @@ class EnvioController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+//    public function actionView($id)
+//    {
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//    }
+    
+        public function actionView($id)
     {
+        $origen = \app\models\Envio::findOne($id); 
+        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();     
+//        print_r($destinos);
+        
+        $searchModel = new \app\models\DestinoSearch();
+        $searchModel->envio_id = $id;
+        $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
+        
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'origen'=>$origen,
+            'destinos'=>$destinos,
+            
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+         public function actionViewrec($id)
+    {
+        $origen = \app\models\Envio::findOne($id); 
+        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();     
+//        print_r($destinos);
+        
+        $searchModel = new \app\models\DestinoSearch();
+        $searchModel->envio_id = $id;
+        $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
+        
+        
+        return $this->render('viewrec', [
+            'model' => $this->findModel($id),
+            'origen'=>$origen,
+            'destinos'=>$destinos,
+            
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -73,34 +114,177 @@ class EnvioController extends Controller
 //            ]);
 //        }
 //    }
-            public function actionCreate()
+    public function actionCreate()
     {
         $model = new Envio();
+        $connection = \Yii::$app->db;
         $model->fecha_registro = date("Y-m-d H:i");
         $model->estado_envio_id = 1;
         if ($model->load(Yii::$app->request->post())) {
-                    $post=Yii::$app->request->post();                    
-                    $latitud = $post['Envio']['latitude'];	
-                    $longitud = $post['Envio']['longitude'];	
-                    $address = $post['Envio']['address'];
-                    
-                    $model->latitud= $latitud;
-                    $model->longitud= $longitud;
-//                    $model->lugar= $address;
-
-                    if($model->save()){
-                        return $this->redirect(['index']);
-                        //return $this->redirect(['view', 'id' => $model->id]);
-                    }
-                    else{
-                        var_dump($row->errors); exit;
-                    }            
+            
+            try{
+            $transaction = $connection->beginTransaction(); 
+                $post=Yii::$app->request->post();                    
+                $latitud = $post['Envio']['latitude'];	
+                $longitud = $post['Envio']['longitude'];
+                $model->latitud= $latitud;
+                $model->longitud= $longitud;                    
+                $model->save();                 
+            $transaction->commit();           
+            }catch(\Exception $e)
+            {
+                $transaction::rollback();
+                 throw $e;
+            }
+            return $this->redirect(['view', 'id' => $model->id]);
+//            return $this->redirect(['index']);      
+             
         } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
         }
     }
+    
+    public function actionCreateprog()
+    {
+        $model = new Envio();
+        $connection = \Yii::$app->db;
+//        $model->fecha_registro = date("Y-m-d H:i");
+        $model->estado_envio_id = 1;
+        if ($model->load(Yii::$app->request->post())) {
+            
+            try{
+            $transaction = $connection->beginTransaction(); 
+                $post=Yii::$app->request->post();                    
+                $latitud = $post['Envio']['latitude'];	
+                $longitud = $post['Envio']['longitude'];
+                $model->latitud= $latitud;
+                $model->longitud= $longitud;                    
+                $model->save();                 
+            $transaction->commit();           
+            }catch(\Exception $e)
+            {
+                $transaction::rollback();
+                 throw $e;
+            }
+            return $this->redirect(['view', 'id' => $model->id]);
+//            return $this->redirect(['index']);      
+             
+        } else {
+            return $this->render('createprog', [
+                'model' => $model,
+            ]);
+        }
+    }
+       public function actionCreaterec()
+    {
+        $model = new Envio();
+        $connection = \Yii::$app->db;
+//        $model->fecha_registro = date("Y-m-d H:i");
+        $model->estado_envio_id = 1;
+        if ($model->load(Yii::$app->request->post())) {
+        /*****************************************************************/
+            $post=Yii::$app->request->post();           
+            $fecha_desde =$post['fecha_desde'];
+            $fecha_hasta =$post['fecha_hasta'];
+            $dias = $post['dias'];
+            
+            $fechaInicio=strtotime($fecha_desde);
+            $fechaFin=strtotime($fecha_hasta);
+
+            $days = array('1' => 'Monday', '2' => 'Tuesday', '3' => 'Wednesday', '4' => 'Thursday', '5' => 'Friday', '6' => 'Saturday', '7' => 'Sunday');
+            foreach($dias as $dia){                
+                for($i = strtotime($days[$dia], $fechaInicio); $i <= $fechaFin; $i = strtotime('+1 week', $i)){
+                    $fechas[] = date('Y-m-d', $i);                    
+                }                
+            }
+        /*****************************************************************/                
+            try{
+            $transaction = $connection->beginTransaction(); 
+                $ciudad_id = $post ['Envio']['ciudad_id'];
+                $user_id = $post['Envio']['user_id'];
+                $remitente = $post['Envio']['remitente'];
+                $direccion_origen = $post['Envio']['direccion_origen'];
+                $latitud = $post['Envio']['latitude'];	
+                $longitud = $post['Envio']['longitude'];
+                $celular = $post['Envio']['celular'];
+                $observacion = $post['Envio']['observacion'];
+                $tipo_envio_id = $post['Envio']['tipo_envio_id'];
+                $dimensiones_id = $post['Envio']['dimensiones_id'];
+
+                $cont = 0;
+                 while($cont < count($fechas)){
+                     $envio = new Envio;
+                     $envio->ciudad_id = $ciudad_id;
+                     $envio->user_id = $user_id;
+                     $envio->remitente = $remitente;
+                     $envio->direccion_origen = $direccion_origen;
+                        $envio->latitud= $latitud;
+                        $envio->longitud= $longitud;     
+                     $envio->celular = $celular;
+                     $envio->observacion = $observacion;
+                     $envio->estado_envio_id = 1;
+                     $envio->tipo_envio_id = $tipo_envio_id;
+                     $envio->dimensiones_id = $dimensiones_id;
+                     $envio->fecha_registro = $fechas[$cont];
+                     $envio->save();                     
+                     $array_envio[]=$envio;
+                     $array_id[]=$envio->id;
+                    $cont = $cont+1;
+                }  
+            $transaction->commit();
+            }catch(\Exception $e)
+            {
+                $error=$e->getMessage();
+                print_r($error);die();
+                $transaction::rollback();
+                throw $e;
+            }
+
+//            Extraigo el primer elemento del array $envio para sacar la id y renderizar
+            $id_primer_elemento = $array_envio[0] ['id'];
+            return $this->redirect(['viewrec', 'id' => $id_primer_elemento, 'fechas'=>$fechas, 'array_id'=>$array_id ]); 
+            
+        } else {
+            return $this->render('createrec', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+    
+    public function actionDetalles()
+    {
+//        $get=Yii::$app->request->get('destinos_completos');
+        $dist_origen_primer_punto = Yii::$app->request->get('dist_origen_primer_punto');
+        $dist_resto_puntos=Yii::$app->request->get('dist_resto_puntos');
+        $valor_distancia_retornos =Yii::$app->request->get('valor_distancia_retornos');
+        $valor_distancia_retorno_inicio =Yii::$app->request->get('valor_distancia_retorno_inicio');
+        $total  =Yii::$app->request->get('total');
+        $valor_km =      Yii::$app->request->get('valor_km'); 
+        $latitud_origen =      Yii::$app->request->get('latitud_origen'); 
+        $longitud_origen =      Yii::$app->request->get('longitud_origen'); 
+        
+        $mensajeros = \app\models\Tracking::find()->asArray()->all();
+        $r = \app\models\Opciones::find()->select('radio')->asArray()->one();
+        $radio = $r['radio'];
+
+            
+            return $this->render('detalles', [
+                 'dist_origen_primer_punto'=>$dist_origen_primer_punto,
+                'dist_resto_puntos'=>$dist_resto_puntos,
+                'valor_distancia_retornos'=>$valor_distancia_retornos,
+                'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,
+                'total'=>$total,
+                'valor_km'=>$valor_km,   
+                'latitud_origen'=>$latitud_origen,
+                'longitud_origen'=>$longitud_origen,
+                'mensajeros' => $mensajeros,
+                'radio' => $radio,
+            ]);
+    }
+   
 
     /**
      * Updates an existing Envio model.
@@ -149,4 +333,6 @@ class EnvioController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    
 }

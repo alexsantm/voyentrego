@@ -13,7 +13,79 @@ $user = Yii::$app->user->identity;
 <aside class="main-sidebar">
 
     <section class="sidebar">
-
+        <?php
+        echo dmstr\widgets\Menu::widget(
+            [
+                'options' => ['class' => 'sidebar-menu'],
+                'items' => [
+                    ['label' => 'Login', 'url' => ['user/login'],'visible' => Yii::$app->user->isGuest,'options' => ['class' => 'header']],
+//                    ['label' => 'Nuevo Envío', 'icon' => 'location-arrow', 'url' => ['envio/create'], 'visible' => Yii::$app->user->can("admin")],
+                    [
+                        'label' => 'Nuevo Envìo',
+                        'icon' => 'location-arrow',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Envìo Normal', 'icon' => 'file-code-o', 'url' => ['envio/create'],],
+                            ['label' => 'Envìo Programado', 'icon' => 'dashboard', 'url' => ['envio/createprog'],],
+                            ['label' => 'Envìo Recurrente', 'icon' => 'dashboard', 'url' => ['envio/createrec'],],
+                        ],
+                    ],
+                    
+                    [
+                        'label' => 'Tracking',
+                        'icon' => 'location-arrow',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Tracking Mensajero', 'icon' => 'file-code-o', 'url' => ['tracking/create'],],
+                            ['label' => 'Ubicacion Mensajeros', 'icon' => 'dashboard', 'url' => ['tracking/ubicacion'],],
+                        ],
+                    ],
+                    ['label' => 'Rastreo', 'icon' => 'cogs', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
+                    ['label' => 'Estadísticas', 'icon' => 'bar-chart', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
+                    
+                    [
+                        'label' => 'Ayuda',
+                        'icon' => 'question-circle',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
+                            [
+                                'label' => 'Level One',
+                                'icon' => 'circle-o',
+                                'url' => '#',
+                                'items' => [
+                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
+                                    [
+                                        'label' => 'Level Two',
+                                        'icon' => 'circle-o',
+                                        'url' => '#',
+                                        'items' => [
+                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'label' => 'Administrador',
+                        'icon' => 'share',
+                        'url' => '#',
+                        'visible' => Yii::$app->user->can("admin"),
+                        'items' => [
+                            ['label' => 'Opcion 1', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
+                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
+                        ],
+                    ],
+                ],
+            ]
+        ) 
+        ?>
+        
+        
         <!-- Sidebar user panel -->
 <!--        <div class="user-panel">
             <div class="pull-left image">-->
@@ -130,62 +202,7 @@ $user = Yii::$app->user->identity;
 //        ]);
 ?>
         
-
         
-        
-        
-        
-        <?php
-        echo dmstr\widgets\Menu::widget(
-            [
-                'options' => ['class' => 'sidebar-menu'],
-                'items' => [
-                    ['label' => 'Login', 'url' => ['user/login'],'visible' => Yii::$app->user->isGuest,'options' => ['class' => 'header']],
-                    ['label' => 'Nuevo Envío', 'icon' => 'location-arrow', 'url' => ['envio/create'], 'visible' => Yii::$app->user->can("admin")],
-                    ['label' => 'Rastreo', 'icon' => 'cogs', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
-                    ['label' => 'Estadísticas', 'icon' => 'bar-chart', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
-//                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
-                    [
-                        'label' => 'Ayuda',
-                        'icon' => 'question-circle',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
-                            [
-                                'label' => 'Level One',
-                                'icon' => 'circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'label' => 'Administrador',
-                        'icon' => 'share',
-                        'url' => '#',
-                        'visible' => Yii::$app->user->can("admin"),
-                        'items' => [
-                            ['label' => 'Opcion 1', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
-                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
-                        ],
-                    ],
-                ],
-            ]
-        ) 
-        ?>
 
     </section>
 
