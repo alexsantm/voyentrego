@@ -45,7 +45,7 @@ use dosamigos\ckeditor\CKEditor;
                                     ->where(['envio_id'=>$id_envio])
                                     ->all(), 'id', 'direccion_destino'), 
                                     ['prompt' => '--Escoga un lugar de retorno--'])->label('Destino de Retorno');?>
-                                    <?= $form->field($model, 'retorno_inicio')->checkbox(['uncheck' => 'NO', 'checked' => true]); ?>
+                                    <?= $form->field($model, 'retorno_inicio')->checkbox(['uncheck' => 'NO', 'checked' => 1]); ?>
                             </div>                        
                     </fieldset>                   
                 </div>
@@ -59,11 +59,11 @@ use dosamigos\ckeditor\CKEditor;
                 </div>	
 
             <!--//Campos Ocultos-->        
-            <?= $form->field($model, 'envio_id')->hiddenInput(['value'=>$id_envio])->label(false) ?>
-            <?= $form->field($model, 'latitud')->hiddenInput()->label(false) ?>
-            <?= $form->field($model, 'longitud')->hiddenInput()->label(false) ?>
-            <?= $form->field($model, 'kilometros')->hiddenInput()->label(false) ?>
-            <?= $form->field($model, 'valor')->hiddenInput()->label(false) ?>            
+                    <?= $form->field($model, 'envio_id')->hiddenInput(['value'=>$id_envio])->label(false) ?>
+                    <?= $form->field($model, 'latitud')->hiddenInput()->label(false) ?>
+                    <?= $form->field($model, 'longitud')->hiddenInput()->label(false) ?>
+                    <?= $form->field($model, 'kilometros')->hiddenInput()->label(false) ?>
+                    <?= $form->field($model, 'valor')->hiddenInput()->label(false) ?>            
         
             <div class="row">
                 <div class="col-lg-12">
@@ -117,7 +117,6 @@ use dosamigos\ckeditor\CKEditor;
     display:none;
 }
 
-
 fieldset.retorno {
     border: solid 1px #DDD !important;
     padding: 0 10px 10px 10px;
@@ -130,7 +129,6 @@ legend.retorno_legend {
     font-size: 14px;
 }
 </style>  
-
 
 <script>
 $(document).ready(function () {

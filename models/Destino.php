@@ -54,6 +54,7 @@ class Destino extends \yii\db\ActiveRecord
         return [
             [['ciudad_id', 'envio_id', 'destinatario', 'direccion_destino', 'celular', 'tipo_envio_id', 'dimensiones_id'], 'required'],
             [['ciudad_id', 'envio_id', 'estado_envio_id', 'retorno_destino_id',  'tipo_envio_id', 'dimensiones_id'], 'integer'],
+            [['retorno_inicio'], 'safe'],
             [['latitud', 'longitud', 'kilometros', 'valor'], 'number'],
             [['destinatario', 'direccion_destino', 'fecha_registro', 'fecha_asignacion', 'fecha_finalizacion'], 'string', 'max' => 45],
             [['celular'], 'string', 'max' => 10],

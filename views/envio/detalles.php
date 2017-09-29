@@ -1,52 +1,3 @@
-<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
-<script>
-$(window).load(function () {
-$('#cargando').hide();
-});
-</script>
-<style type="text/css">
-#cargando {
-width:350px;
-height:70px;
-clear:both;
-background-color:#FFFF00;
-color:#CC0000;
-}
-</style>
-<div id="cargando"><h3>Cargando página ...</h3> Sea paciente, los datos demoran en ser importados.</div>-->
-
-<!--<div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
-</div>
-<div class="content">I would like to display a loading bar before the entire page is loaded. For now, I'm just using a small delay:
-
-The page already uses jquery.
-
-Note: I have tried this, but it didn't work for me:
-
-loading bar while script runs
-
-I also tried other solutions. In most cases, the page loads as usually or the page won't load/display at all.
-
-Thank you for any help.</div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>
-$(function() {
-    $(".preload").fadeOut(2000, function() {
-        $(".content").fadeIn(1000);        
-    });
-});
-</script>    
-
-<style>
-.content {display:none;}
-.preload { width:100px;
-    height: 100px;
-    position: fixed;
-    top: 50%;
-    left: 50%;}
-</style>-->
-
-
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -63,22 +14,25 @@ use dosamigos\google\maps\Map;
 use dosamigos\google\maps\services\DirectionsRequest;
 use dosamigos\google\maps\overlays\Polygon;
 use dosamigos\google\maps\layers\BicyclingLayer;
+use kartik\mpdf\Pdf;
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 $this->title = 'Mensajeros Cercanos';
 ?>
-
-
-
-
-
-
-
 <h2>Mensajeros Cercanos</h2>
+
+<?php
+echo Html::a('<i class="glyphicon glyphicon-barcode"></i> Generar Factura', ['/envio/factura'], [
+    'class'=>'btn btn-danger', 
+    'target'=>'_blank', 
+    'data-toggle'=>'tooltip', 
+    'title'=>'Descargue su Factura'
+]);
+?>
+
 <?php
 $coord_centro = new LatLng(['lat' => $latitud_origen, 'lng' => $longitud_origen]);
 $map = new Map([
@@ -107,7 +61,6 @@ $marker_centro->attachInfoWindow(new InfoWindow(
         ]));
         
 $map->addOverlay($marker_centro);
-
 foreach ($mensajeros as $f) {
     $coord = new LatLng(['lat' => $f['latitud'], 'lng' => $f['longitud']]);
     $aux = \app\models\Profile::find()->where(['user_id'=>$f['user_id']])->asArray()->one();
@@ -133,10 +86,9 @@ echo $map->display();
         $radio_en_km = $radio /1000;
         $id_usuario = Yii::$app->user->identity['id'];
         $favorito = \app\models\Favoritos::find()->select('mensajero_id')->asArray()->all();
-//        
+               
         foreach($favorito as $fav){
-            $favorito_id = $fav['mensajero_id'];
-                
+            $favorito_id = $fav['mensajero_id'];                
                 foreach ($mensajeros as $f) {
                     $latitud_destino = $f['latitud'];
                     $longitud_destino = $f['longitud'];   
@@ -175,17 +127,20 @@ echo $map->display();
                          $id_mensajero = $id_mjs['mensajero_id'];
                                      
                          $mensajero = $model->detallesMensajero($id_mensajero);  
-                         echo($mensajero);
-                         
-                         //Elimino los datos de la tabla temporal                                                 
+                    }
+                }
+       }        
+       if($mensajero){
+                             echo($mensajero);
+                             //Elimino los datos de la tabla temporal                                                 
                                      $x = Yii::$app->db->createCommand("
                                         DELETE FROM distancia_temp 
                                     ")->execute();
-                        return;
-                    }
-                }
-       }            
+                             return;        
+                         }
 ?>
+
+
 
 <style>
     #gmap0-map-canvas{

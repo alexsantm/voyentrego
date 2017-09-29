@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 use yii\widgets\DetailView;
@@ -30,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="envio-view">
-
     <div class="row">
         <div class="col-lg-10">
             <h1><?php echo('Detalle del envío: '); ?><?= Html::encode($this->title) ?></h1>
@@ -48,7 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
     </div>
-    
     <?php 
 //    DetailView::widget([
 //        'model' => $model,
@@ -72,10 +69,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ////            'mensajero_id',
 //        ],
 //    ]) 
-            ?>
+    ?>
 
 </div>
-
 <!--/*********************************************************************************************************************/-->
 <?php
 $latitud_origen = $model['latitud'];
@@ -191,134 +187,127 @@ else{
 <!--/*****************************************************GRIDVIEW DE  DESTINOS**************************************************************/-->
 <div class="geo-destino-index">
     <br><br>
-    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
+    <p style="text-align: right"> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
             ['destino/create', 'id'=>$model->id],
-            ['class'=>'btn btn-success btn-lg modalButton', 'title'=>'view/edit', ]
+            ['class'=>'btn btn-success btn-lg modalButton', 
+             'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
             );?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
-     'dataProvider' => $dataProvider,
-     'panel' => ['type' => GridView::TYPE_WARNING, 'footer'=>false],
-//        'filterModel' => $searchModel,
-        'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'attribute' => 'id',
-                'label' => 'Id',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-            ], 
-            [
-                'attribute' => 'ciudad_id',
-                'label' => 'Ciudad',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-                'value' => function($model, $key, $index, $column) {
-                   $service = app\models\Ciudad::findOne($model->ciudad_id);
-                   return $service ? $service->ciudad : '-';
-                },     
-            ],
-            [
-                'attribute' => 'destinatario',
-                'label' => 'Destinatario',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-            ],             
-            [
-                'attribute' => 'direccion_destino',
-                'label' => 'Dirección Destino',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-            ],             
-//            'latitud',
-//            'longitud',
-            [
-                'attribute' => 'celular',
-                'label' => 'Celular',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-            ],             
-            [
-                'attribute' => 'fecha_registro',
-                'label' => 'Fecha Registro',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-            ],             
-//            'fecha_asignacion',
-//            'fecha_finalizacion',
-//            'kilometros',
-//            'valor',
-            [
-                'attribute' => 'observacion',
-                'label' => 'Observación',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-                'format'=>'html'
-            ],             
-//            'estado_envio_id',
-            [
-                'attribute' => 'retorno_destino_id',
-                'label' => 'Retorno a:',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-                'value' => function($model, $key, $index, $column) {
-                   $service = app\models\Destino::findOne($model->retorno_destino_id);
-                   return $service ? $service->direccion_destino : '-';
-                },     
-            ],            
-            [
-                'attribute' => 'retorno_inicio',
-                'label' => 'Retorno a Origen:',
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-                'value' => function($model, $key, $index, $column) {
-                   if($model->retorno_inicio){
-                       return "Si";
-                   } 
-                   else{
-                       return "No";
-                   }                   
-                },     
-            ],            
-//            'tipo_envio_id',
-//            'dimensiones_id',
-//            ['class' => 'yii\grid\ActionColumn'],
-            ['class' => 'kartik\grid\ActionColumn',
-              'template'=>'{view}{update}{delete}',
-                'buttons'=>[
-                        'view' => function ($url, $model) { 
-                            $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/'.$model->id]);
-//                            print_r($url);
-//                            print_r(Yii::$app->urlManager->createAbsoluteUrl(['destino/'.$model->id]));
-//                            die();
-                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
-                                  'class'=>'btn btn-success btn-md modalButton','title' => Yii::t('yii', 'View'),
-                          ]); 
-                        },
-                        'update' => function ($url, $model) {     
-                        $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/update/'.$model->id,  'id_envio' => $model->envio_id]);    
-                        return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [
-                                  'class'=>'btn btn-success btn-md','title' => Yii::t('yii', 'Update'),
-                          ]); 
-                        },
-                        'delete' => function($url, $model) {
-                        $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/'.$model->id]);    
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['delete', 'id' => $model['id']], ['class'=>'btn btn-success btn-md',
-                        'title' => Yii::t('app', 'Delete'), 'data-confirm' => Yii::t('app', 'Are you sure you want to delete this Record?'),'data-method' => 'post']);        
-                        }        
-                ]                                      
-            ],           
-        ],
-    ]); ?>
-<?php Pjax::end(); ?></div>
+    <?php // Verifico si existe Dataprovider para que aparezca el Grid
+    if ($dataProvider->totalCount > 0) {
+ 
+                    ?>
+                <?php Pjax::begin(); ?>    <?= GridView::widget([
+                     'dataProvider' => $dataProvider,
+                     'panel' => ['type' => GridView::TYPE_WARNING, 'footer'=>false],
+                //        'filterModel' => $searchModel,
+                        'columns' => [
+                //            ['class' => 'yii\grid\SerialColumn'],
+                            [
+                                'attribute' => 'id',
+                                'label' => 'Id',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                            ], 
+                            [
+                                'attribute' => 'ciudad_id',
+                                'label' => 'Ciudad',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                                'value' => function($model, $key, $index, $column) {
+                                   $service = app\models\Ciudad::findOne($model->ciudad_id);
+                                   return $service ? $service->ciudad : '-';
+                                },     
+                            ],
+                            [
+                                'attribute' => 'destinatario',
+                                'label' => 'Destinatario',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                            ],             
+                            [
+                                'attribute' => 'direccion_destino',
+                                'label' => 'Dirección Destino',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                            ],             
+                            [
+                                'attribute' => 'celular',
+                                'label' => 'Celular',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                            ],             
+                            [
+                                'attribute' => 'fecha_registro',
+                                'label' => 'Fecha Registro',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                            ],             
+                            [
+                                'attribute' => 'observacion',
+                                'label' => 'Observación',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                                'format'=>'html'
+                            ],             
+                            [
+                                'attribute' => 'retorno_destino_id',
+                                'label' => 'Retorno a:',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                                'value' => function($model, $key, $index, $column) {
+                                   $service = app\models\Destino::findOne($model->retorno_destino_id);
+                                   return $service ? $service->direccion_destino : '-';
+                                },     
+                            ],            
+                            [
+                                'attribute' => 'retorno_inicio',
+                                'label' => 'Retorno a Origen:',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                                'value' => function($model, $key, $index, $column) {
+                                   if($model->retorno_inicio){
+                                       return "Si";
+                                   } 
+                                   else{
+                                       return "No";
+                                   }                   
+                                },     
+                            ],            
+                            ['class' => 'kartik\grid\ActionColumn',
+                              'template'=>'{view}{update}{delete}',
+                                'buttons'=>[
+                                        'view' => function ($url, $model) { 
+                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/'.$model->id]);
+                                            return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
+                                                      'class'=>'btn btn-warning btn-md modalButton','title' => Yii::t('yii', 'View'),
+                                              ]); 
+                                        },
+                                        'update' => function ($url, $model) {     
+                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/update/'.$model->id,  'id_envio' => $model->envio_id]);    
+                                            return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [
+                                                      'class'=>'btn btn-warning btn-md','title' => Yii::t('yii', 'Update'),
+                                          ]); 
+                                        },
+                                        'delete' => function($url, $model) {
+                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/'.$model->id]);    
+                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['delete', 'id' => $model['id']], ['class'=>'btn btn-warning btn-md',
+                                            'title' => Yii::t('app', 'Deletee'), 'data-confirm' => Yii::t('app', 'Are you sure you want to delete this Record?'),'data-method' => 'post']);        
+                                        }        
+                                ]                                      
+                            ],           
+                        ],
+                    ]); ?>
+                <?php Pjax::end(); 
 
+ }
+?></div>
 <!--/******************************************************FIN GRIDVIEW DE DESTINOS************************************************************/-->
 <?php
                                         /***********************************************************/
                                         //*****************Calculo de Distancias******************
                                         /************************************************************/
 if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un inicio
-
     //    print_r("destinos_llenos");
                         $primer_punto[] = [$destinos_completos[0]['latitud'] , $destinos_completos[0]['longitud']];
 
@@ -335,7 +324,7 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
 
                         $dist_origen_primer_punto = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_primer_punto, $long_primer_punto);
 
-    //                    echo('<h2>'); echo('Distancia Origen al primer punto:');echo(round($dist_origen_primer_punto, 2));echo('</h2>');  
+//                        echo('<h2>'); echo('Distancia Origen al primer punto:');echo(round($dist_origen_primer_punto, 2));echo('</h2>');  
 
                          //Distancia entre puntos:   
                             $unit = 'km'; // 'miles' or 'km'
@@ -350,9 +339,9 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                                     $dist_resto_puntos ==0;
                                 }
 //                                else{
-    //                                    print_r($lugar[$i][0]); echo(' - '); print_r($lugar[$i+1][0]);; echo("Distancia: ".$distance);echo('<br>');
+//                                        print_r($lugar[$i][0]); echo(' - '); print_r($lugar[$i+1][0]);; echo("Distancia: ".$distance);echo('<br>');
 //                                }
-                                $dist_resto_puntos = $dist_resto_puntos +$distance;echo('<br>');                
+                                $dist_resto_puntos = $dist_resto_puntos +$distance;                
                             }
                             if(is_nan($dist_resto_puntos)){
                                 $dist_resto_puntos ==0;
@@ -394,13 +383,14 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                         //Calculo de retornos al inicio
                             $resultados = \app\models\Destino::find()->where(['retorno_inicio'=> 1])->andWhere(['envio_id'=>$model->id])->asArray()->all();
                             $valor_distancia_retorno_inicio = 0;
-    //                        print_r($resultados);
+//                            print_r($resultados);
                             if(!empty($resultados)){
+//                                print_r("si hay resultados");
                                         foreach($resultados as $r){
                                             //  $latitud_origen  coordenada de inicio
                                             //  $longitud_origen coordenada de inicio
 
-                                        $coord_dest = \app\models\GeoDestino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
+                                        $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
                                             $lat_dest= $coord_dest['latitud'];    
                                             $long_dest= $coord_dest['longitud'];    
                                             $lugar_dest=$coord_dest['direccion_destino']; 
@@ -408,11 +398,13 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                                         $valor_distancia_ret_ini = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_dest, $long_dest);
                                         $valor_distancia_retorno_inicio = $valor_distancia_retorno_inicio + $valor_distancia_ret_ini;
 
-    //                                    echo('<br>'); echo("<h3>Retorno al inicio : ". $valor_distancia_ret_ini.'</h3>' );   
+//                                        echo('<br>'); echo("<h3>Retorno al inicio : ". $valor_distancia_ret_ini.'</h3>' );   
                                        } 
-    //                                   echo('<br>'); echo("<h2>Valor de retornos del inicio: ". $valor_distancia_retorno_inicio.'</h2>' );   
+//                                       echo('<br>'); echo("<h2>Valor de retornos del inicio: ". $valor_distancia_retorno_inicio.'</h2>' );   
+//                                       die();
                             }
                             else{
+//                                print_r("no hay resultados");
                                         $valor_distancia_retorno_inicio = 0;
     //                                    print_r("no hay retorno al inicio");
                             }
@@ -432,9 +424,13 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
 
     
 //    Detalle de Distancias y costos
-if(!empty($dist_origen_primer_punto) && !empty($dist_resto_puntos)){
+//print_r($dist_origen_primer_punto); echo('<br>');
+//print_r($dist_resto_puntos); echo('<br>');
+if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
+//if(($dist_origen_primer_punto>0) || !empty($dist_resto_puntos)){
+//if(!empty($dist_resto_puntos)){
     ?>
-    <h2>Detalle de distancias y Costo referencial</h2>
+    <h2 class="bg-warning text-white">Detalle de distancias y Costo referencial</h2>
     <table class="table table-hover table-condensed">
       <thead class="thead-inverse">
         <tr>
@@ -444,11 +440,11 @@ if(!empty($dist_origen_primer_punto) && !empty($dist_resto_puntos)){
       </thead>
       <tbody>
         <tr class="table-warning">
-          <td>Distancia entre el Origen y el Primero Destino</td>
+          <td>Distancia entre el Origen y el Primero Destino (km)</td>
           <td><?php echo(round($dist_origen_primer_punto, 2));?></td>
         </tr>
         <tr>
-          <td>Distancia en resto de Destinos</td>
+          <td>Distancia en resto de Destinos (km)</td>
           <td><?php 
                   if (is_nan($dist_resto_puntos)) {
                       $dist_resto_puntos = 0;
@@ -459,15 +455,15 @@ if(!empty($dist_origen_primer_punto) && !empty($dist_resto_puntos)){
                   ?></td>
         </tr>
         <tr>
-          <td>Distancia de Retornos a Destinos determinados</td>
+          <td>Distancia de Retornos a Destinos determinados (km)</td>
           <td><?php echo($valor_distancia_retornos);?></td>
         </tr>
         <tr>
-          <td>Distancia de Retornos al Origen</td>
+          <td>Distancia de Retornos al Origen (km)</td>
           <td><?php echo($valor_distancia_retorno_inicio);?></td>
         </tr>
         <tr>
-          <td>Total de Kilómetros</td>
+          <td>Total de Kilómetros (km)</td>
           <td><?php echo($total);?></td>
         </tr>
         <tr>
@@ -497,7 +493,7 @@ if(!empty($dist_origen_primer_punto) && !empty($dist_resto_puntos)){
     </center>
 <?php
 }
-else{
+else {
     echo('<center><h3 class="alert alert-danger">Agregue mas Destinos para poder visualizar detalle de distancia aproximada y costos</h3></center>');
 }
 ?>
@@ -552,6 +548,3 @@ else{
             });
         ");
 ?>
-
-
-

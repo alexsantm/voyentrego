@@ -8,6 +8,7 @@ use app\models\EnvioSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
 
 /**
  * EnvioController implements the CRUD actions for Envio model.
@@ -120,8 +121,7 @@ class EnvioController extends Controller
         $connection = \Yii::$app->db;
         $model->fecha_registro = date("Y-m-d H:i");
         $model->estado_envio_id = 1;
-        if ($model->load(Yii::$app->request->post())) {
-            
+        if ($model->load(Yii::$app->request->post())) {            
             try{
             $transaction = $connection->beginTransaction(); 
                 $post=Yii::$app->request->post();                    
@@ -256,7 +256,6 @@ class EnvioController extends Controller
     
     public function actionDetalles()
     {
-//        $get=Yii::$app->request->get('destinos_completos');
         $dist_origen_primer_punto = Yii::$app->request->get('dist_origen_primer_punto');
         $dist_resto_puntos=Yii::$app->request->get('dist_resto_puntos');
         $valor_distancia_retornos =Yii::$app->request->get('valor_distancia_retornos');
@@ -266,23 +265,27 @@ class EnvioController extends Controller
         $latitud_origen =      Yii::$app->request->get('latitud_origen'); 
         $longitud_origen =      Yii::$app->request->get('longitud_origen'); 
         
-        $mensajeros = \app\models\Tracking::find()->asArray()->all();
+        //Traigo los ultimos registros por cada mensajero (si hay varios registros traera el mas actual)
+        $mensajeros = (new \yii\db\Query())
+        ->select(['t1.id', 't1.user_id', 't1.longitud', 't1.latitud', 't1.fecha'])
+        ->from('tracking t1')
+        ->where('t1.fecha = (SELECT MAX(t2.fecha)FROM tracking t2 WHERE t2.user_id = t1.user_id)')
+        ->all();
+        
         $r = \app\models\Opciones::find()->select('radio')->asArray()->one();
         $radio = $r['radio'];
-
-            
-            return $this->render('detalles', [
-                 'dist_origen_primer_punto'=>$dist_origen_primer_punto,
-                'dist_resto_puntos'=>$dist_resto_puntos,
-                'valor_distancia_retornos'=>$valor_distancia_retornos,
-                'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,
-                'total'=>$total,
-                'valor_km'=>$valor_km,   
-                'latitud_origen'=>$latitud_origen,
-                'longitud_origen'=>$longitud_origen,
-                'mensajeros' => $mensajeros,
-                'radio' => $radio,
-            ]);
+        return $this->render('detalles', [
+            'dist_origen_primer_punto'=>$dist_origen_primer_punto,
+            'dist_resto_puntos'=>$dist_resto_puntos,
+            'valor_distancia_retornos'=>$valor_distancia_retornos,
+            'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,
+            'total'=>$total,
+            'valor_km'=>$valor_km,   
+            'latitud_origen'=>$latitud_origen,
+            'longitud_origen'=>$longitud_origen,
+            'mensajeros' => $mensajeros,
+            'radio' => $radio,
+        ]);
     }
    
 
@@ -292,14 +295,77 @@ class EnvioController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+//    public function actionUpdate($id)
+//    {
+//        $model = $this->findModel($id);
+//
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        } else {
+//            return $this->render('update', [
+//                'model' => $model,
+//            ]);
+//        }
+//    }
+    
+//        public function actionUpdate($id)
+//    {
+//       $model = $this->findModel($id);       
+//        $connection = \Yii::$app->db;
+//        $model->fecha_registro = date("Y-m-d H:i");
+//        $model->estado_envio_id = 1;
+//        if ($model->load(Yii::$app->request->post())) {    
+//           
+//            try{
+//            $transaction = $connection->beginTransaction();        
+////             print_r($model);die();
+//                $model->save(); 
+////                if(!$model->save()){
+////                    print_r($model->errors); die();
+////                }                
+//            $transaction->commit();           
+//            }catch(\Exception $e)
+//            {
+//                $error=$e->getMessage();
+//                print_r($error); die();
+//                $transaction::rollback();
+//                 throw $e;                
+//            }
+//            //return $this->redirect(['view', 'id' => $model->id]);
+////            return $this->redirect(Yii::$app->request->referrer);
+//            return $this->redirect(['index']);                  
+//        } else {
+//            return $this->render('update', [
+//                'model' => $model,
+//            ]);
+//        }
+//    }
+         public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model = $this->findModel($id);     
+        $connection = \Yii::$app->db;
+        $model->fecha_registro = date("Y-m-d H:i");
+        $model->estado_envio_id = 1;
+        if ($model->load(Yii::$app->request->post())) {            
+            try{
+            $transaction = $connection->beginTransaction(); 
+                $post=Yii::$app->request->post();                    
+                $latitud = $post['Envio']['latitude'];	
+                $longitud = $post['Envio']['longitude'];
+                $model->latitud= $latitud;
+                $model->longitud= $longitud;                    
+                $model->save();                 
+            $transaction->commit();           
+            }catch(\Exception $e)
+            {
+                $transaction::rollback();
+                 throw $e;
+            }
             return $this->redirect(['view', 'id' => $model->id]);
+//            return $this->redirect(['index']);      
+             
         } else {
-            return $this->render('update', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
@@ -332,6 +398,24 @@ class EnvioController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    
+    
+        public function actionFactura() {
+    $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
+            'content' => $this->renderPartial('factura'),
+            'options' => [
+                'title' => 'Factura',
+                'subject' => 'Factura Generada por VoyEntrego'
+            ],
+            'methods' => [
+                'SetHeader' => ['Generada por VoyEntrego||Fecha: ' . date("r")],
+                'SetFooter' => ['|Page {PAGENO}|'],
+            ]
+        ]);
+        return $pdf->render();
     }
     
     

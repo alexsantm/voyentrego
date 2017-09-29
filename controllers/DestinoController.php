@@ -81,23 +81,22 @@ class DestinoController extends Controller
         $model->fecha_registro = date("Y-m-d H:i");
         $model->estado_envio_id = 1;
         if ($model->load(Yii::$app->request->post())) {            
-//                            print_r(Yii::$app->request->post()); die();
             try{
             $transaction = $connection->beginTransaction();                  
                 $model->save(); 
+//                if(!$model->save()){
+//                    print_r($model->errors); die();
+//                }                
             $transaction->commit();           
             }catch(\Exception $e)
             {
                 $error=$e->getMessage();
-                //print_r($error);die();
                 $transaction::rollback();
-                 throw $e;
-                
+                 throw $e;                
             }
             //return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(Yii::$app->request->referrer);
-//            return $this->redirect(['index']);      
-             
+//            return $this->redirect(['index']);                  
         } else {
             return $this->renderAjax('create', [
                 'model' => $model,
@@ -193,6 +192,39 @@ class DestinoController extends Controller
             ]);
         }
     }
+    
+//    public function actionUpdate($id)
+//    {
+//       $model = $this->findModel($id);       
+//        $connection = \Yii::$app->db;
+//        $model->fecha_registro = date("Y-m-d H:i");
+//        $model->estado_envio_id = 1;
+//        if ($model->load(Yii::$app->request->post())) {                       
+//            try{
+//            $transaction = $connection->beginTransaction();        
+//             print_r($model);die();
+//                $model->save(); 
+//                if(!$model->save()){
+//                    print_r($model->errors); die();
+//                }                
+//            $transaction->commit();           
+//            }catch(\Exception $e)
+//            {
+//                $error=$e->getMessage();
+//                $transaction::rollback();
+//                 throw $e;                
+//            }
+//            //return $this->redirect(['view', 'id' => $model->id]);
+//            return $this->redirect(Yii::$app->request->referrer);
+////            return $this->redirect(['index']);                  
+//        } else {
+//            return $this->renderAjax('update', [
+//                'model' => $model,
+//            ]);
+//        }
+//    }
+    
+    
 
     /**
      * Deletes an existing Destino model.
@@ -203,8 +235,8 @@ class DestinoController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
+//        return $this->redirect(['index']);
     }
 
     /**
