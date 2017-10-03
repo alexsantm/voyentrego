@@ -4,29 +4,36 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DimensionesSearch */
+/* @var $searchModel app\models\ValoresSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Dimensiones';
+$this->title = 'Valores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="dimensiones-index">
+<div class="valores-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nueva Dimensión', ['create'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Nuevo Valor', ['/valores/create'], ['class' => 'btn btn-warning']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_WARNING
+        ],
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'dimension',
-            ['class' => 'kartik\grid\ActionColumn',
+//            'id',
+            'km_inicio',
+            'km_fin',
+            'valor',
+
+//            ['class' => 'yii\grid\ActionColumn'],
+             ['class' => 'kartik\grid\ActionColumn',
                           'template'=>'{view}{update}{delete}',
                             'buttons'=>[
                                     'view' => function ($url, $model) {     
@@ -55,9 +62,13 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 
+
+
 <style>
     .skip-export{
         /*border: solid 1px red;*/
         width: 150px !important;
     }
-</style> 
+    
+    
+</style>    

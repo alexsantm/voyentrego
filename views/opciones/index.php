@@ -2,31 +2,32 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DimensionesSearch */
+/* @var $searchModel app\models\OpcionesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Dimensiones';
+$this->title = 'Opciones';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="dimensiones-index">
+<div class="opciones-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nueva Dimensión', ['create'], ['class' => 'btn btn-warning']) ?>
+        <?php // Html::a('Create Opciones', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?= GridView::widget([
+<?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
+//
+//            'id',
+            'radio',
 
-            'id',
-            'dimension',
-            ['class' => 'kartik\grid\ActionColumn',
+                         ['class' => 'kartik\grid\ActionColumn',
                           'template'=>'{view}{update}{delete}',
                             'buttons'=>[
                                     'view' => function ($url, $model) {     
@@ -52,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-</div>
+<?php Pjax::end(); ?></div>
 
 
 <style>
@@ -60,4 +61,4 @@ $this->params['breadcrumbs'][] = $this->title;
         /*border: solid 1px red;*/
         width: 150px !important;
     }
-</style> 
+</style>   

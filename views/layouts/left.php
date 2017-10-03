@@ -44,42 +44,69 @@ $user = Yii::$app->user->identity;
                     ['label' => 'Estadísticas', 'icon' => 'bar-chart', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
                     
                     [
-                        'label' => 'Ayuda',
+                        'label' => 'Configuración',
                         'icon' => 'question-circle',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
-                            [
-                                'label' => 'Level One',
-                                'icon' => 'circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
+                            ['label' => 'Opciones', 'icon' => 'dashboard', 'url' => ['site/configuracion'],],
+                            //['label' => 'Tabla de Valores', 'icon' => 'dashboard', 'url' => ['valores/index'],],
+//                            [
+//                                'label' => 'Level One',
+//                                'icon' => 'circle-o',
+//                                'url' => '#',
+//                                'items' => [
+//                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
+//                                    [
+//                                        'label' => 'Level Two',
+//                                        'icon' => 'circle-o',
+//                                        'url' => '#',
+//                                        'items' => [
+//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+//                                        ],
+//                                    ],
+//                                ],
+//                            ],
                         ],
                     ],
-                    [
-                        'label' => 'Administrador',
-                        'icon' => 'share',
-                        'url' => '#',
-                        'visible' => Yii::$app->user->can("admin"),
-                        'items' => [
-                            ['label' => 'Opcion 1', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
-                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
-                        ],
-                    ],
+                    
+//                    [
+//                        'label' => 'Ayuda',
+//                        'icon' => 'question-circle',
+//                        'url' => '#',
+//                        'items' => [
+//                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+//                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
+//                            [
+//                                'label' => 'Level One',
+//                                'icon' => 'circle-o',
+//                                'url' => '#',
+//                                'items' => [
+//                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
+//                                    [
+//                                        'label' => 'Level Two',
+//                                        'icon' => 'circle-o',
+//                                        'url' => '#',
+//                                        'items' => [
+//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+//                                        ],
+//                                    ],
+//                                ],
+//                            ],
+//                        ],
+//                    ],
+//                    [
+//                        'label' => 'Administrador',
+//                        'icon' => 'share',
+//                        'url' => '#',
+//                        'visible' => Yii::$app->user->can("admin"),
+//                        'items' => [
+//                            ['label' => 'Opcion 1', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+//                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
+//                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
+//                        ],
+//                    ],
                 ],
             ]
         ) 

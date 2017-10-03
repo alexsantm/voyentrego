@@ -339,7 +339,7 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                                     $dist_resto_puntos ==0;
                                 }
 //                                else{
-//                                        print_r($lugar[$i][0]); echo(' - '); print_r($lugar[$i+1][0]);; echo("Distancia: ".$distance);echo('<br>');
+//                                        print_r($lugar[$i][0]); echo(' ==> '); print_r($lugar[$i+1][0]);; echo("Distancia: ".$distance);echo('<br>');
 //                                }
                                 $dist_resto_puntos = $dist_resto_puntos +$distance;                
                             }
@@ -421,8 +421,7 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                             $valor_km = $model->calculo_valores($total);
     }    
      //*****************Fin Calculo de Distancias******************
-
-    
+         
 //    Detalle de Distancias y costos
 //print_r($dist_origen_primer_punto); echo('<br>');
 //print_r($dist_resto_puntos); echo('<br>');
@@ -441,7 +440,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
       <tbody>
         <tr class="table-warning">
           <td>Distancia entre el Origen y el Primero Destino (km)</td>
-          <td><?php echo(round($dist_origen_primer_punto, 2));?></td>
+          <td><?php echo('<strong>'); echo(round($dist_origen_primer_punto, 2)); echo('</strong>');?></td>
         </tr>
         <tr>
           <td>Distancia en resto de Destinos (km)</td>
@@ -450,25 +449,67 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
                       $dist_resto_puntos = 0;
                       echo($dist_resto_puntos);
                   } else {
-                      echo($dist_resto_puntos);
+                      echo('<strong>');echo($dist_resto_puntos);echo('</strong>');
                   }
-                  ?></td>
+                  ?>
+          </td>
+        <tr>
+            <?php
+             for($i = 0; $i<count($destinos_completos); $i++){          
+                                  $punto[] = [$destinos_completos[$i]['latitud'] , $destinos_completos[$i]['longitud']];
+                                  $lugar[] = [$destinos_completos[$i]['direccion_destino']];
+                                  $distance = \Yii::$app->googleApi->getDistance($punto[$i], $punto[$i+1], $unit);
+                                  if(is_nan($distance)){
+                                      $dist_resto_puntos ==0;
+                                  }
+                                  else{
+                                      //$lug[] = $lugar[$i][0]. ' -- '. $lugar[$i+1][0].' :'. '<strong>'.$distance.'</strong>';                                      
+                                      $lug[] = $lugar[$i][0]. ' -- '. $lugar[$i+1][0];                                      
+                                      $dis[] = $distance;
+                                  }                                                                   
+                              }
+                              if((!empty($lug) &&(!empty($dis)))){
+                                    unset($lug[0]);
+                                    unset($dis[0]);
+//                                    foreach($lug as $l){
+//                                            $lugares = $l;
+//                                            echo('&ensp; &ensp;');print_r($lugares); echo('<br>');
+//                                        }
+//                                        foreach($dis as $d){
+//                                            $distancias = $d;
+//                                            echo('&ensp; &ensp;');print_r($distancias); echo('<br>');
+//                                        }
+                                     echo('<td>');   
+                                     foreach($lug as $l){
+                                            $lugares = $l;
+                                            echo('<div>&ensp;&ensp;');print_r($lugares); echo('</div><br>');
+                                        }
+                                     echo('</td>');
+                                     echo('<td>');
+                                        foreach($dis as $d){
+                                            $distancias = $d;
+                                            echo('<div>');print_r($distancias); echo('</div><br>');
+                                        }    
+                                    echo('</td>');    
+                              }    
+            ?>
+        </tr>  
         </tr>
         <tr>
           <td>Distancia de Retornos a Destinos determinados (km)</td>
-          <td><?php echo($valor_distancia_retornos);?></td>
+          <td><?php echo('<strong>'); echo($valor_distancia_retornos);echo('</strong>');?></td>
         </tr>
         <tr>
           <td>Distancia de Retornos al Origen (km)</td>
-          <td><?php echo($valor_distancia_retorno_inicio);?></td>
+          <td><?php echo('<strong>');echo($valor_distancia_retorno_inicio); echo('</strong>');?></td>
         </tr>
         <tr>
           <td>Total de Kilómetros (km)</td>
-          <td><?php echo($total);?></td>
+          <td><?php echo('<strong>');echo($total); echo('</strong>');?></td>
         </tr>
         <tr>
-           <td class="warning"><strong>Costo Referencial (USD)</strong></td>
-           <td class="warning"><strong><?php echo($valor_km);?></strong></strong></td>
+            <td class="warning"><strong><h3>Costo Referencial (USD)</h3></strong></td>
+           <td class="warning"><strong><h3><?php echo($valor_km);?></h3></strong></strong></td>
         </tr>
       </tbody>
     </table>

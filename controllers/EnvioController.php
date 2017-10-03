@@ -36,10 +36,26 @@ class EnvioController extends Controller
      */
     public function actionIndex()
     {
+        $user_id = Yii::$app->user->identity['id'];
         $searchModel = new EnvioSearch();
+        $searchModel->user_id = $user_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+        public function actionIndexexitoso()
+    {
+        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new EnvioSearch();
+        $searchModel->user_id = $user_id;
+        $searchModel->estado_envio_id = 3;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('indexexitoso', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -67,7 +83,6 @@ class EnvioController extends Controller
         $searchModel->envio_id = $id;
         $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
         
-        
         return $this->render('view', [
             'model' => $this->findModel($id),
             'origen'=>$origen,
@@ -77,17 +92,22 @@ class EnvioController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+        public function actionVistaenvio($id)
+    {
+         return $this->renderAjax('vistaenvio', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+    
          public function actionViewrec($id)
     {
         $origen = \app\models\Envio::findOne($id); 
-        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();     
-//        print_r($destinos);
-        
+        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();            
         $searchModel = new \app\models\DestinoSearch();
         $searchModel->envio_id = $id;
         $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
-        
-        
+                
         return $this->render('viewrec', [
             'model' => $this->findModel($id),
             'origen'=>$origen,

@@ -72,20 +72,39 @@ class SiteController extends Controller
     
             public function actionIndex()
     {
-        $rol = Yii::$app->user->identity['role_id'];      
+        $rol = Yii::$app->user->identity['role_id'];     
+        $user_id = Yii::$app->user->identity['id'];
+        $fechaactual = date("Y-m-d");;
+//        print_r($fechaactual); die();
         if (Yii::$app->user->isGuest)
             return $this->redirect(['user/login']);
         else{            
                 if(!empty($rol) && ($rol==2)){    
-//                    print_r($rol);
-                    return $this->render('index');
+                    //return $this->render('index');
+                    $searchModel = new \app\models\EnvioSearch();
+                    $searchModel->user_id = $user_id;
+                    $searchModel->fecha_registro = $fechaactual;
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+                    return $this->render('index', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                    ]);
                 }
-                 if(!empty($rol) && ($rol==3)){    
-//                    print_r($rol);
+                if(!empty($rol) && ($rol==3)){    
                     return $this->render('indexmensajero');
                 }
                 else if(!empty($rol) && ($rol==1)){    
-                        return $this->render('index');    
+                    //    return $this->render('index');    
+                    $searchModel = new \app\models\EnvioSearch();
+                    $searchModel->user_id = $user_id;
+                    $searchModel->fecha_registro = $fechaactual;
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+                    return $this->render('index', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                    ]);    
                 }
                 else{        
                         print_r("Hubo un error de autorizacion");
@@ -94,12 +113,8 @@ class SiteController extends Controller
     }
 //            public function actionRegister()
 //    {
-//        
 //            return $this->redirect(['user/register']);
 //    }
-    
-    
-    
     
                 public function actionIndexmensajero()
     {
@@ -113,7 +128,6 @@ class SiteController extends Controller
         }
     }
     
-
     /**
      * Login action.
      *
@@ -175,13 +189,15 @@ class SiteController extends Controller
     }
     
     /****************************************************************/
-    
-    
-        
-            public function actionTestapi()
+       
+    public function actionTestapi()
     {
         print_r("Esta es una prueba del api"); exit;
         return $this->render('testapi');
     }
-
+    
+    public function actionConfiguracion()
+    {
+        return $this->render('configuracion');
+    }
 }
