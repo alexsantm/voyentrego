@@ -78,7 +78,13 @@ class SiteController extends Controller
 //        print_r($fechaactual); die();
         if (Yii::$app->user->isGuest)
             return $this->redirect(['user/login']);
-        else{            
+        else{        
+            /***************Promociones*************/
+//            $consulta = \app\models\Descuento::find()->asArray()->one();
+//            $foto_promocion = $consulta['archivo_promocion'];
+//            $fecha_inicio = $consulta['fecha_inicio'];
+//            $fecha_fin = $consulta['fecha_fin'];
+            /***************Fin Promociones*************/
                 if(!empty($rol) && ($rol==2)){    
                     //return $this->render('index');
                     $searchModel = new \app\models\EnvioSearch();
@@ -89,6 +95,10 @@ class SiteController extends Controller
                     return $this->render('index', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
+                        //Datos enviados desde Descuento:
+//                        'foto_promocion' => $foto_promocion,
+//                        'fecha_inicio' => $fecha_inicio,
+//                        'fecha_fin' => $fecha_fin,
                     ]);
                 }
                 if(!empty($rol) && ($rol==3)){    
@@ -104,6 +114,10 @@ class SiteController extends Controller
                     return $this->render('index', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
+                        //Datos enviados desde Descuento:
+                        'foto_promocion' => $foto_promocion,
+                        'fecha_inicio' => $fecha_inicio,
+                        'fecha_fin' => $fecha_fin,
                     ]);    
                 }
                 else{        
@@ -116,7 +130,7 @@ class SiteController extends Controller
 //            return $this->redirect(['user/register']);
 //    }
     
-                public function actionIndexmensajero()
+    public function actionIndexmensajero()
     {
         $rol = Yii::$app->user->identity['role_id'];      
         if (Yii::$app->user->isGuest){

@@ -301,11 +301,12 @@ use yii\helpers\Html;
                         <!-- Menu Footer-->
                         <!--<div class="row">-->
                             <li class="user-footer">
-                                <div class="col-lg-4 col-offset-md-12 col-offset-sm-12 col-offset-xs-12">                               
-                                    <?= Html::a('Mi perfil', ['/user/profile'], ['class'=>'btn btn-default btn-flat'])?>
+                                <div class="col-lg-12 col-offset-md-12 col-offset-sm-12 col-offset-xs-12">                               
+                                    <?php // Html::a('Mi perfil', ['/user/profile'], ['class'=>'col-md-12 btn btn-default btn-flat'])?>
+                                    <?= Html::a('Mi perfil', ['/user/perfil'], ['class'=>'col-md-12 btn btn-default btn-flat'])?>
                                 </div>
-                                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">                               
-                                    <?= Html::a('Cambio contraseña', ['/user/account'], ['class'=>'btn btn-default btn-flat'])?>
+                                <div class="col-lg-12 col-offset-md-12 col-offset-sm-12 col-offset-xs-12">                               
+                                    <?= Html::a('Cambio contraseña', ['/user/account'], ['class'=>'col-md-12  btn btn-default btn-flat'])?>
                                 </div>
                                 <div class="col-lg-12 col-offset-md-12 col-sm-12 col-xs-12">
                                     <?= Html::a(

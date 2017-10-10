@@ -40,8 +40,8 @@ $user = Yii::$app->user->identity;
                             ['label' => 'Ubicacion Mensajeros', 'icon' => 'dashboard', 'url' => ['tracking/ubicacion'],],
                         ],
                     ],
-                    ['label' => 'Rastreo', 'icon' => 'cogs', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
-                    ['label' => 'Estadísticas', 'icon' => 'bar-chart', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
+//                    ['label' => 'Rastreo', 'icon' => 'cogs', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
+//                    ['label' => 'Estadísticas', 'icon' => 'bar-chart', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
                     
                     [
                         'label' => 'Configuración',
@@ -96,17 +96,19 @@ $user = Yii::$app->user->identity;
 //                            ],
 //                        ],
 //                    ],
-//                    [
-//                        'label' => 'Administrador',
-//                        'icon' => 'share',
-//                        'url' => '#',
-//                        'visible' => Yii::$app->user->can("admin"),
-//                        'items' => [
-//                            ['label' => 'Opcion 1', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                    [
+                        'label' => 'Administrador',
+                        'icon' => 'share',
+                        'url' => '#',
+                        'visible' => Yii::$app->user->can("admin"),
+                        'items' => [
+                            ['label' => 'Administrador Recargas', 'icon' => 'file-code-o', 'url' => ['//recarga-transferencia/index'],],
+                            ['label' => 'Tabla de Valores', 'icon' => 'dashboard', 'url' => ['valores/index'],],
+                            ['label' => 'Promociones', 'icon' => 'dashboard', 'url' => ['//promocion/index'],],
 //                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
 //                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
-//                        ],
-//                    ],
+                        ],
+                    ],
                 ],
             ]
         ) 

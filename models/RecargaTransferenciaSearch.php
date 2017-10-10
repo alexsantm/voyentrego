@@ -68,7 +68,7 @@ class RecargaTransferenciaSearch extends RecargaTransferencia
 
         $query->andFilterWhere(['like', 'fecha', $this->fecha])
             ->andFilterWhere(['like', 'doc_referencia', $this->doc_referencia]);
-
+        $dataProvider->pagination->pageSize=10;
         return $dataProvider;
     }
 }

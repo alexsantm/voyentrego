@@ -46,14 +46,16 @@ $user = Yii::$app->user->identity;
                             </section>
                         </div>
                         <div id="contenedor" class=" col-lg-6">
-                            <section class="saldo">
-                                <div class="col-lg-4 iconos"><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span></div>
-                                <div class="col-lg-8">
-                                    <h2 class="texto_tomate">SALDO</h2>
-                                    <span class="texto_tomate">Carga de saldo</span><br>
-                                    <span class="texto_tomate">Métodos de pago</span><br>                                    
-                                </div>
-                            </section>
+                            <a href="<?= Url::to(['user/perfil#recarga']) ?>">
+                                <section class="saldo">
+                                    <div class="col-lg-4 iconos"><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span></div>
+                                    <div class="col-lg-8">
+                                        <h2 class="texto_tomate">SALDO</h2>
+                                        <span class="texto_tomate">Carga de saldo</span><br>
+                                        <span class="texto_tomate">Métodos de pago</span><br>                                    
+                                    </div>
+                                </section>
+                            </a>     
                         </div>
                         <div id="contenedor" class="col-lg-6">
                              <section class="cuenta">
@@ -68,12 +70,29 @@ $user = Yii::$app->user->identity;
                         </div>                
                     </div>
             
-                    <div class=" row col-lg-4" style="border: solid 2px green;">
-                        <center>
-                            <div class="promociones">
-                                PROMOCIONES
-                            </div>
-                        </center>    
+                    <div class=" row col-lg-4">
+                        <!--<center>-->
+                            <!--<div class="promociones">-->
+                                 <?php 
+//                                $fecha_actual = date("Y-m-d"); 
+//                                $model = new \app\models\Descuento;
+////                                 if ($model->check_in_range($fecha_inicio, $fecha_fin, $fecha_actual)) {
+////                                     print_r("si esta dentro del rango");
+////                                 }
+////                                 else{
+////                                     print_r("no esta dentro del rango");
+////                                 }
+//                                 if((!empty($foto_promocion)) && ($model->check_in_range($fecha_inicio, $fecha_fin, $fecha_actual))){
+//                                        echo Html::img('@web/images/promociones/'.$foto_promocion, ['style'=>'width:100%; height:357px;']);
+//                                    }
+//                                    else{
+//                                        echo Html::img('@web/images/promociones/no_promocion.png', ['style'=>'width:100%; height:357px;']);
+//                                    }
+                                    
+                                    echo Html::img('@web/images/promociones/no_promocion.png', ['style'=>'width:100%; height:357px;']);
+                                ?>
+                            <!--</div>-->
+                        <!--</center>-->    
                     </div>            
         </div>
         
@@ -175,12 +194,7 @@ $user = Yii::$app->user->identity;
       thead{
         color: #3c8dbc;
       }
-/*      thead th{
-        text-align: center;
-      }*/
-      
-      
-      
+
 @media (max-width: 1199px) {
   .iconos {
     display: none;

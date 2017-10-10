@@ -516,7 +516,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
 
             <!---------------------------------------------CONTINUAR---------------------------------------------------------------->
     <center>
-    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Continuar',
+    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
                 ['envio/detalles', 
                     'dist_origen_primer_punto'=>$dist_origen_primer_punto,
                     'dist_resto_puntos'=>$dist_resto_puntos,

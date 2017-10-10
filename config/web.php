@@ -10,6 +10,7 @@ $config = [
     'language' => 'es',
     'timeZone' => 'America/Guayaquil',
     'name'=>'VoyEntrego',
+//    'layoutPath'=>'@app/themes/adminLTE/layouts',
     'components' => [
 //        'view' => [
 //         'theme' => [

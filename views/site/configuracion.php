@@ -44,22 +44,23 @@ echo TabsX::widget([
     'enableStickyTabs'=>true,
 //    'position'=>TabsX::POS_RIGHT,
     'items' => [
+//        [
+//            'label' => 'Tabla de Valores(km)',
+//            'content' => $valores,
+//            'active' => true,
+//            'bordered'=>true,
+//            'height'=>TabsX::SIZE_LARGE,
+//        ],
         [
-            'label' => 'Tabla de Valores(km)',
-            'content' => $valores,
-            'active' => true,
-            'bordered'=>true,
-            'height'=>TabsX::SIZE_LARGE,
-        ],
-        [
-            'label' => 'Radio de búsqueda',
+            'label' => 'OPCIONES',
             'content' => $opciones,
             'headerOptions' => ['style'=>'font-weight:bold'],
+            'active' => true,
             'options' => ['id' => 'opciones'],
             'bordered'=>true,
         ],
         [
-            'label' => 'Tipos de Envìo',
+            'label' => 'TIPOS DE ENVIO',
             'content' => $tipo_envio,
             'headerOptions' => ['style'=>'font-weight:bold'],
             'options' => ['id' => 'tipo_envio'],
@@ -67,7 +68,7 @@ echo TabsX::widget([
         ],
         
         [
-            'label' => 'Dimensiones',
+            'label' => 'DIMENSIONES',
             'content' => $dimensiones,
             'headerOptions' => ['style'=>'font-weight:bold'],
             'options' => ['id' => 'dimensiones'],

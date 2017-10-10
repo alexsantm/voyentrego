@@ -414,13 +414,13 @@ a.desc:after {
     /*border: solid 1px red;*/  
 }
 
-.promociones{
-    width: 345px;
+/*.promociones{*/
+/*    width: 345px;
     height:325px; 
     padding: 5px 5px;
-     margin: 15px 15px;  
+     margin: 15px 15px;  */
     /*border: solid 1px blue;*/  
-}
+/*}*/
 
 .historial{
     background-color: #FEF7F1; 
