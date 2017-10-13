@@ -15,6 +15,8 @@ use dosamigos\google\maps\services\DirectionsRequest;
 use dosamigos\google\maps\overlays\Polygon;
 use dosamigos\google\maps\layers\BicyclingLayer;
 use kartik\mpdf\Pdf;
+
+use yii\httpclient\Client;
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -22,6 +24,86 @@ use kartik\mpdf\Pdf;
  */
 $this->title = 'Mensajeros Cercanos';
 ?>
+
+<h2>Detalles de Factura</h2>
+<div class="row">
+    <?php
+    print_r(Yii::$app->request->get());
+    $get = Yii::$app->request->get();
+    
+    $detalle_distancia_envio=$get['detalle_distancia_envio'];
+    $total_km= $get['total_km'];    
+    $valor_km= $get['valor_km'];    
+    $nombre= $get['nombre'];  
+    $direccion= $get['direccion'];  
+    $telefono= $get['telefono'];  
+    $cedula= $get['cedula'];  
+    $email= $get['email']; 
+    $valor_recarga= $get['valor_recarga']; 
+    
+    
+    echo('<br>'); echo('**************************'); echo('<br>');
+    echo ("Detalle Distancia Envio : "); echo($detalle_distancia_envio); echo('<br>');
+    echo ("total km: "); echo($total_km); echo('<br>');
+    echo ("valor km: "); echo($valor_km); echo('<br>');
+    echo ("Nombre "); echo($nombre); echo('<br>');
+    echo ("Direccion: "); echo($direccion); echo('<br>');
+    echo ("Telefono: "); echo($telefono); echo('<br>');
+    echo ("cedula: "); echo($cedula); echo('<br>');
+    echo ("Email: "); echo($email); echo('<br>');
+    echo ("Valor Recarga: "); echo($valor_recarga); echo('<br>');
+    
+    
+//$client = new Client();
+//$response = $client->createRequest()
+//        ->setMethod('post')
+//        ->setUrl('http://example.com/api/1.0/users')
+//        ->setData(['name' => 'John Doe', 'email' => 'johndoe@example.com'])
+//        ->send();
+//if ($response->isOk) {
+//    $newUserId = $response->data['id'];
+//}
+//else{
+//    print_r("paso algo");
+//}
+
+
+
+$client = new Client();
+$response = $client->createRequest()
+        ->setMethod('post')
+        ->setUrl('https://dog.ceo/dog-api/api/breeds/list/all')
+        ->setData(['name' => 'John Doe', 'email' => 'johndoe@example.com'])
+        ->send();
+if ($response->isOk) {
+    $newUserId = $response->data['id'];
+}
+else{
+    print_r("paso algo");
+}
+
+
+//$text = Yii::$app->httpclient->get('https://dog.ceo/dog-api/api/breeds/list/all');
+//foreach($text as $t){
+//    print_r($t);
+//    //print_r($t['id']); echo("--"); print_r($t['name']); echo("<br>");
+//}
+
+
+
+
+$client = new Client(['baseUrl' => 'https://dog.ceo/api/breeds/list/all']);
+$response = $client->get('https://dog.ceo/api/breeds/list/all');
+//$newUserResponse = $client->post('users', ['name' => 'John Doe', 'email' => 'johndoe@example.com'])->send();
+//$articleResponse = $client->get('breed', ['breed' => 'affenpinscher'])->send();
+print_r($response);
+//$client->post('subscriptions', ['user_id' => $newUserResponse->data['id'], 'article_id' => $articleResponse->data['id']])->send();
+
+?>
+</div>
+
+
+
 <h2>Mensajeros Cercanos</h2>
 
 <?php

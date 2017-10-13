@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'valor_promocion',
             'valor_base',
             'limite',
+            'limite_personas',
             'fecha_inicio',
             'fecha_fin',
         ],

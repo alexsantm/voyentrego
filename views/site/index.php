@@ -10,7 +10,7 @@ $user = Yii::$app->user->identity;
 <!--<div class="container" style="border: solid 1px red;">-->
     <!-- Content Header (Page header) -->
     <nav class="seccion_tomate">
-      Resumen de envíos realizados
+        <div><h3>Menú Principal</h3></div>
     </nav>
     <!--<h1>Estadísticas<small>Control panel</small></h1>-->
 
@@ -100,6 +100,10 @@ $user = Yii::$app->user->identity;
       <div class="row">
           <span class="iconos glyphicon glyphicon-road" aria-hidden="true"> <h2 class="texto_tomate" style="display:inline-block">&ensp; ENVIOS EN CAMINO</h2></span>
           
+    <?php // Verifico si existe Dataprovider para que aparezca el Grid
+    if ($dataProvider->totalCount > 0) {
+        
+    ?>
           
           <div class="envio-index">
                 <?php Pjax::begin(); ?>    
@@ -175,7 +179,14 @@ $user = Yii::$app->user->identity;
                 ?>
                 <?php Pjax::end(); ?>
           </div>
-          
+    <?php
+    }
+    else{
+    ?>
+          <div class="alert alert-info"><center><h4>No existen envíos para el dia de hoy</h4></center></div>
+    <?php
+    }    
+    ?>      
           
           
           

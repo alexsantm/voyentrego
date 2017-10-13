@@ -133,20 +133,44 @@ a.desc:after {
 }
 
 
-
 .skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
     background-color: white !important;
 }
 
 /**************************************Color blanco de main header************************************/
+
+/* Ajuste de logo principal al header principal*/
+    .main-header .logo { height: 64px !important;}
+    .sidebar-menu li:first-child  { margin-top: 14px !important;}
+/* Fin  Ajuste de logo principal al header principal*/
+
+
+/*.sidebar-menu li:active {
+    background: #F7931E !important;
+    color: green !important;
+}*/
+
+/*.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
+    border-left-color: #F7931E !important;
+    background: #F7931E !important;
+}*/
+
+/*.sidebar-menu li:active {
+   
+    background-color: #F7931E !important;
+}*/
+
 .skin-blue .main-header .logo {
     background-color: white !important;
+    /*height: 64px !important;*/
 }
 .skin-blue .main-header .navbar {
     background-color: white !important;
+    /*height: 50px !important;*/
 }
 .skin-blue .main-header .navbar .nav>li>a {
     color: grey !important;
+    /*height: 50px !important;*/
 }
 .skin-blue .main-header .navbar .sidebar-toggle {
     color: grey !important;
@@ -268,7 +292,7 @@ a.desc:after {
     
     .skin-blue .treeview-menu>li>a {    /*Submenu*/
         color: #666666 !important;        
-        font-size: 16px !important ;
+        font-size: 14px !important ;
     }
     
     .skin-blue .sidebar-menu>li>a{  /*Color plomo a las cajas del menu izquierdo*/
@@ -291,10 +315,14 @@ a.desc:after {
         background: white !important;
     }
     
-    .skin-blue .sidebar-menu>li.active>a {
+/*    .skin-blue .sidebar-menu>li.active>a {
         color: white;
         background: #eea236 !important;
-    }
+    }*/
+    
+    .skin-blue .sidebar-menu>li>.treeview-menu {
+    background: #ECF0F5 !important;
+}
     
     skin-blue .sidebar a:active {
      color: transparent !important; 
@@ -311,6 +339,12 @@ a.desc:after {
     color: white;
 }
 
+.fondo_azul{
+    background-color: #264E61 !important;
+    color: white !important;
+}
+
+
 .seccion_tomate{
 /*    background-color: #F7931E;
     color: white;
@@ -320,7 +354,7 @@ a.desc:after {
     background-color: #F7931E;
     color: white; 
     font-size: 20px;
-    padding: 40px 0px 20px 25px;
+    padding: 10px 10px 20px 20px;
     width: 100%;
     max-height: 76px;
 }

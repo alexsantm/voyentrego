@@ -12,6 +12,7 @@ use Yii;
  * @property string $valor_promocion
  * @property string $valor_base
  * @property integer $limite
+ * @property integer $limite_personas
  * @property string $fecha_inicio
  * @property string $fecha_fin
  *
@@ -35,7 +36,7 @@ class Promocion extends \yii\db\ActiveRecord
         return [
             [['codigo_promocion', 'valor_promocion', 'valor_base', 'limite', 'fecha_inicio', 'fecha_fin'], 'required'],
             [['valor_promocion', 'valor_base'], 'number'],
-            [['limite'], 'integer'],
+            [['limite', 'limite_personas'], 'integer'],
             [['codigo_promocion', 'fecha_inicio', 'fecha_fin'], 'string', 'max' => 45],
         ];
     }
@@ -51,6 +52,7 @@ class Promocion extends \yii\db\ActiveRecord
             'valor_promocion' => Yii::t('app', 'Valor Promocion'),
             'valor_base' => Yii::t('app', 'Valor Base'),
             'limite' => Yii::t('app', 'Limite'),
+            'limite_personas' => Yii::t('app', 'Limite Personas'),
             'fecha_inicio' => Yii::t('app', 'Fecha Inicio'),
             'fecha_fin' => Yii::t('app', 'Fecha Fin'),
         ];
@@ -64,7 +66,7 @@ class Promocion extends \yii\db\ActiveRecord
         return $this->hasMany(PromocionUsuario::className(), ['promocion_id' => 'id']);
     }
     
-        /******************************************************************************************************/
+/******************************************************************************************************/
     
     public function generarCodigo($longitud) {
         $key = '';
@@ -81,4 +83,7 @@ class Promocion extends \yii\db\ActiveRecord
         $user_ts = strtotime($evaluame);
         return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
     }
+    
+    
+    
 }

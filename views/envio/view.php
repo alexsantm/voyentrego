@@ -323,9 +323,18 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                         $latlng_destination   = [$lat_primer_punto,$long_primer_punto];
 
                         $dist_origen_primer_punto = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_primer_punto, $long_primer_punto);
-
-//                        echo('<h2>'); echo('Distancia Origen al primer punto:');echo(round($dist_origen_primer_punto, 2));echo('</h2>');  
-
+                        
+    /*******************************************************************************************/                    
+//                        Extraigo los nombres del origen y envio para capturar el primer y ultimo lugar
+                        foreach($destinos_completos as $d){
+                            $lugares[] = $d['direccion_destino'];                            
+                        }
+                        $primer_lugar = array_shift($lugares); //Extraigo primer elemento de array
+                        $ultimo_lugar = array_pop($lugares);    //Extraigo ultimo elemento de array
+                        $detalle_distancia_envio = $primer_lugar.' - '.$ultimo_lugar;
+//                        print_r($detalle_distancia_envio);
+    /*******************************************************************************************/                    
+                        
                          //Distancia entre puntos:   
                             $unit = 'km'; // 'miles' or 'km'
                             $punto[] = [$destinos_completos[0]['latitud'] , $destinos_completos[0]['longitud']];
@@ -411,14 +420,14 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
 
                          //Distancia sumada de los 2 primeros puntos + el resto 
                             if(is_nan($dist_resto_puntos)){
-                                $total = $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
+                                $total_km = $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
                             }
                             else{
-                                $total = $dist_resto_puntos + $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
+                                $total_km = $dist_resto_puntos + $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
                             }
     //                        echo('<h2>'); echo('Distancia Total: ');echo($total);echo('</h2>');
 
-                            $valor_km = $model->calculo_valores($total);
+                            $valor_km = $model->calculo_valores($total_km);
     }    
      //*****************Fin Calculo de Distancias******************
          
@@ -505,7 +514,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
         </tr>
         <tr>
           <td>Total de Kilómetros (km)</td>
-          <td><?php echo('<strong>');echo($total); echo('</strong>');?></td>
+          <td><?php echo('<strong>');echo($total_km); echo('</strong>');?></td>
         </tr>
         <tr>
             <td class="warning"><strong><h3>Costo Referencial (USD)</h3></strong></td>
@@ -515,23 +524,86 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
     </table>
 
             <!---------------------------------------------CONTINUAR---------------------------------------------------------------->
-    <center>
-    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
-                ['envio/detalles', 
-                    'dist_origen_primer_punto'=>$dist_origen_primer_punto,
-                    'dist_resto_puntos'=>$dist_resto_puntos,
-                    'valor_distancia_retornos'=>$valor_distancia_retornos,
-                    'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,
-                    'total'=>$total,
-                    'valor_km'=>$valor_km, 
-                    'latitud_origen'=>$latitud_origen,
-                    'longitud_origen'=>$longitud_origen,
-                ],
-                ['class'=>'btn btn-warning btn-lg', 'title'=>'Haga click para continuar', ]
-                );
-        ?>
-    </p>
-    </center>
+    <?php
+    //Datos para la factura
+    $profile = Yii::$app->user->identity->profile;
+        $nombre = $profile->full_name;
+        $direccion = $profile->direccion;
+        $telefono = $profile->telefono;
+        $cedula = $profile->cedula;
+        $email = Yii::$app->user->identity['email'];
+    
+    //Valor de Recarga
+    $id_usuario = Yii::$app->user->identity['id'];
+    $query= app\models\Recarga::find()->where(['user_id'=>$id_usuario])->asArray()->one();
+        $valor_recarga = $query['valor_recarga'];
+    
+    
+//    print_r($nombre);echo('<br>');
+//    print_r($direccion);echo('<br>');
+//    print_r($telefono);echo('<br>');
+//    print_r($cedula);echo('<br>');
+//    print_r($email);echo('<br>');
+//    print_r($valor_recarga);echo('<br>');
+    
+    
+    if($valor_recarga > $valor_km){
+    ?>
+            <div class="panel panel-warning">
+                <div class="panel-heading"> <center><h2>Condiciones de Aceptación</h2></center></div>
+                <div class="panel-body">   
+                    <p>Al aceptar, se generará la factura correspondiente con sus datos y se descontará de su saldo de Recarga</p>
+                    <center>
+                    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
+                                ['envio/detalles', 
+                                    //Datos para Factura:
+                                    'detalle_distancia_envio'=>$detalle_distancia_envio,
+                                    'total_km'=>$total_km,
+                                    'valor_km'=>$valor_km, 
+                                    'nombre'=>$nombre, 
+                                    'direccion'=>$direccion, 
+                                    'telefono'=>$telefono, 
+                                    'cedula'=>$cedula, 
+                                    'email'=>$email, 
+                                    'valor_recarga'=>$valor_recarga, 
+                                    
+                                    //Datos para dibujar el Google Maps:                                    
+                                    'dist_origen_primer_punto'=>$dist_origen_primer_punto,
+                                    'dist_resto_puntos'=>$dist_resto_puntos,
+                                    'valor_distancia_retornos'=>$valor_distancia_retornos,
+                                    'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,                    
+                                    'latitud_origen'=>$latitud_origen,
+                                    'longitud_origen'=>$longitud_origen,
+                                ],
+                                ['class'=>'btn btn-warning btn-lg', 'title'=>'Haga click para continuar', ]
+                                );
+                        ?>
+                    </p>
+                    </center>
+                </div>
+            </div>    
+    <?php
+    }
+    else{
+    ?>
+    <div class="col-lg-12  col-sm-12">
+        <div class="alert alert-danger"><h2><strong>ATENCION</strong></h2><p>Su saldo de recarga es insuficiente para poder continuar. Por favor recarge saldo</p></div>
+    </div>
+    <center><p> 
+            <?=
+               Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>'. ' Recarga Saldo',
+                       ['//recarga-transferencia/create', 'user_id'=>$id_usuario],                   
+                       ['class'=>'btn btn-warning btn-lg modalButton', 'title'=>'Haga click aquí para recargar Saldo', ]
+               );
+            ?>    
+    </p></center>
+
+    <?php
+    }
+    ?>
+    
+    
+    
 <?php
 }
 else {

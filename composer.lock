@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bd6fc6bcd7aab66511d36cc1817e5b60",
-    "content-hash": "0e2b712e6ccef0554c5326fcacd423bc",
+    "hash": "5a07f4ea1a1b58f184ab016a18251c97",
+    "content-hash": "ddaaa6af3d5b451936b2f07609bf4e97",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -199,6 +199,62 @@
             "time": "2016-01-31 16:06:21"
         },
         {
+            "name": "andrewblake1/yii2-credit-card",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andrewblake1/yii2-credit-card.git",
+                "reference": "fac5907a9a90637079fd1c5eff53ca25cc385cca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andrewblake1/yii2-credit-card/zipball/fac5907a9a90637079fd1c5eff53ca25cc385cca",
+                "reference": "fac5907a9a90637079fd1c5eff53ca25cc385cca",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/font-awesome": "4.*@stable",
+                "bower-asset/jquery.payment": "~1",
+                "kartik-v/yii2-krajee-base": "*",
+                "yiisoft/yii2": "~2"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "andrewblake1\\creditcard\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Blake",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Yaroslav Havryliv",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Yii2 credit card widget with client validation",
+            "homepage": "https://github.com/andrewblake1/yii2-credit-card",
+            "keywords": [
+                "card",
+                "credit",
+                "widget",
+                "yii2"
+            ],
+            "time": "2016-06-28 23:14:46"
+        },
+        {
             "name": "bower-asset/bootstrap",
             "version": "v3.3.7",
             "source": {
@@ -352,6 +408,44 @@
             "time": "2017-02-28 15:46:21"
         },
         {
+            "name": "bower-asset/font-awesome",
+            "version": "v4.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/a8386aae19e200ddb0f6845b5feeee5eb7013687",
+                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "less/font-awesome.less",
+                    "scss/font-awesome.scss"
+                ],
+                "bower-asset-ignore": [
+                    "*/.*",
+                    "*.json",
+                    "src",
+                    "*.yml",
+                    "Gemfile",
+                    "Gemfile.lock",
+                    "*.md"
+                ]
+            },
+            "license": [
+                "OFL-1.1",
+                "MIT",
+                "CC-BY-3.0"
+            ],
+            "description": "Font Awesome",
+            "time": "2016-10-24 15:52:54"
+        },
+        {
             "name": "bower-asset/jquery",
             "version": "2.2.4",
             "source": {
@@ -500,6 +594,29 @@
             ]
         },
         {
+            "name": "bower-asset/jquery.payment",
+            "version": "v1.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stripe/jquery.payment.git",
+                "reference": "88fcc8a48a7f1d2e77bb6cf90089ea7cfa59765e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stripe/jquery.payment/zipball/88fcc8a48a7f1d2e77bb6cf90089ea7cfa59765e",
+                "reference": "88fcc8a48a7f1d2e77bb6cf90089ea7cfa59765e",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.5"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "lib/jquery.payment.js"
+            },
+            "time": "2016-08-15 21:27:47"
+        },
+        {
             "name": "bower-asset/lightbox2",
             "version": "v2.9.0",
             "source": {
@@ -607,6 +724,53 @@
             "license": [
                 "MIT"
             ]
+        },
+        {
+            "name": "braintree/braintree_php",
+            "version": "3.25.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/braintree/braintree_php.git",
+                "reference": "8c8785b8876d5b2f4b4f78c5768ad245a7c43feb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/8c8785b8876d5b2f4b4f78c5768ad245a7c43feb",
+                "reference": "8c8785b8876d5b2f4b4f78c5768ad245a7c43feb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-hash": "*",
+                "ext-openssl": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Braintree": "lib/"
+                },
+                "psr-4": {
+                    "Braintree\\": "lib/Braintree"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Braintree",
+                    "homepage": "http://www.braintreepayments.com"
+                }
+            ],
+            "description": "Braintree PHP Client Library",
+            "time": "2017-08-25 19:38:09"
         },
         {
             "name": "cebe/markdown",
@@ -3024,6 +3188,48 @@
             "time": "2017-03-29 03:56:27"
         },
         {
+            "name": "npm-asset/braintree-web",
+            "version": "2.10.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/braintree-web/-/braintree-web-2.10.1.tgz",
+                "reference": null,
+                "shasum": "e0d918a2a30a620d64ed8695df1a0f92ca3a8156"
+            },
+            "require-dev": {
+                "npm-asset/jsdom": ">=1.1.0,<2.0.0"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/braintree/braintree-web/issues"
+                },
+                "npm-asset-main": "dist/braintree.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git@github.com:braintree/braintree-web"
+                },
+                "npm-asset-scripts": []
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "braintree",
+                    "email": "code@getbraintree.com"
+                }
+            ],
+            "description": "A suite of tools for integrating Braintree in the browser",
+            "homepage": "https://github.com/braintree/braintree-web",
+            "keywords": [
+                "braintree",
+                "payments"
+            ],
+            "time": "2015-07-22 15:43:00"
+        },
+        {
             "name": "psr/http-message",
             "version": "1.0.1",
             "source": {
@@ -3218,6 +3424,50 @@
             "time": "2017-05-11 14:25:49"
         },
         {
+            "name": "sjaakp/yii2-bandoneon",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sjaakp/yii2-bandoneon.git",
+                "reference": "49c78bf018d17209f1f401108bfb4a41b9cec58d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sjaakp/yii2-bandoneon/zipball/49c78bf018d17209f1f401108bfb4a41b9cec58d",
+                "reference": "49c78bf018d17209f1f401108bfb4a41b9cec58d",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "sjaakp\\bandoneon\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sjaak Priester",
+                    "email": "sjaak@sjaakpriester.nl",
+                    "homepage": "http://sjaakpriester.nl"
+                }
+            ],
+            "description": "Lightweight accordion widget for Yii 2.0.",
+            "keywords": [
+                "accordion",
+                "extension",
+                "widget",
+                "yii",
+                "yii2"
+            ],
+            "time": "2015-08-02 12:22:55"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.8",
             "source": {
@@ -3270,6 +3520,52 @@
                 "mailer"
             ],
             "time": "2017-05-01 15:54:03"
+        },
+        {
+            "name": "tuyakhov/yii2-braintree",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tuyakhov/yii2-braintree.git",
+                "reference": "b952c7492974061131e20804480534cfc68c2ab8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tuyakhov/yii2-braintree/zipball/b952c7492974061131e20804480534cfc68c2ab8",
+                "reference": "b952c7492974061131e20804480534cfc68c2ab8",
+                "shasum": ""
+            },
+            "require": {
+                "braintree/braintree_php": "*",
+                "npm-asset/braintree-web": "2.10.*",
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "tuyakhov\\braintree\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Tuyakhov",
+                    "email": "atuyakhov@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Braintree for Yii2",
+            "homepage": "https://github.com/tuyakhov/yii2-braintree",
+            "keywords": [
+                "braintree",
+                "yii",
+                "yii2"
+            ],
+            "time": "2014-05-27 00:00:00"
         },
         {
             "name": "yeesoft/yii2-lightbox",
@@ -6131,7 +6427,8 @@
         "kartik-v/yii2-grid": 20,
         "kartik-v/yii2-widget-datepicker": 20,
         "newerton/yii2-fancybox": 20,
-        "kartik-v/yii2-editable": 20
+        "kartik-v/yii2-editable": 20,
+        "andrewblake1/yii2-credit-card": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

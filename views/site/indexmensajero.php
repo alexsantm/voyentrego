@@ -4,7 +4,7 @@ $this->title = 'VoyVengo';
 <!--<div class="container" style="border: solid 1px red;">-->
     <!-- Content Header (Page header) -->
     <nav class="seccion_tomate">
-      Resumen de envíos realizados
+      Menú
     </nav>    
     
     <section class="content-header">

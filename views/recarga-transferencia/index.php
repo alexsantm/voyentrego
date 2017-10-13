@@ -154,7 +154,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data' => ArrayHelper::map(\app\models\Estado::find()->where(['id'=>4])->all(), 'id', 'estado'),
                 ],        
             ], 
-            'valor_promo',            
+//            'valor_promo',    
+             [
+                'attribute'=>'valor_promo',
+                'header'=>'Valor Promoción',
+                'hAlign' => 'center',
+                'vAlign' => 'middle',
+                'filter'=> false, 
+            ],             
 
 //            ['class' => 'yii\grid\ActionColumn'],
               ['class' => 'kartik\grid\ActionColumn',
@@ -203,8 +210,6 @@ $this->params['breadcrumbs'][] = $this->title;
             });
         ");
 ?>
-
-
 
 <style>
     .kv-align-center img{

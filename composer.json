@@ -31,7 +31,7 @@
         "2amigos/yii2-google-maps-library": "*",
         "quexer69/yii2-google-api": "2.0.*",
         "kartik-v/yii2-widget-datepicker": "@dev",
-        "yiisoft/yii2-jui": "*",
+        "yiisoft/yii2-jui": "^2.0",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-field-range": "*",
         "kartik-v/yii2-tabs-x": "*",
@@ -39,7 +39,10 @@
         "yeesoft/yii2-lightbox": "~0.1.0",
         "newerton/yii2-fancybox": "dev-master",
         "kartik-v/yii2-editable": "@dev",
-        "kartik-v/yii2-widget-alert": "*"
+        "kartik-v/yii2-widget-alert": "*",
+        "tuyakhov/yii2-braintree": "*",
+        "andrewblake1/yii2-credit-card": "@dev",
+        "sjaakp/yii2-bandoneon": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

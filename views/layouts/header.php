@@ -7,7 +7,6 @@ use yii\helpers\Html;
 
 <header class="main-header">
     <?php 
-
     $rol = Yii::$app->user->identity['role_id']; 
     $id_usuario = Yii::$app->user->identity['id'];
 
@@ -16,22 +15,23 @@ use yii\helpers\Html;
         $user = Yii::$app->user->identity;
             
     ?><?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg">' . Html::img(Yii::$app->request->baseUrl.'/images/logos/mainLogo.png', ['width'=>'200','height'=>'43']) . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
-    
-    
+        
     <nav class="navbar navbar-static-top" role="navigation">
 
     <!--Diferenciacion de colores respecto a rol-->
         <?php
-        if(empty($user->profile->full_name)){
-            ?><span id="bienvenido" class="alert alert-danger" style="font-size: 30px;margin-left: 20px;"> Ingrese sus datos personales</span><?php
-        }else if($rol==2){            
+//        if(empty($user->profile->full_name)){
+//            ?>
+    <!--<center><span id="bienvenido" class="alert alert-danger" style="font-size: 30px;margin-left: 20px;"> Ingrese sus datos personales</span></center>--><?php
+//        }else 
+        if(($rol==2) && (!empty($user->profile->full_name))){  //Usuario          
             ?><span id="bienvenido" class="texto_tomate" style="font-size: 30px;margin-left: 20px;"> Bienvenid@ Usuario <?= $user->profile->full_name ?></span><?php
-        }else if($rol==3){
-            ?><span id="bienvenido" class="texto_azul" style="font-size: 30px;margin-left: 20px;">Mensajero: <?= $user->profile->full_name ?></span><?php
+        }else if(($rol==3) && (!empty($user->profile->full_name))){  //Mensajero
+            ?><span id="bienvenido" class="fondo_azul" style="font-size: 30px;margin-left: 20px;">Mensajero: <?= $user->profile->full_name ?></span><?php
+        }else if(($rol==4) && (!empty($user->profile->full_name))){  //Administrador
+            ?><span id="bienvenido" class="texto_tomate" style="font-size: 30px;margin-left: 20px;">Administrador: <?= $user->profile->full_name ?></span><?php
         }
-        ?>
-        
-        
+        ?>                
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
@@ -250,14 +250,13 @@ use yii\helpers\Html;
 <!--                        <img src="<? $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>-->
                         <?php //echo Html::img('@web/fotos/'.$user->foto, ['class' => 'user-image']); ?>
                         <?php if(!empty($profile->foto)){
-                                     echo Html::img('@web/images/fotos/'.$profile->foto, ['class' => 'user-image', 'style'=>'width:42px; height:40px;']);
+                                     echo Html::img('@web/images/fotos/'.$profile->foto, ['class' => 'user-image', 'style'=>'width:40px; height:40px;']);
                                 }
                                 else{
                                     echo Html::img('@web/images/fotos/default.jpg', ['class' => 'user-image']);
                                 }
                         ?>
-                        <!--<span class="hidden-xs"><?php // echo isset($user->username);?></span>-->
-                        
+                        <!--<span class="hidden-xs"><?php // echo isset($user->username);?></span>-->                        
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->

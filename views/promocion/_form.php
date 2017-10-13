@@ -25,6 +25,7 @@ use kartik\date\DatePicker;
             <div class="col-lg-6"><?= $form->field($model, 'valor_promocion')->textInput(['maxlength' => true]) ?></div>
             <div class="col-lg-6"><?= $form->field($model, 'valor_base')->textInput(['maxlength' => true]) ?></div>
             <div class="col-lg-6"><?= $form->field($model, 'limite')->textInput() ?></div>
+            <div class="col-lg-6"><?= $form->field($model, 'limite_personas')->textInput() ?></div>
             <div class="col-lg-12"><?=  '<label class="control-label">Rango de la Promoción</label>';
                 echo DatePicker::widget([
                     'name' => 'fecha_inicio',

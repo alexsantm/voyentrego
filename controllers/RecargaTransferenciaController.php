@@ -160,17 +160,17 @@ class RecargaTransferenciaController extends Controller
     {
         $model = new RecargaTransferencia();                
         $model->fecha = date("Y-m-d H:i");
-        $model->estado_id = 2;
-        
+        $model->estado_id = 2;        
 //        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 //            Yii::$app->response->format = Response::FORMAT_JSON;
 //            return ActiveForm::validate($model);
 //        }
-
-
         $model->attributes = \Yii::$app->request->post('RecargaTransferencia');
         if ($model->load(Yii::$app->request->post())) {
-//            print_r("envio datos"); die();
+            
+            $post = Yii::$app->request->post();
+            $codigo_promo = $post['RecargaTransferencia']['codigo_promocion'];            
+            
           $image = UploadedFile::getInstance($model, 'doc_referencia');
            if (!is_null($image)) {
              $model->doc_referencia = $image->name;
@@ -188,23 +188,54 @@ class RecargaTransferenciaController extends Controller
             }
             /*****************************************************************/
             $valor=$model->valor;
-            $codigo_promo = $model->codigo_promocion;
-            $promocion = $model->calculo_promocion($valor, $codigo_promo);
-            $model->valor_promo = $promocion;
+//            $codigo_promo = $model->codigo_promocion;
+
+            if(!empty($codigo_promo)){
+                $promocion = $model->calculo_promocion($valor, $codigo_promo);
+                $model->valor_promo = $promocion;
+//                echo("promocion"); print_r($model->valor_promo); die();
+                if(!empty($model->valor_promo)){
+                                    $model->save();
+                                    if ($model->save()) {             
+                                         ?><?= Yii::$app->session->setFlash('success', 'BIEN HECHO: Se ha añadido una promoción a su recarga');  ?><?php  
+                                        return $this->redirect(Yii::$app->request->referrer); 
+                                    }  
+                                    else {
+                                        var_dump ($model->getErrors()); die();
+                                    }
+                }
+                else{
+                                     $model->save();
+                                    if ($model->save()) {             
+                                        return $this->redirect(Yii::$app->request->referrer); 
+                                    }  
+                                    else {
+                                        var_dump ($model->getErrors()); die();
+                                    }
+                }
+            }
+            else{
+                $model->valor_promo = 0;                
+                                    $model->save();
+                                    if ($model->save()) {             
+                                         ?><?= Yii::$app->session->setFlash('success', 'BIEN HECHO: Recarga realizada con éxito');  ?><?php  
+                                        return $this->redirect(Yii::$app->request->referrer); 
+                                    }  
+                                    else {
+                                        var_dump ($model->getErrors()); die();
+                                    }
+            }
             
             /*****************************************************************/      
-            $model->save();
-            if ($model->save()) {             
-//                print_r("guardo"); die();
-//                return $this->redirect(['view', 'id' => $model->id]);   
-                 ?><?=Yii::$app->session->setFlash('success', 'BIEN HECHO: Recarga realizada con éxito');  ?><?php  
-                return $this->redirect(Yii::$app->request->referrer); 
-            }  
-            else {
-                var_dump ($model->getErrors()); die();
-            }
-        }
-    
+//            $model->save();
+//            if ($model->save()) {             
+//                 ?><?php // Yii::$app->session->setFlash('success', 'BIEN HECHO: Recarga realizada con éxito');  ?><?php  
+//                return $this->redirect(Yii::$app->request->referrer); 
+//            }  
+//            else {
+//                var_dump ($model->getErrors()); die();
+//            }
+        }    
               return $this->renderAjax('create', [
                   'model' => $model,
               ]);     

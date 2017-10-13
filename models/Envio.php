@@ -39,6 +39,8 @@ class Envio extends \yii\db\ActiveRecord
         public $address;
         public $longitude;
         public $latitude;
+        
+        public $favorito;
     
     /**
      * @inheritdoc

@@ -7,6 +7,7 @@ use yii\helpers\Url;
 //use yii\bootstrap\Nav;
 
 $user = Yii::$app->user->identity;
+$rol = Yii::$app->user->identity['role_id']; 
 //$profile = Yii::$app->user->identity->profile;
 ?>
 
@@ -14,6 +15,9 @@ $user = Yii::$app->user->identity;
 
     <section class="sidebar">
         <?php
+        
+if(!empty($user->profile->full_name)) //for now i use this to be rendered only if the name of the user is admin, but i want to change it to be available for everyone who are admin.
+{         
         echo dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu'],
@@ -24,6 +28,7 @@ $user = Yii::$app->user->identity;
                         'label' => 'Nuevo Envìo',
                         'icon' => 'location-arrow',
                         'url' => '#',
+                        'visible' => $rol ==2,
                         'items' => [
                             ['label' => 'Envìo Normal', 'icon' => 'file-code-o', 'url' => ['envio/create'],],
                             ['label' => 'Envìo Programado', 'icon' => 'dashboard', 'url' => ['envio/createprog'],],
@@ -35,6 +40,7 @@ $user = Yii::$app->user->identity;
                         'label' => 'Tracking',
                         'icon' => 'location-arrow',
                         'url' => '#',
+                        'visible' => $rol ==2,
                         'items' => [
                             ['label' => 'Tracking Mensajero', 'icon' => 'file-code-o', 'url' => ['tracking/create'],],
                             ['label' => 'Ubicacion Mensajeros', 'icon' => 'dashboard', 'url' => ['tracking/ubicacion'],],
@@ -43,31 +49,12 @@ $user = Yii::$app->user->identity;
 //                    ['label' => 'Rastreo', 'icon' => 'cogs', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
 //                    ['label' => 'Estadísticas', 'icon' => 'bar-chart', 'url' => ['#'], 'visible' => Yii::$app->user->can("admin")],
                     
-                    [
-                        'label' => 'Configuración',
-                        'icon' => 'question-circle',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Opciones', 'icon' => 'dashboard', 'url' => ['site/configuracion'],],
-                            //['label' => 'Tabla de Valores', 'icon' => 'dashboard', 'url' => ['valores/index'],],
-//                            [
-//                                'label' => 'Level One',
-//                                'icon' => 'circle-o',
-//                                'url' => '#',
-//                                'items' => [
-//                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
-//                                    [
-//                                        'label' => 'Level Two',
-//                                        'icon' => 'circle-o',
-//                                        'url' => '#',
-//                                        'items' => [
-//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-//                                        ],
-//                                    ],
-//                                ],
-//                            ],
-                        ],
+
+                    
+                    ['label' => 'Soporte', 
+                      'icon' => 'life-ring', 
+                      'visible' => $rol ==2,  
+                      'url' => ['site/soporte'],
                     ],
                     
 //                    [
@@ -96,54 +83,137 @@ $user = Yii::$app->user->identity;
 //                            ],
 //                        ],
 //                    ],
+                    /************************************************ADMINISTRADOR*************************************************************/
+                    
                     [
-                        'label' => 'Administrador',
-                        'icon' => 'share',
+                        'label' => 'Nuevo Envìo',
+                        'icon' => 'location-arrow',
                         'url' => '#',
-                        'visible' => Yii::$app->user->can("admin"),
+                        'visible' => $rol ==4,
                         'items' => [
-                            ['label' => 'Administrador Recargas', 'icon' => 'file-code-o', 'url' => ['//recarga-transferencia/index'],],
-                            ['label' => 'Tabla de Valores', 'icon' => 'dashboard', 'url' => ['valores/index'],],
-                            ['label' => 'Promociones', 'icon' => 'dashboard', 'url' => ['//promocion/index'],],
+                            ['label' => 'Envìo Normal', 'icon' => 'file-code-o', 'url' => ['envio/create'],],
+                            ['label' => 'Envìo Programado', 'icon' => 'dashboard', 'url' => ['envio/createprog'],],
+                            ['label' => 'Envìo Recurrente', 'icon' => 'dashboard', 'url' => ['envio/createrec'],],
+                        ],
+                    ],
+                    
+                                        [
+                        'label' => 'Configuración',
+                        'icon' => 'question-circle',
+                        'visible' => $rol ==4,
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Opciones', 'icon' => 'dashboard', 'url' => ['site/configuracion'],],
+                            
+                            //['label' => 'Tabla de Valores', 'icon' => 'dashboard', 'url' => ['valores/index'],],
+//                            [
+//                                'label' => 'Level One',
+//                                'icon' => 'circle-o',
+//                                'url' => '#',
+//                                'items' => [
+//                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
+//                                    [
+//                                        'label' => 'Level Two',
+//                                        'icon' => 'circle-o',
+//                                        'url' => '#',
+//                                        'items' => [
+//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+//                                        ],
+//                                    ],
+//                                ],
+//                            ],
+                        ],
+                    ],
+                    
+                    
+                    [
+                        'label' => 'Menú Administrador',
+                        'icon' => 'bars',
+                        'url' => '#',
+                        'visible' => $rol ==4,
+//                        'visible' => Yii::$app->user->can("admin"),
+                        'items' => [
+                            ['label' => 'Administrador Recargas', 'icon' => 'credit-card', 'url' => ['//recarga-transferencia/index'],],
+                            ['label' => 'Tabla de Valores', 'icon' => 'file-text-o', 'url' => ['valores/index'],],
+                            ['label' => 'Promociones', 'icon' => 'google-wallet', 'url' => ['//promocion/index'],],
+//                            ['label' => 'Preguntas Frecuentes', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/index'],],
+//                            ['label' => 'Preguntas', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/preguntas'],],
 //                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
 //                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
                         ],
+                    ],
+                    
+//                    [
+//                        'label' => 'User Administrador',
+//                        'icon' => 'share',
+//                        'url' => '#',
+//                        'visible' => $rol ==4,
+//                        'items' => [
+//                            ['label' => 'Crear Usuarios', 'icon' => 'file-code-o', 'url' => ['/user/admin/index'],],
+//                            ['label' => 'Crear Grupos de Usuarios', 'icon' => 'dashboard', 'url' => ['//grupo-usuarios/index'],],
+//                            ['label' => 'Asignación de Grupos', 'icon' => 'dashboard', 'url' => ['//user-grupo/index'],],
+//                            ['label' => 'Administración de Flota', 'icon' => 'dashboard', 'url' => ['//datos-vehiculo/index'],],
+////                            ['label' => 'Preguntas', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/preguntas'],],
+////                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
+////                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
+//                        ],
+//                    ],
+                    
+                    [
+                        'label' => 'Usuarios',
+                        'icon' => 'users',
+                        'url' => '#',
+                        'visible' => $rol ==4,
+                        'items' => [
+                            ['label' => 'Usuarios', 'icon' => 'user', 'url' => ['/user/admin/index'],],
+                            ['label' => 'Grupos', 'icon' => 'users', 'url' => ['//grupo-usuarios/index'],],
+                            ['label' => 'Asignación de Grupos', 'icon' => 'user-plus', 'url' => ['//user-grupo/index'],],
+                        ],
+                    ],
+                    
+                    [
+                        'label' => 'Flota',
+                        'icon' => 'car',
+                        'url' => ['//datos-vehiculo/index'],
+                        'visible' => $rol ==4,
+                    ],
+                    
+                     ['label' => 'Soporte', 
+                      'icon' => 'life-ring', 
+                      'visible' => $rol ==4,  
+                      'url' => ['site/soporte'],
+                    ],
+                    /************************************************MENSAJERO*************************************************************/
+                    [
+                        'label' => 'Pendientes',
+                        'icon' => 'exclamation',
+                        'url' => '#',
+                        'visible' => $rol ==3,
+                    ],
+                    
+                    [
+                        'label' => 'Historial',
+                        'icon' => 'calendar-check-o',
+                        'url' => '#',
+                        'visible' => $rol ==3,
+                    ],
+                    
+                    [
+                        'label' => 'Pagos',
+                        'icon' => 'money',
+                        'url' => '#',
+                        'visible' => $rol ==3,
+                    ],
+                      ['label' => 'Soporte', 
+                      'icon' => 'life-ring', 
+                      'visible' => $rol ==3,  
+                      'url' => ['site/soporte'],
                     ],
                 ],
             ]
         ) 
         ?>
-        
-        
-        <!-- Sidebar user panel -->
-<!--        <div class="user-panel">
-            <div class="pull-left image">-->
-                <!--<img src="<? $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>-->
-                 <?php 
-//                 if(!empty($profile->foto)){
-//                                    echo Html::img('@web/fotos/'.$profile->foto, ['class' => 'user-image']); 
-//                                }
-//                                else{
-//                                    echo Html::img('@web/fotos/default.jpg', ['class' => 'user-image']);
-//                                }
-                ?>
-<!--            </div>
-            <div class="pull-left info">
-                <p><?php // echo $profile->full_name;?></p>
-            </div>
-        </div>-->
-
-        <!-- search form -->
-<!--        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search..."/>
-              <span class="input-group-btn">
-                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-            </div>
-        </form>-->
-        <!-- /.search form -->
 
 <?php
 //echo SideNav::widget([
@@ -194,7 +264,21 @@ $user = Yii::$app->user->identity;
 //		],
 //	],
 //]);
-
+}
+else{
+     echo dmstr\widgets\Menu::widget(
+            [
+                'options' => ['class' => 'sidebar-menu'],
+                'items' => [
+                    [
+                        'label' => 'Completar Perfil',
+                        'icon' => 'user-secret',
+                        'url' => ['/user/perfil'],                        
+                    ],
+                ],
+            ]
+        );
+}
 ?>
 <?php
 //    $envio = Html::img(Yii::$app->request->baseUrl.'/images/iconos/menu_lateral/nuevoE.png', ['width'=>'30','height'=>'20']);

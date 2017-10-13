@@ -72,6 +72,7 @@ class SiteController extends Controller
     
             public function actionIndex()
     {
+        $user = Yii::$app->user->identity;        
         $rol = Yii::$app->user->identity['role_id'];     
         $user_id = Yii::$app->user->identity['id'];
         $fechaactual = date("Y-m-d");;
@@ -85,7 +86,11 @@ class SiteController extends Controller
 //            $fecha_inicio = $consulta['fecha_inicio'];
 //            $fecha_fin = $consulta['fecha_fin'];
             /***************Fin Promociones*************/
-                if(!empty($rol) && ($rol==2)){    
+            if(empty($user->profile->full_name)){       //Si no ha ingresado un nombre de usuario pues tiene que agregarlo
+                ?><?= Yii::$app->session->setFlash('danger', '<center><div><h2>ANTES DE COMENZAR:</h2> <h3>Por favor ingrese su información de Perfil</h3></div></center>');  ?><?php  
+                return $this->redirect(['user/perfil']);                
+            }
+                if(!empty($rol) && ($rol==2) || ($rol==4)){    
                     //return $this->render('index');
                     $searchModel = new \app\models\EnvioSearch();
                     $searchModel->user_id = $user_id;
@@ -120,6 +125,8 @@ class SiteController extends Controller
                         'fecha_fin' => $fecha_fin,
                     ]);    
                 }
+                
+                
                 else{        
                         print_r("Hubo un error de autorizacion");
                 }
@@ -213,5 +220,15 @@ class SiteController extends Controller
     public function actionConfiguracion()
     {
         return $this->render('configuracion');
+    }
+    
+     public function actionSoporte()
+    {
+        return $this->render('soporte');
+    }
+    
+     public function actionContactanos()
+    {
+        return $this->render('contactanos');
     }
 }

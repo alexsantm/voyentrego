@@ -20,6 +20,14 @@ $config = [
 //         ],
 //    ],
         
+        'braintree' => [
+        'class' => 'tuyakhov\braintree\Braintree',
+        'merchantId' => 'yqj4sysgyvmjp28b',
+        'publicKey' => 'wz9qxg3n9qqmff6s',
+        'privateKey' => '3e659e792b856fcb77a6e22b0a3737de',
+    ],
+        
+        
          'assetManager' => [
             'bundles' => [
                 'dosamigos\google\maps\MapAsset' => [

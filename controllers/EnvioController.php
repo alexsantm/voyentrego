@@ -10,6 +10,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use kartik\mpdf\Pdf;
 
+use yii\web\UploadedFile;
+use yii\helpers\Json;
+
 /**
  * EnvioController implements the CRUD actions for Envio model.
  */
@@ -34,18 +37,76 @@ class EnvioController extends Controller
      * Lists all Envio models.
      * @return mixed
      */
+    
+    
+//    public function actionIndex()
+//    {
+//        $user_id = Yii::$app->user->identity['id'];
+//        $searchModel = new EnvioSearch();
+//        $searchModel->user_id = $user_id;
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
+    
+    
     public function actionIndex()
     {
+//        $searchModel = new RecargaTransferenciaSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
         $user_id = Yii::$app->user->identity['id'];
         $searchModel = new EnvioSearch();
         $searchModel->user_id = $user_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+       
+        
+        if (Yii::$app->request->post('hasEditable')) {
+            $_id = $_POST['editableKey'];
+            $model = $this->findModel($_id);
+
+            $post = [];
+            $posted = current($_POST['Envio']);
+            $post['Envio'] = $posted;
+
+            if ($model->load($post)) {
+       
+                $query = \app\models\Envio::find()->where(['id'=>$_id])->asArray()->one();
+                $mensajero_id = $query['mensajero_id'];
+                $model->save();
+                if (isset($posted['favorito'])) {
+                    $output = $model->favorito;
+                    if($posted['favorito'] == 'SI'){
+                            $connection = Yii::$app->getDb();
+                            $command = $connection->createCommand('                                   
+                            INSERT INTO favoritos (user_id, mensajero_id)
+                                values ("'.$user_id.'",'.$mensajero_id.')
+                            ');                   
+                            $resultado = $command->execute();
+                    }else{
+                        $query = \app\models\Favoritos::find()->where(['user_id'=>$user_id,'mensajero_id'=>$mensajero_id ])->asArray()->count();
+                        if($query >0){
+                            \app\models\Favoritos::deleteAll(['user_id' => $user_id, 'mensajero_id' => $mensajero_id]);
+                        }
+                    }                  
+                }
+                $out = Json::encode(['output' => $output, 'message' => '']);
+            }
+            // Return AJAX JSON encoded response and exit
+            echo $out;
+            return $this->redirect(['index']);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+    
     
         public function actionIndexexitoso()
     {
