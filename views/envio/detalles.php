@@ -53,11 +53,12 @@ $this->title = 'Mensajeros Cercanos';
     echo ("Email: "); echo($email); echo('<br>');
     echo ("Valor Recarga: "); echo($valor_recarga); echo('<br>');
     
-    
+
+
 //$client = new Client();
 //$response = $client->createRequest()
 //        ->setMethod('post')
-//        ->setUrl('http://example.com/api/1.0/users')
+//        ->setUrl('https://dog.ceo/dog-api/api/breeds/list/all')
 //        ->setData(['name' => 'John Doe', 'email' => 'johndoe@example.com'])
 //        ->send();
 //if ($response->isOk) {
@@ -66,21 +67,10 @@ $this->title = 'Mensajeros Cercanos';
 //else{
 //    print_r("paso algo");
 //}
-
-
-
-$client = new Client();
-$response = $client->createRequest()
-        ->setMethod('post')
-        ->setUrl('https://dog.ceo/dog-api/api/breeds/list/all')
-        ->setData(['name' => 'John Doe', 'email' => 'johndoe@example.com'])
-        ->send();
-if ($response->isOk) {
-    $newUserId = $response->data['id'];
-}
-else{
-    print_r("paso algo");
-}
+//
+//$client = new Client(['baseUrl' => 'https://dog.ceo/api/breeds/list/all']);
+//$response = $client->get('https://dog.ceo/api/breeds/list/all');
+//print_r($response);
 
 
 //$text = Yii::$app->httpclient->get('https://dog.ceo/dog-api/api/breeds/list/all');
@@ -89,15 +79,6 @@ else{
 //    //print_r($t['id']); echo("--"); print_r($t['name']); echo("<br>");
 //}
 
-
-
-
-$client = new Client(['baseUrl' => 'https://dog.ceo/api/breeds/list/all']);
-$response = $client->get('https://dog.ceo/api/breeds/list/all');
-//$newUserResponse = $client->post('users', ['name' => 'John Doe', 'email' => 'johndoe@example.com'])->send();
-//$articleResponse = $client->get('breed', ['breed' => 'affenpinscher'])->send();
-print_r($response);
-//$client->post('subscriptions', ['user_id' => $newUserResponse->data['id'], 'article_id' => $articleResponse->data['id']])->send();
 
 ?>
 </div>
@@ -113,15 +94,18 @@ echo Html::a('<i class="glyphicon glyphicon-barcode"></i> Generar Factura', ['/e
     'data-toggle'=>'tooltip', 
     'title'=>'Descargue su Factura'
 ]);
+
 ?>
 
 <?php
 $coord_centro = new LatLng(['lat' => $latitud_origen, 'lng' => $longitud_origen]);
+
 $map = new Map([
     'center' => $coord_centro,
     'zoom' => 13,
     'width' => '100%'
 ]);
+
 $marker_centro = new Marker([
     'position' => $coord_centro, 
     'title' => 'Origen',
@@ -130,6 +114,7 @@ $marker_centro = new Marker([
     ]);
 
 $marker_centro->attachInfoWindow(new InfoWindow(['content' => 'Origen']));
+
 
 $circle = new \dosamigos\google\maps\overlays\Circle([
     'center' => $coord_centro, 
@@ -141,8 +126,11 @@ $circle = new \dosamigos\google\maps\overlays\Circle([
 $marker_centro->attachInfoWindow(new InfoWindow(
         ['content' => "<h4><strong>Origen</strong></h4>"
         ]));
+
         
 $map->addOverlay($marker_centro);
+
+
 foreach ($mensajeros as $f) {
     $coord = new LatLng(['lat' => $f['latitud'], 'lng' => $f['longitud']]);
     $aux = \app\models\Profile::find()->where(['user_id'=>$f['user_id']])->asArray()->one();
@@ -154,11 +142,21 @@ foreach ($mensajeros as $f) {
                 'animation' => 'google.maps.Animation.DROP',
                 'visible'=>'true'
             ]);
-     $marker->attachInfoWindow(new InfoWindow(['content' => $full_name ]));
-     $map->addOverlay($marker);
+
+if(empty($full_name)){
+    $marker->attachInfoWindow(new InfoWindow(['content' => "Sin nombre registrado" ])); 
+}
+else{
+    $marker->attachInfoWindow(new InfoWindow(['content' => $full_name ]));  
+}
+    
+     $map->addOverlay($marker);     
 }    
+
 $map->addOverlay($circle);
 echo $map->display();
+
+
 ?>
 
 

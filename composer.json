@@ -42,7 +42,9 @@
         "kartik-v/yii2-widget-alert": "*",
         "tuyakhov/yii2-braintree": "*",
         "andrewblake1/yii2-credit-card": "@dev",
-        "sjaakp/yii2-bandoneon": "*"
+        "sjaakp/yii2-bandoneon": "*",
+        "kartik-v/yii2-detail-view": "^1.7",
+        "kartik-v/yii2-widget-activeform": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

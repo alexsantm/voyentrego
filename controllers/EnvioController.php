@@ -121,6 +121,33 @@ class EnvioController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+        public function actionIndexpendiente()
+    {
+        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new EnvioSearch();
+        $searchModel->mensajero_id = $user_id;
+        $searchModel->estado_envio_id != 3;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('indexpendiente', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+        public function actionIndexmensajero()
+    {
+        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new EnvioSearch();
+        $searchModel->mensajero_id = $user_id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('indexmensajero', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single Envio model.
@@ -354,7 +381,7 @@ class EnvioController extends Controller
         ->all();
         
         $r = \app\models\Opciones::find()->select('radio')->asArray()->one();
-        $radio = $r['radio'];
+        $radio = $r['radio'];        //print_r($radio); die();
         return $this->render('detalles', [
             'dist_origen_primer_punto'=>$dist_origen_primer_punto,
             'dist_resto_puntos'=>$dist_resto_puntos,

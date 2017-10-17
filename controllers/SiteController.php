@@ -107,7 +107,20 @@ class SiteController extends Controller
                     ]);
                 }
                 if(!empty($rol) && ($rol==3)){    
-                    return $this->render('indexmensajero');
+                    //return $this->render('indexmensajero');
+                    
+                    $searchModel = new \app\models\EnvioSearch();
+                    $searchModel->mensajero_id = $user_id;
+                    $searchModel->fecha_registro = $fechaactual;
+                    $searchModel->estado_envio_id != 3;
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+                    return $this->render('indexmensajero', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                    ]);
+                    
+                    
                 }
                 else if(!empty($rol) && ($rol==1)){    
                     //    return $this->render('index');    
@@ -125,8 +138,6 @@ class SiteController extends Controller
                         'fecha_fin' => $fecha_fin,
                     ]);    
                 }
-                
-                
                 else{        
                         print_r("Hubo un error de autorizacion");
                 }

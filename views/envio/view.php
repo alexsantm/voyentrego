@@ -549,39 +549,56 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
     
     if($valor_recarga > $valor_km){
     ?>
-            <div class="panel panel-warning">
-                <div class="panel-heading"> <center><h2>Condiciones de Aceptación</h2></center></div>
+    <div class="row">        
+    <div class="col-lg-5  col-md-offset-3">
+            <div class="panel panel-info">
+                <div class="panel-heading"> <center><h2><strong>Condiciones de Aceptación</strong></h2></center></div>
                 <div class="panel-body">   
                     <p>Al aceptar, se generará la factura correspondiente con sus datos y se descontará de su saldo de Recarga</p>
-                    <center>
-                    <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
-                                ['envio/detalles', 
-                                    //Datos para Factura:
-                                    'detalle_distancia_envio'=>$detalle_distancia_envio,
-                                    'total_km'=>$total_km,
-                                    'valor_km'=>$valor_km, 
-                                    'nombre'=>$nombre, 
-                                    'direccion'=>$direccion, 
-                                    'telefono'=>$telefono, 
-                                    'cedula'=>$cedula, 
-                                    'email'=>$email, 
-                                    'valor_recarga'=>$valor_recarga, 
-                                    
-                                    //Datos para dibujar el Google Maps:                                    
-                                    'dist_origen_primer_punto'=>$dist_origen_primer_punto,
-                                    'dist_resto_puntos'=>$dist_resto_puntos,
-                                    'valor_distancia_retornos'=>$valor_distancia_retornos,
-                                    'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,                    
-                                    'latitud_origen'=>$latitud_origen,
-                                    'longitud_origen'=>$longitud_origen,
-                                ],
-                                ['class'=>'btn btn-warning btn-lg', 'title'=>'Haga click para continuar', ]
-                                );
-                        ?>
-                    </p>
-                    </center>
+                    <div class="row">
+                            <center>   
+                                <div class="col-lg-6">
+                            <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
+                                        ['envio/detalles', 
+                                            //Datos para Factura:
+                                            'detalle_distancia_envio'=>$detalle_distancia_envio,
+                                            'total_km'=>$total_km,
+                                            'valor_km'=>$valor_km, 
+                                            'nombre'=>$nombre, 
+                                            'direccion'=>$direccion, 
+                                            'telefono'=>$telefono, 
+                                            'cedula'=>$cedula, 
+                                            'email'=>$email, 
+                                            'valor_recarga'=>$valor_recarga, 
+
+                                            //Datos para dibujar el Google Maps:                                    
+                                            'dist_origen_primer_punto'=>$dist_origen_primer_punto,
+                                            'dist_resto_puntos'=>$dist_resto_puntos,
+                                            'valor_distancia_retornos'=>$valor_distancia_retornos,
+                                            'valor_distancia_retorno_inicio'=>$valor_distancia_retorno_inicio,                    
+                                            'latitud_origen'=>$latitud_origen,
+                                            'longitud_origen'=>$longitud_origen,
+                                        ],
+                                        ['class'=>'btn btn-warning btn-lg', 'title'=>'Haga click para continuar', ]
+                                        );
+                                ?>
+                            </p>
+                            </div>    
+                                
+                                <div class="col-lg-6">
+                            <p> <?= Html::a( '<i class="glyphicon glyphicon-remove" style="color:white"></i>Cancelar Envío',
+                                        ['#'],
+                                        ['class'=>'btn btn-danger btn-lg', 'title'=>'Haga click para cancelar', 'data-confirm' => '¿Estás seguro que deseas cancelar el envío?',]
+                                        );
+                                ?>
+                            </p>
+                            </div>    
+                            </center>                    
+                    </div>    
                 </div>
-            </div>    
+            </div>  
+    </div>                    
+    </div> 
     <?php
     }
     else{

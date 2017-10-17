@@ -137,6 +137,7 @@ if(!empty($user->profile->full_name)) //for now i use this to be rendered only i
                             ['label' => 'Administrador Recargas', 'icon' => 'credit-card', 'url' => ['//recarga-transferencia/index'],],
                             ['label' => 'Tabla de Valores', 'icon' => 'file-text-o', 'url' => ['valores/index'],],
                             ['label' => 'Promociones', 'icon' => 'google-wallet', 'url' => ['//promocion/index'],],
+                            ['label' => 'Calificación Mensajeros', 'icon' => 'google-wallet', 'url' => ['//calificacion/index'],],
 //                            ['label' => 'Preguntas Frecuentes', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/index'],],
 //                            ['label' => 'Preguntas', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/preguntas'],],
 //                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
@@ -188,21 +189,21 @@ if(!empty($user->profile->full_name)) //for now i use this to be rendered only i
                     [
                         'label' => 'Pendientes',
                         'icon' => 'exclamation',
-                        'url' => '#',
+                        'url' => ['//envio/indexpendiente'],
                         'visible' => $rol ==3,
                     ],
                     
                     [
                         'label' => 'Historial',
                         'icon' => 'calendar-check-o',
-                        'url' => '#',
+                        'url' => ['//envio/indexmensajero'],
                         'visible' => $rol ==3,
                     ],
                     
                     [
                         'label' => 'Pagos',
                         'icon' => 'money',
-                        'url' => '#',
+                        'url' => ['user/perfil#transferencia'],
                         'visible' => $rol ==3,
                     ],
                       ['label' => 'Soporte', 
@@ -212,9 +213,23 @@ if(!empty($user->profile->full_name)) //for now i use this to be rendered only i
                     ],
                 ],
             ]
-        ) 
-        ?>
-
+        );         
+}
+else{
+     echo dmstr\widgets\Menu::widget(
+            [
+                'options' => ['class' => 'sidebar-menu'],
+                'items' => [
+                    [
+                        'label' => 'Completar Perfil',
+                        'icon' => 'user-secret',
+                        'url' => ['/user/perfil'],                        
+                    ],
+                ],
+            ]
+        );
+}
+?>
 <?php
 //echo SideNav::widget([
 //	'type' => SideNav::TYPE_WARNING,
@@ -264,23 +279,16 @@ if(!empty($user->profile->full_name)) //for now i use this to be rendered only i
 //		],
 //	],
 //]);
-}
-else{
-     echo dmstr\widgets\Menu::widget(
-            [
-                'options' => ['class' => 'sidebar-menu'],
-                'items' => [
-                    [
-                        'label' => 'Completar Perfil',
-                        'icon' => 'user-secret',
-                        'url' => ['/user/perfil'],                        
-                    ],
-                ],
-            ]
-        );
-}
-?>
-<?php
+
+
+
+
+
+
+
+
+
+
 //    $envio = Html::img(Yii::$app->request->baseUrl.'/images/iconos/menu_lateral/nuevoE.png', ['width'=>'30','height'=>'20']);
 //    $menuItems[] =  ['label' => 'DFenX - Yii2 User - '. Yii::t('app','User Admin Panel'),  'icon' => 'cog', 'url'=>Url::to(['/user/admin/index'])];
 //    $menuItems[] =  ['label' => 'Nuevo Envío ', 'id'=>'item_menu', 'icon' => $envio, 'url'=>Url::to(['/user/admin/index'])];
@@ -320,17 +328,6 @@ else{
     </section>
 
 </aside>
-
-<!--
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>
-    $( "#item_menu" ).removeClass( "glyphicon glyphicon" )
-</script>    -->
-
-
-
-
-
 
 <style>
     .sidebar-menu {
