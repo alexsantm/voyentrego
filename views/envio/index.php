@@ -169,7 +169,30 @@ $this->title = 'Detalle de Envíos';
 
 <?php
 /******************************************************************************************************************************************/
+?>
 
+<?php
+ yii\bootstrap\Modal::begin([
+        //'header' => 'Formulario Recepción de Pedido',
+        'id'=>'editModalId',
+        'class' =>'modal',
+        'size' => 'modal-lg',
+		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Cerrar</a>',
+    ]);
+        echo "<div class='modalContent'></div>";
+    yii\bootstrap\Modal::end();
+        $this->registerJs(
+        "$(document).on('ready pjax:success', function() {
+                $('.modalButton').click(function(e){
+                   e.preventDefault(); //for prevent default behavior of <a> tag.
+                   var tagname = $(this)[0].tagName;
+                   $('#editModalId').modal('show').find('.modalContent').load($(this).attr('href'));
+               });
+            });
+        ");
+?>
+
+<?php
 echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
     'align' => TabsX::ALIGN_LEFT,
@@ -213,25 +236,3 @@ echo TabsX::widget([
 ?>
 
 
-
-<?php
- yii\bootstrap\Modal::begin([
-        //'header' => 'Formulario Recepción de Pedido',
-        'id'=>'editModalId',
-        'class' =>'modal',
-        'size' => 'modal-lg',
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Cerrar</a>',
-    ]);
-        echo "<div class='modalContent'></div>";
-    yii\bootstrap\Modal::end();
-
-        $this->registerJs(
-        "$(document).on('ready pjax:success', function() {
-                $('.modalButton').click(function(e){
-                   e.preventDefault(); //for prevent default behavior of <a> tag.
-                   var tagname = $(this)[0].tagName;
-                   $('#editModalId').modal('show').find('.modalContent').load($(this).attr('href'));
-               });
-            });
-        ");
-?>

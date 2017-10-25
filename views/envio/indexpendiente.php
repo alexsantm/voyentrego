@@ -299,3 +299,91 @@ use kartik\editable\Editable;
 }
 
 </style>    
+
+
+
+
+
+
+
+<factura id="comprobante" version="1.1.0">
+    <infoTributaria>
+        <ambiente>2</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>Mivsell Technology Company SA</razonSocial>
+        <nombreComercial>Mivsell Tech</nombreComercial>
+        <ruc>1792361575001</ruc>
+        <claveAcceso></claveAcceso>
+        <codDoc>01</codDoc>
+        <estab>001</estab>
+        <ptoEmi>001</ptoEmi>
+        <secuencial>000005691</secuencial>
+        <dirMatriz>WHYMPER E7-154 Y DIEGO DE ALMAGRO EDIFICIO GENEVA OF 102</dirMatriz>
+    </infoTributaria>
+    
+    <infoFactura>
+        <fechaEmision>03/10/2017</fechaEmision>
+        <dirEstablecimiento>WHYMPER E7-154 Y DIEGO DE ALMAGRO EDIFICIO GENEVA OF 102</dirEstablecimiento>
+        <obligadoContabilidad>SI</obligadoContabilidad>
+        <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+        <razonSocialComprador>VALVERDE ORBE ANA CRISTINA</razonSocialComprador>
+        <identificacionComprador>1706093844001</identificacionComprador>
+        <direccionComprador>GARCIA MORENO S/N y COTOPAXI - PRINCIPAL</direccionComprador>
+        <totalSinImpuestos>24.00</totalSinImpuestos>
+        <totalDescuento>0.00</totalDescuento>
+        <totalConImpuestos>
+            <totalImpuesto>
+                <codigo>2</codigo>
+                <codigoPorcentaje>2</codigoPorcentaje>
+                <baseImponible>24.00</baseImponible>
+                <valor>2.88</valor>
+            </totalImpuesto>
+        </totalConImpuestos>
+        <propina>0.00</propina>
+        <importeTotal>26.88</importeTotal>
+        <moneda>DOLAR</moneda>
+        <pagos>
+            <pago>
+                <formaPago>01</formaPago>
+                <total>26.88</total>
+                <plazo>10</plazo>
+                <unidadTiempo>dias</unidadTiempo>
+            </pago>
+        </pagos>
+    </infoFactura>
+    
+    <detalles>
+        <detalle>
+            <codigoPrincipal>MOBILVENDOR2_APP_LICENSE</codigoPrincipal>
+            <codigoAuxiliar>0</codigoAuxiliar>
+            <descripcion>Licencia de aplicacion MobilVendor 2</descripcion>
+            <cantidad>2.0000</cantidad>
+            <precioUnitario>12.0000</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>24.00</precioTotalSinImpuesto>
+            <detallesAdicionales>
+                <detAdicional nombre="Unidad" valor="UNI"/>
+            </detallesAdicionales>
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>2</codigoPorcentaje>
+                    <tarifa>12.00</tarifa>
+                    <baseImponible>24.00</baseImponible>
+                    <valor>2.88</valor>
+                </impuesto>
+            </impuestos>
+        </detalle>
+    </detalles>
+    
+    <infoAdicional>
+        <campoAdicional nombre="Factura">001-001-000005691</campoAdicional>
+        <campoAdicional nombre="Comentario">SERVICIOS DE MIVSELL</campoAdicional>
+        <campoAdicional nombre="Cliente">VALVERDE ORBE ANA CRISTINA</campoAdicional>
+        <campoAdicional nombre="Dirección">GARCIA MORENO S/N y COTOPAXI - PRINCIPAL</campoAdicional>
+        <campoAdicional nombre="Teléfono">022338678</campoAdicional>
+        <campoAdicional nombre="Email">comefa@gmail.com</campoAdicional>
+        <campoAdicional nombre="Termino de Pago">10 DIAS</campoAdicional>
+        <campoAdicional nombre="Fecha de Vencimiento">13/10/2017</campoAdicional>
+    </infoAdicional>
+</factura>

@@ -9,7 +9,8 @@ $this->title = 'Actualizar Destino: ' . $model->direccion_destino;
 $this->params['breadcrumbs'][] = ['label' => 'Destinos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
-$id_envio = Yii::$app->request->get('id');
+$id_envio = Yii::$app->request->get('id_envio');
+//print_r(Yii::$app->request->get()); die();
 ?>
 <div class="destino-update">
 

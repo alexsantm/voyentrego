@@ -33,13 +33,23 @@ use kartik\widgets\Select2;
             <div class="envio-form">
                 <div class="row">
                     <?php $form = ActiveForm::begin(); ?>
-                    <div class="col-lg-5">
-                        <div class="col-lg-6"><?= $form->field($model, 'ciudad_id')->dropDownList(ArrayHelper::map(app\models\Ciudad::find()->all(), 'id', 'ciudad'),  ['prompt' => '--Seleccione una Ciudad--'])->label('Ciudad')?></div>                
-                        <div class="col-lg-6"><?= $form->field($model, 'direccion_origen')->textInput(['maxlength' => true]) ?></div>
-                        <div class="col-lg-6"><?= $form->field($model, 'remitente')->textInput(['maxlength' => true]) ?></div>
-                        <div class="col-lg-6"><?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?>  </div>          
-                        <div class="col-lg-6"><?= $form->field($model, 'tipo_envio_id')->dropDownList(ArrayHelper::map(app\models\TipoEnvio::find()->all(), 'id', 'tipo_envio'),  ['prompt' => '--Seleccione una Tipo de Envìo--'])->label('Tipo de Envio')?></div>
-                        <div class="col-lg-6"><?= $form->field($model, 'dimensiones_id')->dropDownList(ArrayHelper::map(app\models\Dimensiones::find()->all(), 'id', 'dimension'),  ['prompt' => '--Seleccione una Dimensión--'])->label('Dimensiones')?> </div>   
+                    <div class="col-lg-6">
+                        <?php
+                        echo $form->field($model, 'address')->widget(\kalyabin\maplocation\SelectMapLocationWidget::className(), [
+                            'attributeLatitude' => 'latitude',
+                            'attributeLongitude' => 'longitude',
+                            'googleMapApiKey' => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
+                        ])->label('Ubicación en el Mapa: ');
+                        ?>
+                    </div> 
+                    
+                    <div class="col-lg-6">
+                        <div class="col-lg-4"><?= $form->field($model, 'ciudad_id')->dropDownList(ArrayHelper::map(app\models\Ciudad::find()->all(), 'id', 'ciudad'),  ['prompt' => '--Seleccione una Ciudad--'])->label('Ciudad')?></div>                
+                        <div class="col-lg-4"><?= $form->field($model, 'direccion_origen')->textInput(['maxlength' => true]) ?></div>
+                        <div class="col-lg-4"><?= $form->field($model, 'remitente')->textInput(['maxlength' => true]) ?></div>
+                        <div class="col-lg-4"><?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?>  </div>          
+                        <div class="col-lg-4"><?= $form->field($model, 'tipo_envio_id')->dropDownList(ArrayHelper::map(app\models\TipoEnvio::find()->all(), 'id', 'tipo_envio'),  ['prompt' => '--Seleccione una Tipo de Envìo--'])->label('Tipo de Envio')?></div>
+                        <div class="col-lg-4"><?= $form->field($model, 'dimensiones_id')->dropDownList(ArrayHelper::map(app\models\Dimensiones::find()->all(), 'id', 'dimension'),  ['prompt' => '--Seleccione una Dimensión--'])->label('Dimensiones')?> </div>   
                         <div class="col-lg-12">
                                 <?= $form->field($model, 'observacion')->label('Observación:')->widget(CKEditor::className(), [
                                           'options' => ['rows' => 1],
@@ -51,37 +61,39 @@ use kartik\widgets\Select2;
                         </div> 
                     <fieldset class="retorno">
                         <legend class="retorno_legend"><strong>Programación Recurrente</strong></legend>
-                      <small>Escoga una fecha de inicio y fin, y seleccione el o los dias en los que se programarán los envíos</small>
-                        <div class="col-lg-12">
-                                <?php
-                                    echo '<label class="control-label">Ingrese una fecha de inicio y fin</label>';
-                                    echo DatePicker::widget([
-                                        'name' => 'fecha_desde',
-                                        'type' => DatePicker::TYPE_RANGE,
-                                        'name2' => 'fecha_hasta',
-                                        'pluginOptions' => [
-                                            'autoclose' => true,
-                                            'format' => 'yyyy-mm-dd',
+                        <small>Escoga una fecha de inicio y fin, y seleccione el o los dias en los que se programarán los envíos</small>
+                        <div class="row"><br>
+                            <div class="col-lg-12">
+                                    <?php
+                                        echo '<label class="control-label">Ingrese una fecha de inicio y fin</label><br>';
+                                        echo DatePicker::widget([
+                                            'name' => 'fecha_desde',
+                                            'type' => DatePicker::TYPE_RANGE,
+                                            'name2' => 'fecha_hasta',
+                                            'pluginOptions' => [
+                                                'autoclose' => true,
+                                                'format' => 'yyyy-mm-dd',
+                                                'required' => true
+                                            ]
+                                        ]);
+                                        ?>
+
+                                    <?php
+                                    // Without model and implementing a multiple select
+                                    $data =   [ 1 => 'Lunes',2 => 'Martes', 3 => 'Miércoles', 4 => 'Jueves',5 => 'Viernes', 6 => 'Sábado',7 => 'Domingo',];
+                                    echo '<br><label class="control-label">Seleccione el o los días</label>';
+                                    echo Select2::widget([
+                                        'name' => 'dias',
+                                        'data' => $data,
+                                        'options' => [
+                                            'placeholder' => 'Selecione el/los dias ...',
+                                            'multiple' => true,
                                             'required' => true
-                                        ]
+                                        ],
                                     ]);
-                                    ?>
-                            
-                                <?php
-                                // Without model and implementing a multiple select
-                                $data =   [ 1 => 'Lunes',2 => 'Martes', 3 => 'Miércoles', 4 => 'Jueves',5 => 'Viernes', 6 => 'Sábado',7 => 'Domingo',];
-                                echo '<br><label class="control-label">Seleccione el o los días</label>';
-                                echo Select2::widget([
-                                    'name' => 'dias',
-                                    'data' => $data,
-                                    'options' => [
-                                        'placeholder' => 'Selecione el/los dias ...',
-                                        'multiple' => true,
-                                        'required' => true
-                                    ],
-                                ]);
-                                ?>    
-                        </div> 
+                                    ?>    
+                            </div> 
+                        </div>    
                      </fieldset>
                         
                         <!--//Parametrizar el Fecha Registro en el Controller-->
@@ -96,21 +108,12 @@ use kartik\widgets\Select2;
                         <?= $form->field($model, 'total_km')->hiddenInput()->label(false) ?>
                         <?= $form->field($model, 'valor_total')->hiddenInput()->label(false) ?>
                     </div>
-
-                    <div class="col-lg-7">
-                        <?php
-                        echo $form->field($model, 'address')->widget(\kalyabin\maplocation\SelectMapLocationWidget::className(), [
-                            'attributeLatitude' => 'latitude',
-                            'attributeLongitude' => 'longitude',
-                            'googleMapApiKey' => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
-                        ])->label('Ubicación en el Mapa: ');
-                        ?>
-                    </div>   
+  
                 </div>
                         <div class="row">
-                            <div class="col-lg-5">
+                            <div class="col-lg-12">
                                 <div class="form-group">
-                                    <br><center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-primary']) ?></center>
+                                    <br><center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg' : 'btn btn-primary']) ?></center>
                                 </div>
                             </div>
                         </div>    
@@ -119,7 +122,6 @@ use kartik\widgets\Select2;
         <!--/*******************************************************************************************************************************/-->    
         </div>
     </div>
-
 
 <style>
     fieldset.retorno {
@@ -134,3 +136,7 @@ legend.retorno_legend {
     font-size: 14px;
 }
 </style>    
+
+<script>
+    document.getElementById("envio-address").required = true;    
+</script>  

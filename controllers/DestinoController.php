@@ -95,6 +95,7 @@ class DestinoController extends Controller
                  throw $e;                
             }
             //return $this->redirect(['view', 'id' => $model->id]);
+            ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado un nuevo Destino satisfactoriamente');  ?><?php  
             return $this->redirect(Yii::$app->request->referrer);
 //            return $this->redirect(['index']);                  
         } else {
@@ -164,6 +165,7 @@ class DestinoController extends Controller
                 throw $e;
             }
             //return $this->redirect(['view', 'id' => $model->id]);
+            ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado un nuevo Destino satisfactoriamente');  ?><?php  
             return $this->redirect(Yii::$app->request->referrer);
 //            return $this->redirect(['index']);      
              
@@ -185,7 +187,9 @@ class DestinoController extends Controller
         $model = $this->findModel($id);        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Destino Actualizado Correctamente');  ?><?php  
+//             return $this->redirect(Yii::$app->request->referrer);
+            return $this->redirect(['/envio/view', 'id' => $model->envio_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

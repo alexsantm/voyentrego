@@ -2,7 +2,6 @@
 use yii\helpers\Html;
 use kartik\sidenav\SideNav;
 use yii\helpers\Url;
-
 //use yii\bootstrap\NavBar;
 //use yii\bootstrap\Nav;
 
@@ -56,33 +55,6 @@ if(!empty($user->profile->full_name)) //for now i use this to be rendered only i
                       'visible' => $rol ==2,  
                       'url' => ['site/soporte'],
                     ],
-                    
-//                    [
-//                        'label' => 'Ayuda',
-//                        'icon' => 'question-circle',
-//                        'url' => '#',
-//                        'items' => [
-//                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-//                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
-//                            [
-//                                'label' => 'Level One',
-//                                'icon' => 'circle-o',
-//                                'url' => '#',
-//                                'items' => [
-//                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
-//                                    [
-//                                        'label' => 'Level Two',
-//                                        'icon' => 'circle-o',
-//                                        'url' => '#',
-//                                        'items' => [
-//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-//                                        ],
-//                                    ],
-//                                ],
-//                            ],
-//                        ],
-//                    ],
                     /************************************************ADMINISTRADOR*************************************************************/
                     
                     [
@@ -96,71 +68,7 @@ if(!empty($user->profile->full_name)) //for now i use this to be rendered only i
                             ['label' => 'Envìo Recurrente', 'icon' => 'dashboard', 'url' => ['envio/createrec'],],
                         ],
                     ],
-                    
-                                        [
-                        'label' => 'Configuración',
-                        'icon' => 'question-circle',
-                        'visible' => $rol ==4,
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Opciones', 'icon' => 'dashboard', 'url' => ['site/configuracion'],],
-                            
-                            //['label' => 'Tabla de Valores', 'icon' => 'dashboard', 'url' => ['valores/index'],],
-//                            [
-//                                'label' => 'Level One',
-//                                'icon' => 'circle-o',
-//                                'url' => '#',
-//                                'items' => [
-//                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
-//                                    [
-//                                        'label' => 'Level Two',
-//                                        'icon' => 'circle-o',
-//                                        'url' => '#',
-//                                        'items' => [
-//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-//                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-//                                        ],
-//                                    ],
-//                                ],
-//                            ],
-                        ],
-                    ],
-                    
-                    
-                    [
-                        'label' => 'Menú Administrador',
-                        'icon' => 'bars',
-                        'url' => '#',
-                        'visible' => $rol ==4,
-//                        'visible' => Yii::$app->user->can("admin"),
-                        'items' => [
-                            ['label' => 'Administrador Recargas', 'icon' => 'credit-card', 'url' => ['//recarga-transferencia/index'],],
-                            ['label' => 'Tabla de Valores', 'icon' => 'file-text-o', 'url' => ['valores/index'],],
-                            ['label' => 'Promociones', 'icon' => 'google-wallet', 'url' => ['//promocion/index'],],
-                            ['label' => 'Calificación Mensajeros', 'icon' => 'google-wallet', 'url' => ['//calificacion/index'],],
-//                            ['label' => 'Preguntas Frecuentes', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/index'],],
-//                            ['label' => 'Preguntas', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/preguntas'],],
-//                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
-//                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
-                        ],
-                    ],
-                    
-//                    [
-//                        'label' => 'User Administrador',
-//                        'icon' => 'share',
-//                        'url' => '#',
-//                        'visible' => $rol ==4,
-//                        'items' => [
-//                            ['label' => 'Crear Usuarios', 'icon' => 'file-code-o', 'url' => ['/user/admin/index'],],
-//                            ['label' => 'Crear Grupos de Usuarios', 'icon' => 'dashboard', 'url' => ['//grupo-usuarios/index'],],
-//                            ['label' => 'Asignación de Grupos', 'icon' => 'dashboard', 'url' => ['//user-grupo/index'],],
-//                            ['label' => 'Administración de Flota', 'icon' => 'dashboard', 'url' => ['//datos-vehiculo/index'],],
-////                            ['label' => 'Preguntas', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/preguntas'],],
-////                            ['label' => 'Opcon 2', 'icon' => 'dashboard', 'url' => ['/debug'],],
-////                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['#']],
-//                        ],
-//                    ],
-                    
+                   
                     [
                         'label' => 'Usuarios',
                         'icon' => 'users',
@@ -206,11 +114,45 @@ if(!empty($user->profile->full_name)) //for now i use this to be rendered only i
                         'url' => ['user/perfil#transferencia'],
                         'visible' => $rol ==3,
                     ],
-                      ['label' => 'Soporte', 
+                    ['label' => 'Soporte', 
                       'icon' => 'life-ring', 
                       'visible' => $rol ==3,  
                       'url' => ['site/soporte'],
                     ],
+                    /************************************************SUPER ADMIN*************************************************************/
+                    
+                    [
+                        'label' => 'Menú Administrador',
+                        'icon' => 'bars',
+                        'url' => '#',
+                        'visible' => $rol ==1,
+//                        'visible' => Yii::$app->user->can("admin"),
+                        'items' => [
+                            ['label' => 'Administrador Recargas', 'icon' => 'credit-card', 'url' => ['//recarga-transferencia/index'],],
+                            ['label' => 'Tabla de Valores', 'icon' => 'file-text-o', 'url' => ['valores/index'],],
+                            ['label' => 'Promociones', 'icon' => 'google-wallet', 'url' => ['//promocion/index'],],
+                            ['label' => 'Calificación Mensajeros', 'icon' => 'google-wallet', 'url' => ['//calificacion/index'],],
+                            ['label' => 'Preguntas Frecuentes', 'icon' => 'dashboard', 'url' => ['//preguntas-frecuentes/index'],],
+                            ['label' => 'Información Mobilvendor', 'icon' => 'dashboard', 'url' => ['//contactanos-pagina/index'],],
+                        ],
+                    ],
+                    
+                    [
+                        'label' => 'Usuarios',
+                        'icon' => 'users',
+                        'url' => '#',
+                        'visible' => $rol ==1,
+                        'items' => [
+                            ['label' => 'Usuarios', 'icon' => 'user', 'url' => ['/user/admin/index'],],
+                            ['label' => 'Roles', 'icon' => 'user', 'url' => ['//role/index'],],
+                        ],
+                    ],
+                     ['label' => 'Soporte', 
+                      'icon' => 'life-ring', 
+                      'visible' => $rol ==1,  
+                      'url' => ['site/soporte'],
+                    ],
+                    
                 ],
             ]
         );         
@@ -281,14 +223,6 @@ else{
 //]);
 
 
-
-
-
-
-
-
-
-
 //    $envio = Html::img(Yii::$app->request->baseUrl.'/images/iconos/menu_lateral/nuevoE.png', ['width'=>'30','height'=>'20']);
 //    $menuItems[] =  ['label' => 'DFenX - Yii2 User - '. Yii::t('app','User Admin Panel'),  'icon' => 'cog', 'url'=>Url::to(['/user/admin/index'])];
 //    $menuItems[] =  ['label' => 'Nuevo Envío ', 'id'=>'item_menu', 'icon' => $envio, 'url'=>Url::to(['/user/admin/index'])];
@@ -322,9 +256,6 @@ else{
 //            'items' =>$menuItems,
 //        ]);
 ?>
-        
-        
-
     </section>
 
 </aside>

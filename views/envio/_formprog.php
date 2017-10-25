@@ -23,14 +23,25 @@ use kartik\widgets\DateTimePicker;
 
     <div class="panel panel-warning">
         <div class="panel-heading">
-            <h3 class="panel-title">Nuevo Envío</h3>
+            <h3 class="panel-title"><strong>Nuevo Envío Programado</strong></h3>
         </div>
         <div class="panel-body">
         <!--/*******************************************************************************************************************************/-->    
             <div class="envio-form">
                 <div class="row">
                     <?php $form = ActiveForm::begin(); ?>
-                    <div class="col-lg-5">
+                    
+                    <div class="col-lg-6">
+                        <?php
+                        echo $form->field($model, 'address')->widget(\kalyabin\maplocation\SelectMapLocationWidget::className(), [
+                            'attributeLatitude' => 'latitude',
+                            'attributeLongitude' => 'longitude',
+                            'googleMapApiKey' => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
+                        ])->label('Ubicación en el Mapa: ');
+                        ?>
+                    </div> 
+                                        
+                    <div class="col-lg-6">
                         <div class="col-lg-6"><?= $form->field($model, 'ciudad_id')->dropDownList(ArrayHelper::map(app\models\Ciudad::find()->all(), 'id', 'ciudad'),  ['prompt' => '--Seleccione una Ciudad--'])->label('Ciudad')?></div>                
                         <div class="col-lg-6"><?= $form->field($model, 'direccion_origen')->textInput(['maxlength' => true]) ?></div>
                         <div class="col-lg-6"><?= $form->field($model, 'remitente')->textInput(['maxlength' => true]) ?></div>
@@ -56,23 +67,9 @@ use kartik\widgets\DateTimePicker;
                                     'format' => 'yyyy-mm-dd hh:ii'
                                 ],
                                 'options' => ['placeholder' => 'Haga click aquí para seleccionar una fecha ...'],    
-                            ])->hint("Por favor escoga una fecha y una hora para programar el envío");
+                            ])->label('Fecha programada')->hint("Por favor escoga una fecha y una hora para programar el envío");
                         ?>
                         </div>    
-                        
-<!--                        echo '<label class="control-label">Inaugral Date</label>';
-echo DateTimePicker::widget([
-	'name' => 'inaugral_time',
-	'value' => '01/04/2005 08:17',
-	'size' => 'lg',
-	'pluginOptions' => [
-		'autoclose' => true,
-		'format' => 'mm/dd/yyyy hh:ii'
-	]
-]);-->
-                        
-                        
-                        
                         <!--//Parametrizar el Fecha Registro en el Controller-->
                         <!--//Parametrizar el Fecha fin Envio en el Controller-->
                         <!--//Parametrizar el EStado Envio en el Controller-->
@@ -86,20 +83,12 @@ echo DateTimePicker::widget([
                         <?= $form->field($model, 'valor_total')->hiddenInput()->label(false) ?>
                     </div>
 
-                    <div class="col-lg-7">
-                        <?php
-                        echo $form->field($model, 'address')->widget(\kalyabin\maplocation\SelectMapLocationWidget::className(), [
-                            'attributeLatitude' => 'latitude',
-                            'attributeLongitude' => 'longitude',
-                            'googleMapApiKey' => 'AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8',
-                        ])->label('Ubicación en el Mapa: ');
-                        ?>
-                    </div>   
+  
                 </div>
                         <div class="row">
-                            <div class="col-lg-5">
+                            <div class="col-lg-12">
                                 <div class="form-group">
-                                    <center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-primary']) ?></center>
+                                    <center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg' : 'btn btn-primary']) ?></center>
                                 </div>
                             </div>
                         </div>    
@@ -110,3 +99,6 @@ echo DateTimePicker::widget([
     </div>
 
 
+<script>
+    document.getElementById("envio-address").required = true;    
+</script>  

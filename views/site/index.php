@@ -101,8 +101,7 @@ $user = Yii::$app->user->identity;
           <span class="iconos glyphicon glyphicon-road" aria-hidden="true"> <h2 class="texto_tomate" style="display:inline-block">&ensp; ENVIOS EN CAMINO</h2></span>
           
     <?php // Verifico si existe Dataprovider para que aparezca el Grid
-    if ($dataProvider->totalCount > 0) {
-        
+    if ($dataProvider->totalCount > 0) {        
     ?>
           
           <div class="envio-index">
@@ -196,8 +195,6 @@ $user = Yii::$app->user->identity;
     <!-- /.content -->
   <!--</div>-->
   
-  
-  
   <style>
       .kv-panel-before, .kv-panel-after{
         display:none;
@@ -206,29 +203,29 @@ $user = Yii::$app->user->identity;
         color: #3c8dbc;
       }
 
-@media (max-width: 1199px) {
-  .iconos {
-    display: none;
-  }
-  .items {
-    text-align: right;
-  }
-    
-  /*Centrar horizontalmente las cajas*/  
-    #contenedor {
-    /*IMPORTANTE*/
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    h2{
-        text-align: center;
-    }
-}
+    @media (max-width: 1199px) {
+                .iconos {
+                  display: none;
+                }
+                .items {
+                  text-align: right;
+                }
 
-@media (max-width: 765px) {
-    .historial, .asesoria, .saldo, .cuenta {
-        width: 100%;
+            /*Centrar horizontalmente las cajas*/  
+              #contenedor {
+              /*IMPORTANTE*/
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+              }
+              h2{
+                  text-align: center;
+              }
     }
-}
+
+    @media (max-width: 765px) {
+        .historial, .asesoria, .saldo, .cuenta {
+            width: 100%;
+        }
+    }
 </style>

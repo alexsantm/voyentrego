@@ -56,10 +56,20 @@ class Envio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ciudad_id', 'user_id', 'remitente', 'direccion_origen', 'tipo_envio_id', 'dimensiones_id', 'fecha_registro'], 'required'],
+            //[['ciudad_id', 'user_id', 'remitente', 'direccion_origen', 'tipo_envio_id', 'dimensiones_id', 'fecha_registro'], 'required'],
+            [['ciudad_id', 'user_id', 'remitente', 'direccion_origen', 'tipo_envio_id', 'dimensiones_id'], 'required'],
+//            ['address', 'required',  'message'=>'Por favor digite una dirección para ser ubicado en el Mapa'],
             [['ciudad_id', 'user_id', 'estado_envio_id', 'tipo_envio_id', 'dimensiones_id', 'mensajero_id'], 'integer'],
-            [['latitud', 'longitud', 'total_km', 'valor_total'], 'number'],
+            //[['latitud', 'longitud', 'total_km', 'valor_total'], 'number'],
+            [['total_km', 'valor_total'], 'number'],
+            
+            [['latitude', 'longitude', 'latitud', 'longitud', 'fecha_registro', 'address'], 'safe'],
+            
             [['remitente', 'direccion_origen', 'fecha_registro', 'fecha_fin_envio'], 'string', 'max' => 45],
+            
+//            [['fecha_registro'], 'compare', 'compareAttribute'=> date("Y-m-d"), 'operator'=>'>=', 'message'=>'La Fecha de Registro debe ser mayor al dia actual'],
+            ['fecha_registro','validateDates'],
+            
             [['celular'], 'string', 'max' => 10],
             [['observacion'], 'string', 'max' => 300],
             [['ciudad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ciudad::className(), 'targetAttribute' => ['ciudad_id' => 'id']],
@@ -70,6 +80,14 @@ class Envio extends \yii\db\ActiveRecord
             [['mensajero_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['mensajero_id' => 'id']],
         ];
     }
+
+
+public function validateDates(){
+    $fecha_actual = date("Y-m-d");
+     if(strtotime($this->fecha_registro) <= strtotime($fecha_actual)){
+        $this->addError('Fecha Registro','La Fecha Registro debe ser mayor o igual  a la Fecha Actual');
+    }
+}
 
     /**
      * @inheritdoc
@@ -94,6 +112,7 @@ class Envio extends \yii\db\ActiveRecord
             'tipo_envio_id' => Yii::t('app', 'Tipo Envio ID'),
             'dimensiones_id' => Yii::t('app', 'Dimensiones ID'),
             'mensajero_id' => Yii::t('app', 'Mensajero ID'),
+            'address' => Yii::t('app', 'Direccion'),
         ];
     }
 
@@ -160,9 +179,6 @@ class Envio extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'mensajero_id']);
     }
-    
-    
-    
     
     
                     /**********************************************************************************************/
@@ -306,4 +322,177 @@ class Envio extends \yii\db\ActiveRecord
 ////    ]);
 ////    return $pdf->render();
 //}
+    
+    /********************************************** FUNCIONES PARA FACTURA SRI***********************************************/
+//    public function array_to_xml( $data, &$xml_data ) {
+//         $model = new Envio;
+//    foreach( $data as $key => $value ) {
+//        if( is_numeric($key) ){
+//            $key = 'item'.$key; //dealing with <0/>..<n/> issues
+//        }
+//        if( is_array($value) ) {
+//            $subnode = $xml_data->addChild($key);
+//            $model->array_to_xml($value, $subnode);
+//        } else {
+//            $xml_data->addChild("$key",htmlspecialchars("$value"));
+//        }
+//     }
+//}
+
+
+//function array_to_xml(\SimpleXMLElement $object, array $data)
+//{   
+//    $model = new Envio;
+//    foreach ($data as $key => $value) {
+//        if (is_array($value)) {
+//            $new_object = $object->addChild($key);
+//            $model->array_to_xml($new_object, $value);
+//        } 
+//        else if ($key == '@attributes') {
+//                foreach ($value as $n => $v) {
+//                    $object->addAttribute($n, $v);
+//                }
+//            } 
+//        
+//        else {
+//            // if the key is an integer, it needs text with it to actually work.
+//            if ($key == (int) $key) {
+//                $key = "key_$key";
+//            }
+//
+//            $object->addChild($key, $value);
+//        }   
+//    }   
+//}
+
+function build($value, $node) {
+    $model = new Envio;
+    if (is_array($value) == true) {
+        foreach ($value as $key => $element) {
+            if ($key == '@attributes') {
+                foreach ($element as $n => $v) {
+                    $node->addAttribute($n, $v);
+                }
+            } else {
+                $newNode = $node->addChild($key);
+                $model->build($element, $newNode);
+            }
+        }
+    } else {
+        $node->nodeValue = $value;
+    }
+}
+
+//function array_to_xml1(\SimpleXMLElement $object, array $data) {
+//    foreach($data as $key => $value) {
+//        if(is_array($value)) {
+//            if(!is_numeric($key)){
+//                $subnode = $xml->addChild("$key");
+//            } else {
+//                $subnode = $xml->addChild("value");
+//                $subnode->addAttribute('key', $key);                    
+//            }
+//            $model->array_to_xml($value, $subnode);
+//        }
+//        else {
+//            if (is_numeric($key)) {
+//                $xml->addChild("value", $value)->addAttribute('key', $key);
+//            } else {
+//                $xml->addChild("$key",$value);
+//            }
+//        }
+//    }
+//} 
+    
+    
+    
+    
+//    public function generarxml(){
+////            $items = $item;
+////            \Yii::$app->response->format = \yii\web\Response::FORMAT_XML;            
+////            return $items;
+//        
+//            $xmlValues = ['test1' => 'value1', 'test2' => 'value2'];
+// 
+//            //set content type xml in response
+//            Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+//            $headers = Yii::$app->response->headers;
+//            $headers->add('Content-Type', 'text/xml');
+//            foreach($xmlValues as $key => $value){
+//    echo '<setting id="'.$key.'">'.$value.'</settting>';
+//}
+            
+//             \Yii::$app->response->format = \yii\web\Response::FORMAT_XML;
+//            $items = ['some', 'array', 'of', 'data' => ['associative', 'array']];
+//            return $items;
+//    }
+
+
+    public function request($data) {
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+
+		curl_setopt($ch, CURLOPT_URL, 'https://s08.mobilvendor.com/web-service');
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_MAXREDIRS, 2);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept-Language: es'));
+		curl_setopt($ch, CURLOPT_ENCODING, '');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+
+		$content = curl_exec($ch);
+		$response = curl_getinfo($ch);
+
+		curl_close($ch);
+
+		if (!is_array($response) or $response['http_code'] != 200) {
+			print_r($response);
+
+			die('ERROR');
+		}
+
+		$result = json_decode($content);
+		if ($result === null) throw new Exception('Respuesta no valida: '.$content);
+		if (isset($result->error)) throw new Exception('Error durante la respuesta: '.$result->error);
+
+		return $result;
+	}
+
+	public function login() {
+                $model = new Envio;
+                
+		$result = $model->request(array(
+                    'action' => 'login', 
+                    'login' => 'WEBSERVICE', 
+                    'password' => 'webservice', 
+                    'context' => 'pruebassri'));
+		$sessionId = $result->session_id;
+		return $sessionId;
+	}
+
+	public function sendDocuments($sessionId, $documents) {
+                $model = new Envio;
+		$result = $model->request(array('action' => 'putSriObjectsOffline', 'session_id' => $sessionId, 'records' => $documents));
+
+		return array($result->records, $result->errors);
+	}
+
+	public function getProcessedDocuments($sessionId) {
+                $model = new Envio;
+		$result = $model->request(array('action' => 'getSriObjects', 'session_id' => $sessionId, 'filter' => array('process_status' => 1)));
+
+		return $result->records;
+	}
+
+	public function hideDocuments($sessionId, $ids) {
+                $model = new Envio;
+		$model->request(array('action' => 'updateSriObjects', 'session_id' => $sessionId, 'process_status' => 2, 'ids' => $ids));
+	}
 }

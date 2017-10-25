@@ -118,9 +118,7 @@ class SiteController extends Controller
                     return $this->render('indexmensajero', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
-                    ]);
-                    
-                    
+                    ]);                                        
                 }
                 else if(!empty($rol) && ($rol==1)){    
                     //    return $this->render('index');    
@@ -133,9 +131,9 @@ class SiteController extends Controller
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
                         //Datos enviados desde Descuento:
-                        'foto_promocion' => $foto_promocion,
-                        'fecha_inicio' => $fecha_inicio,
-                        'fecha_fin' => $fecha_fin,
+//                        'foto_promocion' => $foto_promocion,
+//                        'fecha_inicio' => $fecha_inicio,
+//                        'fecha_fin' => $fecha_fin,
                     ]);    
                 }
                 else{        

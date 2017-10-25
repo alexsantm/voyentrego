@@ -166,50 +166,67 @@ use kartik\editable\Editable;
                     $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
                     //return $service ? $service['calificacion'] : '-';  
                     $calificacion = $service['calificacion'];
-                   if(($calificacion == 1) || ($calificacion == 2)){
-                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-                   }
-                   else if(($calificacion == 4) || ($calificacion == 5)){
-                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-                   }
-                   else if(($calificacion == 3)){ 
-                        return ['class' => 'rating-static rating-'.$calificacion,
-                            
-                        ]; 
-                   }
+//                   if(($calificacion == 1) || ($calificacion == 2)){
+//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 4) || ($calificacion == 5)){
+//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 3)){ 
+//                        return ['class' => 'rating-static rating-'.$calificacion,
+//                            
+//                        ]; 
+//                   }
+                    if(!empty($calificacion)){
+                        return ['class' => 'rating-static rating-'.$calificacion];
+                    }
+//                   if(($calificacion == 1)){
+//                       
+//                           
+//                           ($calificacion == 2)){
+//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 4) || ($calificacion == 5)){
+//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 3)){ 
+//                        return ['class' => 'rating-static rating-'.$calificacion,
+//                            
+//                        ]; 
+//                   }
             },
                 'filter'=>false        
             ],   
                     
-              [
-                'label' => "Calificación",
-                'attribute' => '',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-                'value' => function($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
-                    //return $service ? $service['calificacion'] : '-';                    
-                    return $service ? $service['calificacion'] : '-'; 
-//                        return '';
-                },        
-                      'contentOptions' => function ($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
-                    //return $service ? $service['calificacion'] : '-';  
-                    $calificacion = $service['calificacion'];
-                   if(($calificacion == 1) || ($calificacion == 2)){
-                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-                   }
-                   else if(($calificacion == 4) || ($calificacion == 5)){
-                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-                   }
-                   else if(($calificacion == 3)){ 
-                        return ['id' => 'circle',
-                            
-                        ]; 
-                   }
-            },
-                'filter'=>false        
-            ], 
+//              [
+//                'label' => "Calificación",
+//                'attribute' => '',
+//                'hAlign' => 'center',
+//                'vAlign' => 'middle',
+//                'value' => function($model, $key, $index, $column) {
+//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
+//                    //return $service ? $service['calificacion'] : '-';                    
+//                    return $service ? $service['calificacion'] : '-'; 
+////                        return '';
+//                },        
+//                      'contentOptions' => function ($model, $key, $index, $column) {
+//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
+//                    //return $service ? $service['calificacion'] : '-';  
+//                    $calificacion = $service['calificacion'];
+//                   if(($calificacion == 1) || ($calificacion == 2)){
+//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 4) || ($calificacion == 5)){
+//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 3)){ 
+//                        return ['id' => 'circle',
+//                            
+//                        ]; 
+//                   }
+//            },
+//                'filter'=>false        
+//            ], 
                     
              ['class' => 'kartik\grid\ActionColumn',
                     'template'=>'{custom_view}',
@@ -225,7 +242,7 @@ use kartik\editable\Editable;
                                         ->andWhere(['envio_id'=>$model['id']])
                                         ->asArray()->one();
                                 if(empty($query)){  
-                                        return Html::a( '<i class="glyphicon glyphicon-thumbs-up" style="color:white"></i>',
+                                        return Html::a( '<i class="glyphicon glyphicon-certificate" style="color:white"></i>',
                                                         ['/calificacion/create', 
                                                             'user_id'=>$model['user_id'],
                                                             'mensajero_id'=>$model['mensajero_id'],    

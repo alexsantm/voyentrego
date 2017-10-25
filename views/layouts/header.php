@@ -31,6 +31,9 @@ use yii\helpers\Html;
         }else if(($rol==4) && (!empty($user->profile->full_name))){  //Administrador
             ?><span id="bienvenido" class="texto_tomate" style="font-size: 30px;margin-left: 20px;">Administrador: <?= $user->profile->full_name ?></span><?php
         }
+        else if(($rol==1) && (!empty($user->profile->full_name))){  //SuperAdministrador
+            ?><span id="bienvenido" class="texto_tomate" style="font-size: 30px;margin-left: 20px;">Super Administrador: <?= $user->profile->full_name ?></span><?php
+        }
         ?>                
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>

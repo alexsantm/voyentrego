@@ -14,6 +14,8 @@ use kartik\editable\Editable;
 
 //$this->title = 'Envios exitosos';
 //$this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 
 <div class="envio-index">
@@ -140,51 +142,68 @@ use kartik\editable\Editable;
 //                           return '';
 //                         },
 //            ],<div class="seccion_tomate_pasos"><center><span class="numero_pasos">1</span></center></div>
+//            [
+//                'label' => "Calificación",
+//                'attribute' => '',
+//                'hAlign' => 'center',
+//                'vAlign' => 'middle',
+//                'value' => function($model, $key, $index, $column) {
+//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
+//                    //return $service ? $service['calificacion'] : '-';                    
+////                    return $service ? $service['calificacion'] : '-'; 
+//                        return '';
+//                },        
+//                      'contentOptions' => function ($model, $key, $index, $column) {
+//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
+//                    $calificacion = $service['calificacion'];
+//                        if(($calificacion == 0)){ 
+//                             return ['class' => 'rating-static rating-0']; 
+//                        }
+//                        else if(($calificacion == 1) || ($calificacion == 2)){
+//                             return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
+//                        }
+//                        else if(($calificacion == 4) || ($calificacion == 5)){
+//                             return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
+//                        }
+//                        else if(($calificacion == 3)){ 
+//                             return ['class' => 'rating-static rating-'.$calificacion]; 
+//                        }
+//            },
+//                'filter'=>false        
+//            ], 
+                    
+
+                    
             [
                 'label' => "Calificación",
                 'attribute' => '',
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
+                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
                     //return $service ? $service['calificacion'] : '-';                    
-//                    return $service ? $service['calificacion'] : '-'; 
-                        return '';
+                    return $service ? $service['calificacion'] : '-'; 
+//                        return '';
                 },        
-//                'contentOptions' => function ($model, $key, $index, $column) {
-//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
-//                    //return $service ? $service['calificacion'] : '-';  
-//                    $calificacion = $service['calificacion'];
-//                   if(($calificacion == 1) || ($calificacion == 2)){
-//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 4) || ($calificacion == 5)){
-//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 3)){ 
-//                        return ['class' => 'rating-static rating-'.$calificacion,
-//                            
-//                        ]; 
-//                   }
-//            },
                       'contentOptions' => function ($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
+                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
+                    //return $service ? $service['calificacion'] : '-';  
                     $calificacion = $service['calificacion'];
-                        if(($calificacion == 0)){ 
-                             return ['class' => 'rating-static rating-0']; 
-                        }
-                        else if(($calificacion == 1) || ($calificacion == 2)){
-                             return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-                        }
-                        else if(($calificacion == 4) || ($calificacion == 5)){
-                             return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-                        }
-                        else if(($calificacion == 3)){ 
-                             return ['class' => 'rating-static rating-'.$calificacion]; 
-                        }
+                   if(($calificacion == 1) || ($calificacion == 2)){
+                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
+                   }
+                   else if(($calificacion == 4) || ($calificacion == 5)){
+                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
+                   }
+                   else if(($calificacion == 3)){ 
+                        return ['id' => 'circle',
+                            
+                        ]; 
+                   }
             },
                 'filter'=>false        
-            ],   
+            ],
+                    
 
         ],          
                     
@@ -283,24 +302,5 @@ use kartik\editable\Editable;
     border-radius: 60px;
 }
 
-#star6 {
- width: 0;
- height: 0;
- border-left: 50px solid transparent;
- border-right: 50px solid transparent;
- border-bottom: 100px solid #05ed08;
- position: relative;
-}
-#star6:after {
- width: 0;
- height: 0;
- border-left: 50px solid transparent;
- border-right: 50px solid transparent;
- border-top: 100px solid #05ed08;
- position: absolute;
- content: "";
- top: 30px;
- left: -50px;
-}
 
 </style>    

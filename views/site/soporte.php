@@ -21,10 +21,12 @@ echo("<center><h2>Soporte Voyentrego</h2></center>");
 //            'query_respuestas' => $query_respuestas,
         ]);
 
-$direccion = $this->render('/site/contactanos', [
-//            'model' => $model,
-//            'query_respuestas' => $query_respuestas,
-        ]);
+
+ $query_direccion = \app\models\ContactanosPagina::find()->asArray()->one();
+  $direccion =$query_direccion['texto'];
+
+//$direccion = $this->render('/site/contactanos', [
+//        ]);
 
 
 //$searchModel = new app\models\ValoresSearch();

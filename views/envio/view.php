@@ -23,9 +23,13 @@ use dosamigos\google\maps\layers\BicyclingLayer;
 
 //$this->title = $model->id;
 $this->title = $model->direccion_origen;
+//$this->title = $model->id;
 $envio_id =$model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Envios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$flag_programado = Yii::$app->request->get('prog');
+//print_r($flag_programado); die();
 
 ?>
 <div class="envio-view">
@@ -35,8 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-lg-2"><br>
             <p>
-                <?= Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-                <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
+                <?php
+                if(!empty($flag_programado)){
+                    echo Html::a('Actualizar Programado', ['updateprog', 'id' => $model->id], ['class' => 'btn btn-primary']);
+                }
+                else{
+                    ?><?= Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?><?php
+                }                
+                ?><?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
                         'confirm' => 'Are you sure you want to delete this item?',
@@ -187,20 +197,34 @@ else{
 <!--/*****************************************************GRIDVIEW DE  DESTINOS**************************************************************/-->
 <div class="geo-destino-index">
     <br><br>
-    <p style="text-align: right"> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
-            ['destino/create', 'id'=>$model->id],
-            ['class'=>'btn btn-success btn-lg modalButton', 
-             'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
-            );?>
-    </p>
+<!--    <p style="text-align: right"> <?php // Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
+//            ['destino/create', 'id'=>$model->id],
+//            ['class'=>'btn btn-success btn-lg modalButton', 
+//             'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
+//            );?>
+    </p>-->
+    <!--<h2>Destinos:</h2>-->
     <?php // Verifico si existe Dataprovider para que aparezca el Grid
     if ($dataProvider->totalCount > 0) {
  
                     ?>
                 <?php Pjax::begin(); ?>    <?= GridView::widget([
                      'dataProvider' => $dataProvider,
-                     'panel' => ['type' => GridView::TYPE_WARNING, 'footer'=>false],
+                     'toolbar' => [
+                            ['content' =>
+                                   Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
+                                    ['destino/create', 'id'=>$model->id],
+                                    ['class'=>'btn btn-success btn-lg modalButton', 
+                                     'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
+                                    ),
+                            ],
+                    ],
+        'panel' => [
+                         'type' => GridView::TYPE_WARNING, 
+                         'heading'=>'<h2>Destinos añadidos</h2>',
+                         'footer'=>false],
                 //        'filterModel' => $searchModel,
+
                         'columns' => [
                 //            ['class' => 'yii\grid\SerialColumn'],
                             [
@@ -297,9 +321,19 @@ else{
                                 ]                                      
                             ],           
                         ],
+                                        
                     ]); ?>
                 <?php Pjax::end(); 
 
+ }
+ else{
+     ?><p style="text-align: right"> 
+             <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
+            ['destino/create', 'id'=>$model->id],
+            ['class'=>'btn btn-success btn-lg modalButton', 
+             'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
+            );?>
+    </p><?php
  }
 ?></div>
 <!--/******************************************************FIN GRIDVIEW DE DESTINOS************************************************************/-->
@@ -438,7 +472,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
 //if(($dist_origen_primer_punto>0) || !empty($dist_resto_puntos)){
 //if(!empty($dist_resto_puntos)){
     ?>
-    <h2 class="bg-warning text-white">Detalle de distancias y Costo referencial</h2>
+    <center><h2 class="bg-warning text-white">Detalle de distancias y Costo referencial</h2></center>
     <table class="table table-hover table-condensed">
       <thead class="thead-inverse">
         <tr>
@@ -517,8 +551,8 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
           <td><?php echo('<strong>');echo($total_km); echo('</strong>');?></td>
         </tr>
         <tr>
-            <td class="warning"><strong><h3>Costo Referencial (USD)</h3></strong></td>
-           <td class="warning"><strong><h3><?php echo($valor_km);?></h3></strong></strong></td>
+            <td class="warning"><h3><strong>Costo Referencial (USD)</strong></h3></td>
+           <td class="warning"><h3><strong><?php echo($valor_km);?></strong></h3></strong></td>
         </tr>
       </tbody>
     </table>
@@ -587,7 +621,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
                                 
                                 <div class="col-lg-6">
                             <p> <?= Html::a( '<i class="glyphicon glyphicon-remove" style="color:white"></i>Cancelar Envío',
-                                        ['#'],
+                                        ['envio/cancelacion', 'id'=>$model->id],
                                         ['class'=>'btn btn-danger btn-lg', 'title'=>'Haga click para cancelar', 'data-confirm' => '¿Estás seguro que deseas cancelar el envío?',]
                                         );
                                 ?>
@@ -653,7 +687,7 @@ else {
 }
 
 .kv-panel-before, .kv-panel-after {
-    display:none;
+    /*display:none;*/
 }
 </style>    
  

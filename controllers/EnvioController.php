@@ -12,6 +12,7 @@ use kartik\mpdf\Pdf;
 
 use yii\web\UploadedFile;
 use yii\helpers\Json;
+use kartik\alert\Alert;
 
 /**
  * EnvioController implements the CRUD actions for Envio model.
@@ -181,6 +182,26 @@ class EnvioController extends Controller
         ]);
     }
     
+//            public function actionViewprog($id)
+//    {
+//        $origen = \app\models\Envio::findOne($id); 
+//        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();     
+////        print_r($destinos);
+//        
+//        $searchModel = new \app\models\DestinoSearch();
+//        $searchModel->envio_id = $id;
+//        $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
+//        
+//        return $this->render('viewprog', [
+//            'model' => $this->findModel($id),
+//            'origen'=>$origen,
+//            'destinos'=>$destinos,
+//            
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
+    
         public function actionVistaenvio($id)
     {
          return $this->renderAjax('vistaenvio', [
@@ -244,9 +265,17 @@ class EnvioController extends Controller
                 $transaction::rollback();
                  throw $e;
             }
-            return $this->redirect(['view', 'id' => $model->id]);
-//            return $this->redirect(['index']);      
-             
+            if($model->save()){
+                ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado el Origen del Envio correctamente');  ?><?php  
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                $error=$model->errors;
+                print_r($error); die();
+                ?><?= Yii::$app->session->setFlash('danger', '<h4>ERROR</h4>'. $error); ?><?php  
+                return $this->redirect(Yii::$app->request->referrer); 
+            }
+//            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -276,8 +305,23 @@ class EnvioController extends Controller
                 $transaction::rollback();
                  throw $e;
             }
-            return $this->redirect(['view', 'id' => $model->id]);
-//            return $this->redirect(['index']);      
+            
+            if($model->save()){
+                ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado el Origen del Envio correctamente');  ?><?php  
+                return $this->redirect(['view', 'id' => $model->id, 'prog'=>'SI']);
+            }
+            else{
+                $error= $model->errors;                
+                foreach($error as $e){
+                    $string = implode(';', $e);
+                    ?><?php Yii::$app->session->setFlash('danger', '<h4>ERROR</h4>'. $string); ?><?php  
+                    return $this->redirect(Yii::$app->request->referrer); 
+                }
+            }
+            
+            ?><?php // Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado el Origen del Envio programado correctamente');  ?><?php  
+//            return $this->redirect(['view', 'id' => $model->id, 'prog'=>'SI']);
+
              
         } else {
             return $this->render('createprog', [
@@ -296,10 +340,19 @@ class EnvioController extends Controller
             $post=Yii::$app->request->post();           
             $fecha_desde =$post['fecha_desde'];
             $fecha_hasta =$post['fecha_hasta'];
+            $fecha_actual = date("Y-m-d");
             $dias = $post['dias'];
             
             $fechaInicio=strtotime($fecha_desde);
             $fechaFin=strtotime($fecha_hasta);
+//            $fecha_actual = strtotime(date("Y-m-d"));
+            
+//            print_r($post); echo('<br>');
+//            echo("Fecha desde: "); print_r($fecha_desde); echo('<br>');
+//            echo("Fecha hasta: "); print_r($fecha_hasta); echo('<br>');
+//            echo("Fecha actual: "); print_r($fecha_actual); echo('<br>');
+                        
+            if( ($fechaInicio <= $fechaFin) && ($fecha_desde >= $fecha_actual)){
 
             $days = array('1' => 'Monday', '2' => 'Tuesday', '3' => 'Wednesday', '4' => 'Thursday', '5' => 'Friday', '6' => 'Saturday', '7' => 'Sunday');
             foreach($dias as $dia){                
@@ -320,9 +373,25 @@ class EnvioController extends Controller
                 $observacion = $post['Envio']['observacion'];
                 $tipo_envio_id = $post['Envio']['tipo_envio_id'];
                 $dimensiones_id = $post['Envio']['dimensiones_id'];
-
+                
+                
+//                echo('ciudad id: ');print_r($ciudad_id); echo("<br>");
+//                echo('user id: ');print_r($user_id); echo("<br>");
+//                echo('remitente: ');print_r($remitente); echo("<br>");
+//                echo('direccion origen: ');print_r($direccion_origen); echo("<br>");
+//                echo('latitud: ');print_r($latitud); echo("<br>");
+//                echo('longitud: ');print_r($longitud); echo("<br>");
+//                echo('celular: ');print_r($celular); echo("<br>");
+//                echo('observacion: ');print_r($observacion); echo("<br>");
+//                echo('tipo_envio: ');print_r($tipo_envio_id); echo("<br>");
+//               echo("<br>");print_r($dimensiones_id); echo("<br>");
+//                die();
+                
                 $cont = 0;
+//                print_r(count($fechas)); die();
                  while($cont < count($fechas)){
+                    echo("Contador: ");print_r($cont);echo("<br>");
+                     
                      $envio = new Envio;
                      $envio->ciudad_id = $ciudad_id;
                      $envio->user_id = $user_id;
@@ -336,11 +405,32 @@ class EnvioController extends Controller
                      $envio->tipo_envio_id = $tipo_envio_id;
                      $envio->dimensiones_id = $dimensiones_id;
                      $envio->fecha_registro = $fechas[$cont];
-                     $envio->save();                     
-                     $array_envio[]=$envio;
-                     $array_id[]=$envio->id;
+//                     print_r($envio->fecha_registro); echo("<br>");
+                     $envio->save();    
+                     
+                    $array_envio[]=$envio;
+                    $array_id[]=$envio->id;
                     $cont = $cont+1;
+                    
+//                echo('-----------------------');    echo("<br>");
+//                 echo('ciudad id: ');print_r($envio->ciudad_id); echo("<br>");
+//                echo('user id: ');print_r($envio->user_id); echo("<br>");
+//                echo('remitente: ');print_r($envio->remitente); echo("<br>");
+//                echo('direccion origen: ');print_r($envio->direccion_origen); echo("<br>");
+//                echo('latitud: ');print_r($envio->latitud); echo("<br>");
+//                echo('longitud: ');print_r($envio->longitud); echo("<br>");
+//                echo('celular: ');print_r($envio->celular); echo("<br>");
+//                echo('observacion: ');print_r($envio->observacion); echo("<br>");
+//                echo('tipo_envio: ');print_r($envio->estado_envio_id); echo("<br>");
+//                echo('dimensioanes: ');print_r( $envio->dimensiones_id); echo("<br>");
+                echo('fecha registro: ');print_r( $envio->fecha_registro); echo("<br>");
+                echo("Contador incrementado: ");print_r($cont); echo("<br>");
+                    
+                    
                 }  
+//                print_r("fin"); 
+//                die();
+                
             $transaction->commit();
             }catch(\Exception $e)
             {
@@ -350,9 +440,21 @@ class EnvioController extends Controller
                 throw $e;
             }
 
-//            Extraigo el primer elemento del array $envio para sacar la id y renderizar
-            $id_primer_elemento = $array_envio[0] ['id'];
-            return $this->redirect(['viewrec', 'id' => $id_primer_elemento, 'fechas'=>$fechas, 'array_id'=>$array_id ]); 
+                // Extraigo el primer elemento del array $envio para sacar la id y renderizar
+                $id_primer_elemento = $array_envio[0] ['id'];
+//                print_r($id_primer_elemento); die();
+                ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado el Origen del Envio recurrente correctamente');  ?><?php  
+                return $this->redirect(['viewrec', 'id' => $id_primer_elemento, 'fechas'=>$fechas, 'array_id'=>$array_id ]); 
+//                return $this->redirect(['index']); 
+                        
+            }else{
+                    ?><?php Yii::$app->session->setFlash('danger',
+                            '<h4>ERROR EN LAS FECHAS</h4>'
+                            . 'Revise los siguientes inconvenientes:<br>'
+                            . '<li>La Fecha Inicio debe ser menor a Fecha fin</li>'
+                            . '<li>La fecha Inicio debe ser mayor o igual a Fecha actual</li>'); ?><?php  
+                    return $this->redirect(Yii::$app->request->referrer); 
+                }         
             
         } else {
             return $this->render('createrec', [
@@ -364,6 +466,7 @@ class EnvioController extends Controller
     
     public function actionDetalles()
     {
+        $model = new Envio;
         $dist_origen_primer_punto = Yii::$app->request->get('dist_origen_primer_punto');
         $dist_resto_puntos=Yii::$app->request->get('dist_resto_puntos');
         $valor_distancia_retornos =Yii::$app->request->get('valor_distancia_retornos');
@@ -393,9 +496,17 @@ class EnvioController extends Controller
             'longitud_origen'=>$longitud_origen,
             'mensajeros' => $mensajeros,
             'radio' => $radio,
+            'model' => $model,
         ]);
     }
-   
+    
+    public function actionCancelacion()
+    {
+        $id = Yii::$app->request->get('id'); 
+        Envio::updateAll(['estado_envio_id' => 4], 'id = '. "'".$id."'" );
+        ?><?= Yii::$app->session->setFlash('warning', '<h4>ENVIO CANCELADO</h4> Se ha cancelado su envío');  ?><?php  
+        return $this->redirect(['index']);  
+    }
 
     /**
      * Updates an existing Envio model.
@@ -469,11 +580,44 @@ class EnvioController extends Controller
                 $transaction::rollback();
                  throw $e;
             }
+            ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Datos de Envío Origen actualizados correctamente');  ?><?php  
             return $this->redirect(['view', 'id' => $model->id]);
 //            return $this->redirect(['index']);      
              
         } else {
             return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+           public function actionUpdateprog($id)
+    {
+        $model = $this->findModel($id);     
+        $connection = \Yii::$app->db;
+        $model->fecha_registro = date("Y-m-d H:i");
+        $model->estado_envio_id = 1;
+        if ($model->load(Yii::$app->request->post())) {            
+            try{
+            $transaction = $connection->beginTransaction(); 
+                $post=Yii::$app->request->post();                    
+                $latitud = $post['Envio']['latitude'];	
+                $longitud = $post['Envio']['longitude'];
+                $model->latitud= $latitud;
+                $model->longitud= $longitud;                    
+                $model->save();                 
+            $transaction->commit();           
+            }catch(\Exception $e)
+            {
+                $transaction::rollback();
+                 throw $e;
+            }
+            ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Datos de Envío Origen actualizados correctamente');  ?><?php  
+            return $this->redirect(['view', 'id' => $model->id]);
+//            return $this->redirect(['index']);      
+             
+        } else {
+            return $this->render('createprog', [
                 'model' => $model,
             ]);
         }
