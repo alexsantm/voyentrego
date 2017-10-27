@@ -68,7 +68,11 @@ use dosamigos\ckeditor\CKEditor;
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <center><?= Html::submitButton($model->isNewRecord ? 'Registrar Destino' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-primary'],['fechas'=>$fechas, 'array_id'=>$array_id]) ?></center>                        
+                        <center><?= Html::submitButton($model->isNewRecord ? 'Registrar Destino' : 'Actualizar Destino', 
+                                ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-primary'],
+                                [
+//                                 'array_id'=>$array_id
+                                ]) ?></center>                        
                     </div>
                 </div>
             </div> 

@@ -83,10 +83,7 @@ class DestinoController extends Controller
         if ($model->load(Yii::$app->request->post())) {            
             try{
             $transaction = $connection->beginTransaction();                  
-                $model->save(); 
-//                if(!$model->save()){
-//                    print_r($model->errors); die();
-//                }                
+                $model->save();               
             $transaction->commit();           
             }catch(\Exception $e)
             {
@@ -107,19 +104,19 @@ class DestinoController extends Controller
     
         public function actionCreaterec()
     {
-            
+//            print_r("createrec"); die();
         $model = new Destino();
         $connection = \Yii::$app->db;
-//        $model->fecha_registro = date("Y-m-d H:i");
         $model->estado_envio_id = 1;
         if ($model->load(Yii::$app->request->post())) {    
             $post=Yii::$app->request->post(); 
-//                print_r(Yii::$app->request->get('fechas')); die();
-                $fechas = Yii::$app->request->get('fechas');
-                $array_id = Yii::$app->request->get('array_id');
-             try{
-            $transaction = $connection->beginTransaction(); 
-//            print_r($post); die();
+            $fechas = Yii::$app->request->get('fechas');
+            $array_id = Yii::$app->request->get('array_id');
+//            print_r($post); echo('<br>');
+//            print_r($fechas); echo('<br>');
+//            die();
+            try{
+            $transaction = $connection->beginTransaction();                
                 $ciudad_id = $post ['Destino']['ciudad_id'];
                 $direccion_destino = $post['Destino']['direccion_destino'];
                 $destinatario = $post['Destino']['destinatario'];
@@ -129,9 +126,10 @@ class DestinoController extends Controller
                 $retorno_destino_id = $post['Destino']['retorno_destino_id'];
                 $retorno_inicio = $post['Destino']['retorno_inicio'];
                 $observacion = $post['Destino']['observacion'];
-                //$envio_id
                 $latitud = $post['Destino']['latitud'];	
                 $longitud = $post['Destino']['longitud'];
+                $kilometros = $post['Destino']['kilometros'];
+                $valor = $post['Destino']['valor'];
                 
                 $cont = 0;
                  while($cont < count($array_id)){
@@ -147,13 +145,12 @@ class DestinoController extends Controller
                      $destino->observacion = $observacion;
                         $destino->latitud= $latitud;
                         $destino->longitud= $longitud;     
-                     $destino->estado_envio_id = 1;
-                     
+                     $destino->estado_envio_id = 1;                     
                      $destino->envio_id = $array_id[$cont];                     
                      $destino->fecha_registro = $fechas[$cont];
                      $destino->save();                     
 //                     $array_envio[]=$envio;
-//                     $array_id[]=$envio->id;
+                     $array_dest_id[]=$destino->id;
                     $cont = $cont+1;
                 }  
             $transaction->commit();
@@ -167,6 +164,7 @@ class DestinoController extends Controller
             //return $this->redirect(['view', 'id' => $model->id]);
             ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado un nuevo Destino satisfactoriamente');  ?><?php  
             return $this->redirect(Yii::$app->request->referrer);
+            
 //            return $this->redirect(['index']);      
              
         } else {
@@ -192,6 +190,77 @@ class DestinoController extends Controller
             return $this->redirect(['/envio/view', 'id' => $model->envio_id]);
         } else {
             return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+    public function actionUpdaterec($id)
+    {
+            $array_id = Yii::$app->request->get('array_id');
+            $array_envio = Yii::$app->request->get('array_envio');
+//            print_r($array_id); die();
+            
+        $model = $this->findModel($id);     
+        $connection = \Yii::$app->db;
+//        $model->fecha_registro = date("Y-m-d H:i");
+        $model->estado_envio_id = 1;
+        if ($model->load(Yii::$app->request->post())) {     
+            try{
+                $post=Yii::$app->request->post();
+//                print_r($post); die();
+                $transaction = $connection->beginTransaction(); 
+                    $ciudad_id = $post ['Destino']['ciudad_id'];
+                    $direccion_destino = $post['Destino']['direccion_destino'];
+                    $destinatario = $post['Destino']['destinatario'];
+                    $celular = $post['Destino']['celular'];
+                    $tipo_envio_id = $post['Destino']['tipo_envio_id'];
+                    $dimensiones_id = $post['Destino']['dimensiones_id'];
+                    $retorno_destino_id = $post['Destino']['retorno_destino_id'];
+                    $retorno_inicio = $post['Destino']['retorno_inicio'];
+                    $observacion = $post['Destino']['observacion'];
+                    $latitud = $post['Destino']['latitud'];	
+                    $longitud = $post['Destino']['longitud'];
+                    $kilometros = $post['Destino']['kilometros'];
+                    $valor = $post['Destino']['valor'];
+            foreach($array_id as $id){
+                     $query = Destino::find()->where(['envio_id' => $id])->one();
+                     $fecha_registro = $query['fecha_registro'];
+                 Destino::updateAll([
+                     'ciudad_id' => $ciudad_id,
+                     'direccion_destino' => $direccion_destino,
+                     'destinatario' => $destinatario,
+                     'celular' => $celular,
+                     'tipo_envio_id' => $tipo_envio_id,
+                     'dimensiones_id' => $dimensiones_id,
+                     'retorno_destino_id' => $retorno_destino_id,
+                     'retorno_inicio' => $retorno_inicio,
+                     'observacion' => $observacion,
+                     'latitud' => $latitud,
+                     'longitud' => $longitud,
+                     'kilometros' => $kilometros,
+                     'valor' => $valor,
+                     'fecha_registro' => $fecha_registro,
+                     ], 'envio_id = '. "'".$id."'" );   
+            }  
+                 
+            $transaction->commit();
+            }catch(\Exception $e)
+            {
+//                $transaction::rollback();
+//                 throw $e;                 
+                $error=$e->getMessage();
+                print_r($error);die();
+                $transaction::rollback();
+                throw $e;
+            }
+            
+            ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Datos de Envío Origen actualizados correctamente');  ?><?php  
+            return $this->redirect(Yii::$app->request->referrer);
+            //return $this->redirect(['viewrec', 'id' => $model->id]);
+                         
+        } else {
+            return $this->renderAjax('updaterec', [
                 'model' => $model,
             ]);
         }
@@ -239,6 +308,11 @@ class DestinoController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        $array_id = Yii::$app->request->get('array_id');
+        $direccion_destino = Yii::$app->request->get('direccion_destino');
+        foreach($array_id as $id){
+                \app\models\Destino::deleteAll(['envio_id' => $id, 'direccion_destino' => $direccion_destino]);
+        }        
         return $this->redirect(Yii::$app->request->referrer);
 //        return $this->redirect(['index']);
     }

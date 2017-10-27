@@ -31,13 +31,75 @@ $this->params['breadcrumbs'][] = $this->title;
 $flag_programado = Yii::$app->request->get('prog');
 $array_id = Yii::$app->request->get('array_id');
 $fechas = Yii::$app->request->get('fechas');
-//print_r($fechas); die();
+
 ?>
-<center><h1>Envios Recurrentes</h1></center>
+<h3>Envios Concurrentes II</h3>
+
+
+<?php
+foreach($array_id as $id){
+    $query = \app\models\Envio::find()->where(['id' => $id])->asArray()->one();
+    $id_envio=$query['id'];
+    $direccion_envio=$query['direccion_origen'];
+    $fecha_registro_envio=$query['fecha_registro'];
+
+   // print_r($query); echo('<br>');
+    print_r($id_envio); echo('<br>');
+    print_r($direccion_envio); echo('<br>');
+    print_r($fecha_registro_envio); echo('<br>');
+}
+
+//$dataProvider = $array_id;
+?>
+
+
+
+ <?= GridView::widget([
+     'dataProvider' => $dataProvider,
+     'toolbar' => [
+            ['content' =>
+                   Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino Recurrente',
+                    ['destino/createrec', 
+                        'id'=>$model->id,
+                        'array_id'=>$array_id,
+                        'fechas'=>$fechas
+                    ],
+                    ['class'=>'btn btn-success btn-lg modalButton', 
+                     'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
+                    ),
+            ],
+    ],
+        'panel' => [
+                         'type' => GridView::TYPE_WARNING, 
+                         'heading'=>'<h2>Destinos añadidos</h2>',
+                         'footer'=>false],
+                //        'filterModel' => $searchModel,
+
+                        'columns' => [
+                //            ['class' => 'yii\grid\SerialColumn'],
+                            [
+                                'attribute' => '',
+                                'label' => 'Id',
+                                'hAlign'=>'center',
+                                'vAlign'=>'middle',
+                                'value' => function($model, $key, $index, $column) {
+                                   return $id_envio;
+                                }, 
+                            ], 
+                          
+                            ['class' => 'yii\grid\ActionColumn'],           
+                        ],
+                                        
+                    ]); ?>
+
+
+
+
+
 <div class="envio-view">
     <div class="row">
         <div class="col-lg-10">
-            <h2><?php echo('Detalle del envío: '); ?><?= Html::encode($this->title) ?></h2>
+            <h1><?php echo('Detalle del envío: '); ?><?= Html::encode($this->title) ?></h1>
         </div>
         <div class="col-lg-2"><br>
             <p>
@@ -62,6 +124,7 @@ $fechas = Yii::$app->request->get('fechas');
             </p>
         </div>
     </div>
+
 </div>
 <!--/*********************************************************************************************************************/-->
 <?php
@@ -186,7 +249,8 @@ else{
     </p>-->
     <!--<h2>Destinos:</h2>-->
     <?php // Verifico si existe Dataprovider para que aparezca el Grid
-    if ($dataProvider->totalCount > 0) { 
+    if ($dataProvider->totalCount > 0) {
+ 
                     ?>
                 <?php Pjax::begin(); ?>    <?= GridView::widget([
                      'dataProvider' => $dataProvider,
@@ -291,27 +355,15 @@ else{
                                                       'class'=>'btn btn-warning btn-md modalButton','title' => Yii::t('yii', 'View'),
                                               ]); 
                                         },
-                                        'update' => function ($url, $model) {  
-                                            $array_id = Yii::$app->request->get('array_id');
-                                            $fechas = Yii::$app->request->get('fechas');
-                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/updaterec/'.$model->id, 
-                                                'id_envio' => $model->envio_id,
-                                                'array_id' => $array_id,
-                                                'fechas' => $fechas
-                                                    ]);    
+                                        'update' => function ($url, $model) {     
+                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/updaterec/'.$model->id, 'id_envio' => $model->envio_id]);    
                                             return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [
-                                                      'class'=>'btn btn-warning btn-md modalButton','title' => 'Actualizar Destino Recurrente',
+                                                      'class'=>'btn btn-warning btn-md','title' => 'Actualizar Destino Recurrente',
                                           ]); 
                                         },
                                         'delete' => function($url, $model) {
-                                             $array_id = Yii::$app->request->get('array_id');
                                             $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/'.$model->id]);    
-                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', 
-                                                    ['destino/delete', 
-                                                        'id' => $model['id'],
-                                                        'direccion_destino' => $model['direccion_destino'],
-                                                        'array_id' => $array_id,
-                                                    ], ['class'=>'btn btn-warning btn-md',
+                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['delete', 'id' => $model['id']], ['class'=>'btn btn-warning btn-md',
                                             'title' => Yii::t('app', 'Deletee'), 'data-confirm' => Yii::t('app', 'Are you sure you want to delete this Record?'),'data-method' => 'post']);        
                                         }        
                                 ]                                      
@@ -320,19 +372,15 @@ else{
                                         
                     ]); ?>
                 <?php Pjax::end(); 
+
  }
  else{
      ?><p style="text-align: right"> 
-             <?=    Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino Recurrente',
-                                    ['destino/createrec', 
-                                        'id'=>$model->id,
-                                        'array_id'=>$array_id,
-                                        'fechas'=>$fechas
-                                    ],
-                                    ['class'=>'btn btn-success btn-lg modalButton', 
-                                     'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
-                                    )
-             ?>
+             <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
+            ['destino/create', 'id'=>$model->id],
+            ['class'=>'btn btn-success btn-lg modalButton', 
+             'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
+            );?>
     </p><?php
  }
 ?></div>
@@ -460,7 +508,7 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                                 $total_km = $dist_resto_puntos + $dist_origen_primer_punto + $valor_distancia_retornos+ $valor_distancia_retorno_inicio;
                             }
     //                        echo('<h2>'); echo('Distancia Total: ');echo($total);echo('</h2>');
-                                               
+
                             $valor_km = $model->calculo_valores($total_km);
     }    
      //*****************Fin Calculo de Distancias******************
@@ -551,12 +599,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
           <td><?php echo('<strong>');echo($total_km); echo('</strong>');?></td>
         </tr>
         <tr>
-            <?php  
-            //Contador de envios recurrentes
-                $contador_envios=count($array_id);        
-                $valor_km = $valor_km *  $contador_envios;
-            ?>
-            <td class="warning"><h3><strong>Costo Referencial (USD) x <?= $contador_envios ?> Envios</strong></h3></td>            
+            <td class="warning"><h3><strong>Costo Referencial (USD)</strong></h3></td>
            <td class="warning"><h3><strong><?php echo($valor_km);?></strong></h3></strong></td>
         </tr>
       </tbody>
@@ -658,6 +701,8 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
     }
     ?>
     
+    
+    
 <?php
 }
 else {
@@ -687,6 +732,10 @@ else {
 
 .modal-content{
     width: 125% !important;
+}
+
+.kv-panel-before, .kv-panel-after {
+    /*display:none;*/
 }
 </style>    
  

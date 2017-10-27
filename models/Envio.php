@@ -69,6 +69,7 @@ class Envio extends \yii\db\ActiveRecord
             
 //            [['fecha_registro'], 'compare', 'compareAttribute'=> date("Y-m-d"), 'operator'=>'>=', 'message'=>'La Fecha de Registro debe ser mayor al dia actual'],
             ['fecha_registro','validateDates'],
+//            [['fecha_registro'], 'compare', 'compareAttribute'=>date("Y-m-d"), 'operator'=>'>', 'message'=>'La Hora fin debe ser mayor a Hora de Inicio'],
             
             [['celular'], 'string', 'max' => 10],
             [['observacion'], 'string', 'max' => 300],
@@ -84,7 +85,9 @@ class Envio extends \yii\db\ActiveRecord
 
 public function validateDates(){
     $fecha_actual = date("Y-m-d");
-     if(strtotime($this->fecha_registro) <= strtotime($fecha_actual)){
+     if(strtotime($this->fecha_registro) < strtotime($fecha_actual)){
+//         print_r($fecha_actual);echo('<br>');
+//         print_r($this->fecha_registro);echo('<br>');         
         $this->addError('Fecha Registro','La Fecha Registro debe ser mayor o igual  a la Fecha Actual');
     }
 }

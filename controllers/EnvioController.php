@@ -226,6 +226,24 @@ class EnvioController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+           public function actionViewrecurrente($id)
+    {
+        $origen = \app\models\Envio::findOne($id); 
+        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();            
+        $searchModel = new \app\models\DestinoSearch();
+        $searchModel->envio_id = $id;
+        $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
+                
+        return $this->render('viewrecurrente', [
+            'model' => $this->findModel($id),
+            'origen'=>$origen,
+            'destinos'=>$destinos,
+            
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Creates a new Envio model.
@@ -318,22 +336,18 @@ class EnvioController extends Controller
                     return $this->redirect(Yii::$app->request->referrer); 
                 }
             }
-            
-            ?><?php // Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado el Origen del Envio programado correctamente');  ?><?php  
-//            return $this->redirect(['view', 'id' => $model->id, 'prog'=>'SI']);
 
-             
         } else {
             return $this->render('createprog', [
                 'model' => $model,
             ]);
         }
     }
+    
        public function actionCreaterec()
     {
         $model = new Envio();
         $connection = \Yii::$app->db;
-//        $model->fecha_registro = date("Y-m-d H:i");
         $model->estado_envio_id = 1;
         if ($model->load(Yii::$app->request->post())) {
         /*****************************************************************/
@@ -345,15 +359,7 @@ class EnvioController extends Controller
             
             $fechaInicio=strtotime($fecha_desde);
             $fechaFin=strtotime($fecha_hasta);
-//            $fecha_actual = strtotime(date("Y-m-d"));
-            
-//            print_r($post); echo('<br>');
-//            echo("Fecha desde: "); print_r($fecha_desde); echo('<br>');
-//            echo("Fecha hasta: "); print_r($fecha_hasta); echo('<br>');
-//            echo("Fecha actual: "); print_r($fecha_actual); echo('<br>');
-                        
             if( ($fechaInicio <= $fechaFin) && ($fecha_desde >= $fecha_actual)){
-
             $days = array('1' => 'Monday', '2' => 'Tuesday', '3' => 'Wednesday', '4' => 'Thursday', '5' => 'Friday', '6' => 'Saturday', '7' => 'Sunday');
             foreach($dias as $dia){                
                 for($i = strtotime($days[$dia], $fechaInicio); $i <= $fechaFin; $i = strtotime('+1 week', $i)){
@@ -372,26 +378,9 @@ class EnvioController extends Controller
                 $celular = $post['Envio']['celular'];
                 $observacion = $post['Envio']['observacion'];
                 $tipo_envio_id = $post['Envio']['tipo_envio_id'];
-                $dimensiones_id = $post['Envio']['dimensiones_id'];
-                
-                
-//                echo('ciudad id: ');print_r($ciudad_id); echo("<br>");
-//                echo('user id: ');print_r($user_id); echo("<br>");
-//                echo('remitente: ');print_r($remitente); echo("<br>");
-//                echo('direccion origen: ');print_r($direccion_origen); echo("<br>");
-//                echo('latitud: ');print_r($latitud); echo("<br>");
-//                echo('longitud: ');print_r($longitud); echo("<br>");
-//                echo('celular: ');print_r($celular); echo("<br>");
-//                echo('observacion: ');print_r($observacion); echo("<br>");
-//                echo('tipo_envio: ');print_r($tipo_envio_id); echo("<br>");
-//               echo("<br>");print_r($dimensiones_id); echo("<br>");
-//                die();
-                
+                $dimensiones_id = $post['Envio']['dimensiones_id'];               
                 $cont = 0;
-//                print_r(count($fechas)); die();
-                 while($cont < count($fechas)){
-                    echo("Contador: ");print_r($cont);echo("<br>");
-                     
+                while($cont < count($fechas)){
                      $envio = new Envio;
                      $envio->ciudad_id = $ciudad_id;
                      $envio->user_id = $user_id;
@@ -405,32 +394,14 @@ class EnvioController extends Controller
                      $envio->tipo_envio_id = $tipo_envio_id;
                      $envio->dimensiones_id = $dimensiones_id;
                      $envio->fecha_registro = $fechas[$cont];
-//                     print_r($envio->fecha_registro); echo("<br>");
-                     $envio->save();    
-                     
+                    $envio->save(); 
                     $array_envio[]=$envio;
-                    $array_id[]=$envio->id;
+                    $array_id[]=$envio->id;                                                            
+//                    $fechas[]=$envio->fecha_registro;                                                            
                     $cont = $cont+1;
-                    
-//                echo('-----------------------');    echo("<br>");
-//                 echo('ciudad id: ');print_r($envio->ciudad_id); echo("<br>");
-//                echo('user id: ');print_r($envio->user_id); echo("<br>");
-//                echo('remitente: ');print_r($envio->remitente); echo("<br>");
-//                echo('direccion origen: ');print_r($envio->direccion_origen); echo("<br>");
-//                echo('latitud: ');print_r($envio->latitud); echo("<br>");
-//                echo('longitud: ');print_r($envio->longitud); echo("<br>");
-//                echo('celular: ');print_r($envio->celular); echo("<br>");
-//                echo('observacion: ');print_r($envio->observacion); echo("<br>");
-//                echo('tipo_envio: ');print_r($envio->estado_envio_id); echo("<br>");
-//                echo('dimensioanes: ');print_r( $envio->dimensiones_id); echo("<br>");
-                echo('fecha registro: ');print_r( $envio->fecha_registro); echo("<br>");
-                echo("Contador incrementado: ");print_r($cont); echo("<br>");
-                    
-                    
                 }  
-//                print_r("fin"); 
-//                die();
-                
+//                print_r('primer print'); print_r($fechas);                 
+//                die();                
             $transaction->commit();
             }catch(\Exception $e)
             {
@@ -442,11 +413,14 @@ class EnvioController extends Controller
 
                 // Extraigo el primer elemento del array $envio para sacar la id y renderizar
                 $id_primer_elemento = $array_envio[0] ['id'];
-//                print_r($id_primer_elemento); die();
+//                print_r($envio); die();  
                 ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Se ha creado el Origen del Envio recurrente correctamente');  ?><?php  
-                return $this->redirect(['viewrec', 'id' => $id_primer_elemento, 'fechas'=>$fechas, 'array_id'=>$array_id ]); 
-//                return $this->redirect(['index']); 
-                        
+                return $this->redirect(['viewrec', 
+                    'id' => $id_primer_elemento, 
+                    'array_id'=>$array_id,
+                    'fechas'=>$fechas
+                        ]); 
+                    
             }else{
                     ?><?php Yii::$app->session->setFlash('danger',
                             '<h4>ERROR EN LAS FECHAS</h4>'
@@ -454,8 +428,7 @@ class EnvioController extends Controller
                             . '<li>La Fecha Inicio debe ser menor a Fecha fin</li>'
                             . '<li>La fecha Inicio debe ser mayor o igual a Fecha actual</li>'); ?><?php  
                     return $this->redirect(Yii::$app->request->referrer); 
-                }         
-            
+                }                     
         } else {
             return $this->render('createrec', [
                 'model' => $model,
@@ -559,7 +532,7 @@ class EnvioController extends Controller
 //            ]);
 //        }
 //    }
-         public function actionUpdate($id)
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);     
         $connection = \Yii::$app->db;
@@ -591,7 +564,7 @@ class EnvioController extends Controller
         }
     }
     
-           public function actionUpdateprog($id)
+    public function actionUpdateprog($id)
     {
         $model = $this->findModel($id);     
         $connection = \Yii::$app->db;
@@ -622,6 +595,75 @@ class EnvioController extends Controller
             ]);
         }
     }
+    
+        public function actionUpdaterec($id)
+    {
+            $array_id = Yii::$app->request->get('array_id');
+            $array_envio = Yii::$app->request->get('array_envio');
+//            print_r($array_id); die();
+            
+        $model = $this->findModel($id);     
+        $connection = \Yii::$app->db;
+//        $model->fecha_registro = date("Y-m-d H:i");
+        $model->estado_envio_id = 1;
+        if ($model->load(Yii::$app->request->post())) {     
+            try{
+                $post=Yii::$app->request->post();
+                $transaction = $connection->beginTransaction(); 
+                $ciudad_id = $post ['Envio']['ciudad_id'];
+                $user_id = $post['Envio']['user_id'];
+                $remitente = $post['Envio']['remitente'];
+                $direccion_origen = $post['Envio']['direccion_origen'];
+                $latitud = $post['Envio']['latitude'];	
+                $longitud = $post['Envio']['longitude'];
+                $celular = $post['Envio']['celular'];
+                $observacion = $post['Envio']['observacion'];
+                $tipo_envio_id = $post['Envio']['tipo_envio_id'];
+                $dimensiones_id = $post['Envio']['dimensiones_id'];
+                
+//                $fecha_registro = $post['Envio']['fecha_registro'];
+                
+//                print_r(Yii::$app->request->get()); die();
+            foreach($array_id as $id){
+                     $query = Envio::find()->where(['id' => $id])->one();
+                     $fecha_registro = $query['fecha_registro'];
+                 Envio::updateAll([
+                     'ciudad_id' => $ciudad_id,
+                     'user_id' => $user_id,
+                     'remitente' => $remitente,
+                     'direccion_origen' => $direccion_origen,
+                     'latitud' => $latitud,
+                     'longitud' => $longitud,
+                     'celular' => $celular,
+                     'observacion' => $observacion,
+                     'estado_envio_id' => 1,
+                     'tipo_envio_id' => $tipo_envio_id,
+                     'dimensiones_id' => $dimensiones_id,
+                     'fecha_registro' => $fecha_registro,
+                     ], 'id = '. "'".$id."'" );   
+            }  
+                 
+            $transaction->commit();
+            }catch(\Exception $e)
+            {
+//                $transaction::rollback();
+//                 throw $e;                 
+                $error=$e->getMessage();
+                print_r($error);die();
+                $transaction::rollback();
+                throw $e;
+            }
+            
+            ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Datos de Envío Origen actualizados correctamente');  ?><?php  
+            return $this->redirect(['viewrec', 'id' => $model->id]);
+                         
+        } else {
+            return $this->render('createprog', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
 
     /**
      * Deletes an existing Envio model.

@@ -113,7 +113,7 @@ use kartik\widgets\Select2;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <br><center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg' : 'btn btn-primary']) ?></center>
+                                    <br><center><?= Html::submitButton($model->isNewRecord ? 'Registrar Origen' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg' : 'btn btn-primary']) ?></center>
                                 </div>
                             </div>
                         </div>    
