@@ -19,11 +19,6 @@ class Recarga extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-//    public $bookingForm;
-//    public $bookingForm;
-//    public $bookingForm;
-    
-    
     public static function tableName()
     {
         return 'recarga';

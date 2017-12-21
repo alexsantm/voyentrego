@@ -13,10 +13,11 @@ use yii\helpers\ArrayHelper;
 $this->title = 'Administrador de Recargas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="recarga-transferencia-index">
+<div class="recarga-transferencia-index">  
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <p>NOTA: Se debe cotejar el valor del Documento de Transferencia con la columna VALOR. En caso de estar correcto, en ESTADO se debe escoger CONFIRMADO</p>
     
     
     <?php
@@ -179,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                      ]); 
 //                                    },
                                     'delete' => function($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['delete', 'id' => $model['id']], ['class'=>'btn btn-success btn-md',
+                                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['delete', 'id' => $model['id']], ['class'=>'btn btn-warning btn-md',
                                     'title' => Yii::t('app', 'Delete'), 'data-confirm' => Yii::t('app', 'Are you sure you want to delete this Record?'),'data-method' => 'post']);        
                                     }        
                             ]  
@@ -216,6 +217,10 @@ $this->params['breadcrumbs'][] = $this->title;
         /*border: solid 2px red;*/
         width: 65px;
         height: 65px;
+    }
+    
+    th.kv-align-center{
+        color: #337ab7;
     }
     
 </style>    

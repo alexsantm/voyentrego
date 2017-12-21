@@ -111,18 +111,6 @@ class TrackingController extends Controller
      */
     public function actionUpdate($id)
     {
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        } else {
-//            return $this->render('update', [
-//                'model' => $model,
-//            ]);
-//        }
-        
-        
-//         $model = new Tracking();
         $model = $this->findModel($id); 
         $connection = \Yii::$app->db;
         $model->fecha = date("Y-m-d H:i");
@@ -148,8 +136,7 @@ class TrackingController extends Controller
             return $this->render('update', [
                 'model' => $model,
             ]);
-        }
-        
+        }        
     }
 
     /**
@@ -185,10 +172,73 @@ class TrackingController extends Controller
     
     public function actionUbicacion()
     {
-        $mensajeros = Tracking::find()->asArray()->all(); 
+        //$mensajeros = Tracking::find()->asArray()->all();      
+        $mensajeros = (new \yii\db\Query())
+        ->select(['*'])
+        ->from('tracking tbl')
+        ->where('fecha = (select Max(fecha) from tracking where user_id = tbl.user_id)')
+        ->all();
+        
+        //Tiempo de refresco:
+        $time = \app\models\Opciones::find()->select(['tiempo_refresco'])->asArray()->one();
+        $tiempo_refresco = $time['tiempo_refresco']; 
+                
         return $this->render('ubicacion', [
             'mensajeros' => $mensajeros,
+            'tiempo_refresco' => $tiempo_refresco,
         ]);
     }
+
+    
+    public function actionBusquedamensajero()
+    {
+        //$mensajeros = Tracking::find()->asArray()->all();  
+        $model = new Tracking();
+        if ($model->load(Yii::$app->request->get())) {            
+            $get = Yii::$app->request->get();            
+            $user_id = $get['Tracking']['user_id'];
+            
+            $query = Tracking::find()->where(['user_id'=>$user_id])->orderBy('fecha  desc')->limit(1)->asArray()->one();
+            $latitud = $query['latitud'];
+            $longitud = $query['longitud'];
+            $fecha = $query['fecha'];
+            
+            //Tiempo de refresco:
+            $time = \app\models\Opciones::find()->select(['tiempo_refresco'])->asArray()->one();
+            $tiempo_refresco = $time['tiempo_refresco'];
+            
+            $query_profile = \app\models\Profile::find()->where(['user_id'=>$user_id])->asArray()->one();
+            $full_name = $query_profile['full_name'];
+            $foto = $query_profile['foto'];
+            
+            if (empty($foto)) {
+                $foto = Yii::$app->request->BaseUrl . '/images/fotos/default.jpg';
+            } else {
+                $foto = Yii::$app->request->BaseUrl . '/images/fotos/'.$foto;
+            }
+
+            return $this->render('busquedamensajero', [ 
+                'latitud' => $latitud,
+                'longitud' => $longitud,
+                'fecha' => $fecha,
+                'full_name' => $full_name,
+                'foto' => $foto,
+                'user_id' => $user_id,
+                'tiempo_refresco' => $tiempo_refresco,
+            ]);
+        } else {
+//            print_r("noenvio datos"); die();
+            //Tiempo de refresco:
+            $time = \app\models\Opciones::find()->select(['tiempo_refresco'])->asArray()->one();
+            $tiempo_refresco = $time['tiempo_refresco'];
+            $mensaje = "Por favor seleccione un mensajero";
+            return $this->render('busquedamensajero', [
+                'model' => $model,
+                'mensaje' => $mensaje,
+                'tiempo_refresco' => $tiempo_refresco,
+            ]);
+        }
+    }
+
     
 }

@@ -75,11 +75,28 @@ class SiteController extends Controller
         $user = Yii::$app->user->identity;        
         $rol = Yii::$app->user->identity['role_id'];     
         $user_id = Yii::$app->user->identity['id'];
-        $fechaactual = date("Y-m-d");;
-//        print_r($fechaactual); die();
+        $fechaactual = date("Y-m-d");
+           
         if (Yii::$app->user->isGuest)
             return $this->redirect(['user/login']);
-        else{        
+        else{       
+            
+        /****************** MENSAJERO***************************/
+            $model = new \app\models\User;
+            $calificacion_mes= $model->calificacion_mensual_mensajero($user_id);
+            $no_envios_exitosos= $model->envios_exitosos_mes_mensajero($user_id);
+            $no_envios_asignados= $model->envios_asignados_hoy_mensajero($user_id);
+            $no_envios_asignados_mes= $model->envios_asignados_mes_mensajero($user_id);
+            $favoritismo= $model->favoritismo($user_id);
+        /******************FIN MENSAJERO***************************/
+            
+        /****************** USUARIO ***************************/
+            $envios_inicializados_hoy_usuario= $model->envios_inicializados_hoy_usuario($user_id);
+            $envios_pendientes_hoy_usuario= $model->envios_pendientes_hoy_usuario($user_id);
+            $envios_finalizados_hoy_usuario= $model->envios_finalizados_hoy_usuario($user_id);
+        /******************FIN USUARIO***************************/    
+        
+            
             /***************Promociones*************/
 //            $consulta = \app\models\Descuento::find()->asArray()->one();
 //            $foto_promocion = $consulta['archivo_promocion'];
@@ -87,10 +104,11 @@ class SiteController extends Controller
 //            $fecha_fin = $consulta['fecha_fin'];
             /***************Fin Promociones*************/
             if(empty($user->profile->full_name)){       //Si no ha ingresado un nombre de usuario pues tiene que agregarlo
-                ?><?= Yii::$app->session->setFlash('danger', '<center><div><h2>ANTES DE COMENZAR:</h2> <h3>Por favor ingrese su información de Perfil</h3></div></center>');  ?><?php  
-                return $this->redirect(['user/perfil']);                
+                ?><?= Yii::$app->session->setFlash('danger', '<center><div><h3>ANTES DE COMENZAR:</h3> <h4>Por favor ingrese su información de Perfil</h4></div></center>');  ?><?php  
+                //return $this->redirect(['user/perfil']);                
+                return $this->redirect(['user/profile']);                
             }
-                if(!empty($rol) && ($rol==2) || ($rol==4)){    
+                if(!empty($rol) && ($rol==2) || ($rol==4)|| ($rol==5)){    
                     //return $this->render('index');
                     $searchModel = new \app\models\EnvioSearch();
                     $searchModel->user_id = $user_id;
@@ -100,6 +118,12 @@ class SiteController extends Controller
                     return $this->render('index', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
+                        
+                        //Usuario
+                        'envios_inicializados_hoy_usuario'=>$envios_inicializados_hoy_usuario,
+                        'envios_pendientes_hoy_usuario'=>$envios_pendientes_hoy_usuario,
+                        'envios_finalizados_hoy_usuario'=>$envios_finalizados_hoy_usuario,
+                        
                         //Datos enviados desde Descuento:
 //                        'foto_promocion' => $foto_promocion,
 //                        'fecha_inicio' => $fecha_inicio,
@@ -108,7 +132,6 @@ class SiteController extends Controller
                 }
                 if(!empty($rol) && ($rol==3)){    
                     //return $this->render('indexmensajero');
-                    
                     $searchModel = new \app\models\EnvioSearch();
                     $searchModel->mensajero_id = $user_id;
                     $searchModel->fecha_registro = $fechaactual;
@@ -118,6 +141,12 @@ class SiteController extends Controller
                     return $this->render('indexmensajero', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
+                        
+                        //Mensajero
+                        'calificacion_mes' => $calificacion_mes,
+                        'no_envios_asignados'=>$no_envios_asignados,
+                        'no_envios_exitosos'=>$no_envios_exitosos,
+                        'favoritismo'=>$favoritismo,
                     ]);                                        
                 }
                 else if(!empty($rol) && ($rol==1)){    
@@ -153,8 +182,8 @@ class SiteController extends Controller
             $layout=false;
             return $this->redirect(['user/login']);
         }    
-        else{            
-            return $this->render('indexmensajero');
+        else{     
+            return $this->render('indexmensajero');           
         }
     }
     
@@ -240,4 +269,18 @@ class SiteController extends Controller
     {
         return $this->render('contactanos');
     }
+    
+    public function action401()
+    {
+        return $this->render('401');
+    }
+    
+      public function actionHome()
+    {
+        $this->layout = false;  
+        return $this->render('home');
+    }
+    
+    
+
 }

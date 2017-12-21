@@ -102,4 +102,176 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->password === $password;
     }
+    
+    /**************************************************************************************************************************/
+    
+    
+    
+    /*************************************************** MENSAJERO ***********************************************************************/
+    public function calificacion_mensual_mensajero($id_mens){
+        $id_mensajero = $id_mens;
+        $mes_actual = date("m");
+        $sql = "SELECT avg(c.calificacion) as calificacion, count(c.calificacion) as contador
+                    from calificacion c, envio e
+                    where
+                    e.id = c.envio_id and
+                    c.mensajero_id = $id_mensajero and
+                    month(e.fecha_fin_envio)=$mes_actual";
+                    $data = \Yii::$app->getDb()
+                    ->createCommand($sql)
+                    ->queryOne();
+                    $suma_calificacion = $data['calificacion'];
+                    $contador = $data['contador'];
+                    if(!empty($suma_calificacion)){
+                        //return $calificacion_mes = $suma_calificacion/$contador;
+                        return $calificacion_mes = $suma_calificacion;
+                    }
+                    else{
+                        return $calificacion_mes = 0;
+                    }        
+    }
+    
+      public function calificacion_mes_anterior_mensajero($id_mens){
+        $id_mensajero = $id_mens;
+        $mes_anterior = date("m") -1;
+        $sql = "SELECT avg(c.calificacion) as calificacion, count(c.calificacion) as contador
+                    from calificacion c, envio e
+                    where
+                    e.id = c.envio_id and
+                    c.mensajero_id = $id_mensajero and
+                    month(e.fecha_fin_envio)=$mes_anterior";
+                    $data = \Yii::$app->getDb()
+                    ->createCommand($sql)
+                    ->queryOne();
+                    $suma_calificacion = $data['calificacion'];
+                    $contador = $data['contador'];
+                    if(!empty($suma_calificacion)){
+                        //return $calificacion_mes = $suma_calificacion/$contador;
+                        return $calificacion_mes = $suma_calificacion;
+                    }
+                    else{
+                        return $calificacion_mes = 0;
+                    }        
+    }
+    
+        public function envios_asignados_hoy_mensajero($id_mens){
+        $id_mensajero = $id_mens;    
+        $hoy = date("Y-m-d");
+        $query = Envio::find()
+                ->where(['mensajero_id'=> $id_mensajero])
+                ->andWhere(['estado_envio_id'=>2])
+                ->andWhere(['DATE_FORMAT(fecha_registro, "%Y-%m-%d")'=>$hoy])
+                ->count();
+
+                    if(!empty($query)){
+                        return $query;
+                    }
+                    else{
+                        return $query = 0;
+                    }        
+    }
+    
+    public function envios_asignados_mes_mensajero($id_mens){
+        $id_mensajero = $id_mens;    
+        $mes_actual = date("m");
+        $query = Envio::find()
+                ->where(['mensajero_id'=> $id_mensajero])
+                ->andWhere(['estado_envio_id'=>2])
+                ->andWhere(['month(fecha_registro)'=>$mes_actual])
+                ->count();
+
+                    if(!empty($query)){
+                        return $query;
+                    }
+                    else{
+                        return $query = 0;
+                    }        
+    }
+    
+    public function envios_exitosos_mes_mensajero($id_mens){
+        $id_mensajero = $id_mens;    
+        $mes_actual = date("m");
+        $query = Envio::find()
+                ->where(['mensajero_id'=> $id_mensajero])
+                ->andWhere(['estado_envio_id'=>3])
+                ->andWhere(['month(fecha_registro)'=>$mes_actual])
+                ->count();
+
+                    if(!empty($query)){
+                        return $query;
+                    }
+                    else{
+                        return $query = 0;
+                    }        
+    }
+    
+       public function favoritismo($id_mens){
+        $id_mensajero = $id_mens;    
+        $query = Favoritos::find()
+                ->where(['mensajero_id'=> $id_mensajero])
+                ->count();
+
+                    if(!empty($query)){
+                        return $query;
+                    }
+                    else{
+                        return $query = 0;
+                    }        
+    }
+    
+    
+    /*************************************************** USUARIO ***********************************************************************/
+    
+    public function envios_inicializados_hoy_usuario($id_mens){
+        $id_mensajero = $id_mens;    
+        $hoy = date("Y-m-d");
+        $query = Envio::find()
+                ->where(['user_id'=> $id_mensajero])
+                ->andWhere(['estado_envio_id'=>1])
+                ->andWhere(['DATE_FORMAT(fecha_registro, "%Y-%m-%d")'=>$hoy])
+                ->count();
+
+                    if(!empty($query)){
+                        return $query;
+                    }
+                    else{
+                        return $query = 0;
+                    }        
+    }
+    
+    
+    public function envios_pendientes_hoy_usuario($id_mens){
+        $id_mensajero = $id_mens;    
+        $hoy = date("Y-m-d");
+        $query = Envio::find()
+                ->where(['user_id'=> $id_mensajero])
+                ->andWhere(['estado_envio_id'=>2])
+                ->andWhere(['DATE_FORMAT(fecha_registro, "%Y-%m-%d")'=>$hoy])
+                ->count();
+
+                    if(!empty($query)){
+                        return $query;
+                    }
+                    else{
+                        return $query = 0;
+                    }        
+    }
+    
+    public function envios_finalizados_hoy_usuario($id_mens){
+        $id_mensajero = $id_mens;    
+        $hoy = date("Y-m-d");
+        $query = Envio::find()
+                ->where(['user_id'=> $id_mensajero])
+                ->andWhere(['estado_envio_id'=>3])
+                ->andWhere(['DATE_FORMAT(fecha_registro, "%Y-%m-%d")'=>$hoy])
+                ->count();
+
+                    if(!empty($query)){
+                        return $query;
+                    }
+                    else{
+                        return $query = 0;
+                    }        
+    }
+    
 }

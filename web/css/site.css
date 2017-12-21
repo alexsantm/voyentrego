@@ -1,7 +1,17 @@
+@font-face {
+    font-family: exo;
+    src: url("../fonts/exo/Exo-Black.otf") format("otf") !important;
+}
+
+@font-face {
+    font-family: sansita;
+    src: url("../fonts/sansita/Sansita-Regular.otf") format("otf") !important;
+}
+
 html,
 body {
     height: 100%;
-    font-family: Exo, sans-serif !important; 
+    font-family: sansita, sans-serif !important; 
 }
 
 .wrap {
@@ -132,16 +142,59 @@ a.desc:after {
     margin-left:10px;
 }
 
+/*.sidebar-menu li { Color plomo de borde izquierdo menu
+    box-shadow: 5px 0px #DCDFE3 inset !important;
+    border: solid 2px red;
+}*/
+
+
+
+.login-page, .register-page {
+    border: solid 2px red !important;
+    /*background: url(../images/logos/fondo_voyentrego.png) no-repeat center center !important;*/
+}
+
+body>.login-page{
+    border: solid 2px red !important;
+}
+
+
+/*Color de sombreado tomate al seleccionar un padre en menu*/
+.skin-blue .sidebar-menu > li:hover > a, .skin-blue .sidebar-menu > li.active > a {
+    background: #F6A236 !important;
+    color: white !important;
+}
+
+
 
 .skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
     background-color: white !important;
 }
 
+
+/*Submenu vertical - Hijas*/
+.sidebar-menu .treeview-menu {
+    padding-left: 0px !important;
+    /*border: solid 2px #F6A236;*/
+}
+
+/*.skin-blue .sidebar-menu>li>.treeview-menu {
+    margin: 0 0px !important;    
+}*/
+.skin-blue .sidebar-menu>li>.treeview-menu {
+    margin: 0 -2px !important;
+}
+
+
 /**************************************Color blanco de main header************************************/
 
 /* Ajuste de logo principal al header principal*/
+
     .main-header .logo { height: 64px !important;}
-    .sidebar-menu li:first-child  { margin-top: 14px !important;}
+    
+    /* .sidebar-menu li:first-child  { margin-top: 14px !important;}  Quito espacio entre primer elemento hijo del padre*/
+    .sidebar-menu li:first-child  { margin-top: 1px !important; padding-top: 8px !important;} /* Quito espacio entre primer elemento hijo del padre*/
+    
 /* Fin  Ajuste de logo principal al header principal*/
 
 
@@ -286,13 +339,14 @@ a.desc:after {
      
      /*Color negro de texto*/
     .skin-blue .sidebar a {             /*Menu Principal*/
-        color: #666666 !important;
+        /*color: #666666 !important;*/
+        color: grey !important;
         font-size: 16px;
     }
     
     .skin-blue .treeview-menu>li>a {    /*Submenu*/
         color: #666666 !important;        
-        font-size: 14px !important ;
+        font-size: 13px !important ;
     }
     
     .skin-blue .sidebar-menu>li>a{  /*Color plomo a las cajas del menu izquierdo*/
@@ -341,6 +395,11 @@ a.desc:after {
 
 .fondo_azul{
     background-color: #264E61 !important;
+    color: white !important;
+}
+
+.fondo_tomate{
+    background-color: #ED6E23 !important;
     color: white !important;
 }
 

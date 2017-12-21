@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'preguntas_frecuentes_id')->hiddenInput(['value'=>$preguntas_frecuentes_id])->label(false) ?>
     
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-warning']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

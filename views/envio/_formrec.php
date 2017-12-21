@@ -26,7 +26,7 @@ use kartik\widgets\Select2;
 
     <div class="panel panel-warning">
         <div class="panel-heading">
-            <h3 class="panel-title">Nuevo Envío</h3>
+            <h3 class="panel-title">Nuevo Envío Recurrente</h3>
         </div>
         <div class="panel-body">
         <!--/*******************************************************************************************************************************/-->    

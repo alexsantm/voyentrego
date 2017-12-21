@@ -57,8 +57,10 @@ $responsable_id = Yii::$app->user->identity['id'];
                  'hAlign'=>'center',
                  'vAlign'=>'middle',
                  'value'=>function($model) {
-                   $responsable_id = Yii::$app->user->identity['id'];
-                   $service = app\models\GrupoUsuarios::find()->where(['responsable_user_id'=>$responsable_id])->asArray()->one();
+//                   $responsable_id = Yii::$app->user->identity['id'];
+//                   $service = app\models\GrupoUsuarios::find()->where(['responsable_user_id'=>$responsable_id])->asArray()->one();
+//                   $service = app\models\GrupoUsuarios::find()->asArray()->one();
+                   $service = app\models\GrupoUsuarios::findOne($model->grupo_usuarios_id);
                      return $service ? $service['grupo'] : '-';
                  },
                 'filterType'=>GridView::FILTER_SELECT2,

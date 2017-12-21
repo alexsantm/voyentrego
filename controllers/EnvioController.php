@@ -14,6 +14,10 @@ use yii\web\UploadedFile;
 use yii\helpers\Json;
 use kartik\alert\Alert;
 
+use yii\filters\AccessControl;
+use app\components\AccessRule;
+use app\models\User;
+
 /**
  * EnvioController implements the CRUD actions for Envio model.
  */
@@ -22,6 +26,7 @@ class EnvioController extends Controller
     /**
      * @inheritdoc
      */
+    
     public function behaviors()
     {
         return [
@@ -63,7 +68,14 @@ class EnvioController extends Controller
         $searchModel = new EnvioSearch();
         $searchModel->user_id = $user_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+/***************************************************** VERIFICACION DE ACCESO*******************************************/        
+//        $rol = Yii::$app->user->identity['role_id']; 
+//        $ruta = '/'.Yii::$app->controller->id.'/'.Yii::$app->controller->action->id;
+//        $asignacion = \app\models\Utilidades::verificar_acceso($rol, $ruta);
+//        if($asignacion == 0){
+//            return $this->render('//site/401');
+//        }
+/***************************************************** FIN VERIFICACION DE ACCESO*******************************************/   
        
         
         if (Yii::$app->request->post('hasEditable')) {
@@ -108,6 +120,34 @@ class EnvioController extends Controller
         ]);
     }
     
+        public function actionIndexiniciado()
+    {
+        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new EnvioSearch();
+        $searchModel->user_id = $user_id;
+        $searchModel->estado_envio_id = 1;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('indexiniciado', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+        public function actionIndexproceso()
+    {
+        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new EnvioSearch();
+        $searchModel->user_id = $user_id;
+        $searchModel->estado_envio_id = 2;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('indexproceso', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     
         public function actionIndexexitoso()
     {
@@ -123,19 +163,31 @@ class EnvioController extends Controller
         ]);
     }
     
-        public function actionIndexpendiente()
+        public function actionIndexmensajerofavorito()
     {
-        $user_id = Yii::$app->user->identity['id'];
         $searchModel = new EnvioSearch();
-        $searchModel->mensajero_id = $user_id;
-        $searchModel->estado_envio_id != 3;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchmensajerofavorito(Yii::$app->request->queryParams);
 
-        return $this->render('indexpendiente', [
+        return $this->render('indexmensajerofavorito', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    
+//        public function actionIndexpendiente()
+//    {
+//        $user_id = Yii::$app->user->identity['id'];
+//        $searchModel = new EnvioSearch();
+//        $searchModel->mensajero_id = $user_id;
+//        $searchModel->estado_envio_id != 3;
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('indexpendiente', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
     
         public function actionIndexmensajero()
     {
@@ -145,6 +197,19 @@ class EnvioController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('indexmensajero', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+          public function actionIndexcalificacion()
+    {
+        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new EnvioSearch();
+        $searchModel->mensajero_id = $user_id;
+        $dataProvider = $searchModel->searchindexcalificacion(Yii::$app->request->queryParams);
+
+        return $this->render('indexcalificacion', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -164,6 +229,18 @@ class EnvioController extends Controller
     
         public function actionView($id)
     {
+        $user_id = Yii::$app->user->identity['id'];    
+        $query = \app\models\Envio::find()
+                ->where(['user_id'=>$user_id])
+                ->andWhere(['id'=>$id])
+                ->asArray()->count();
+        if(empty($query)){
+            ?><?=
+                $error = "Usted no ha generado este envio. Si considera que existe una equivocación, por favor contáctese con el Administrador";
+                Yii::$app->session->setFlash('warning', '<h4>ERROR</h4>'. $error); ?><?php  
+                $this->goHome();
+        }
+            
         $origen = \app\models\Envio::findOne($id); 
         $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();     
 //        print_r($destinos);
@@ -176,6 +253,7 @@ class EnvioController extends Controller
             'model' => $this->findModel($id),
             'origen'=>$origen,
             'destinos'=>$destinos,
+            'envio_id'=>$id,
             
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -227,23 +305,23 @@ class EnvioController extends Controller
         ]);
     }
     
-           public function actionViewrecurrente($id)
-    {
-        $origen = \app\models\Envio::findOne($id); 
-        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();            
-        $searchModel = new \app\models\DestinoSearch();
-        $searchModel->envio_id = $id;
-        $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
-                
-        return $this->render('viewrecurrente', [
-            'model' => $this->findModel($id),
-            'origen'=>$origen,
-            'destinos'=>$destinos,
-            
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//           public function actionViewrecurrente($id)
+//    {
+//        $origen = \app\models\Envio::findOne($id); 
+//        $destinos = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();            
+//        $searchModel = new \app\models\DestinoSearch();
+//        $searchModel->envio_id = $id;
+//        $dataProvider = $searchModel->searchdestinos(Yii::$app->request->queryParams);
+//                
+//        return $this->render('viewrecurrente', [
+//            'model' => $this->findModel($id),
+//            'origen'=>$origen,
+//            'destinos'=>$destinos,
+//            
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Creates a new Envio model.
@@ -265,10 +343,19 @@ class EnvioController extends Controller
     public function actionCreate()
     {
         $model = new Envio();
+/***************************************************** VERIFICACION DE ACCESO*******************************************/        
+//        $rol = Yii::$app->user->identity['role_id']; 
+//        $ruta = '/'.Yii::$app->controller->id.'/'.Yii::$app->controller->action->id;
+//        $asignacion = \app\models\Utilidades::verificar_acceso($rol, $ruta);
+//        if($asignacion == 0){
+//            return $this->render('//site/401');
+//        }
+/***************************************************** FIN VERIFICACION DE ACCESO*******************************************/        
+        
         $connection = \Yii::$app->db;
         $model->fecha_registro = date("Y-m-d H:i");
         $model->estado_envio_id = 1;
-        if ($model->load(Yii::$app->request->post())) {            
+        if ($model->load(Yii::$app->request->post())) {    
             try{
             $transaction = $connection->beginTransaction(); 
                 $post=Yii::$app->request->post();                    
@@ -276,10 +363,13 @@ class EnvioController extends Controller
                 $longitud = $post['Envio']['longitude'];
                 $model->latitud= $latitud;
                 $model->longitud= $longitud;                    
+                $model->modo_envio= 1;
                 $model->save();                 
             $transaction->commit();           
             }catch(\Exception $e)
             {
+//                $error=$model->errors;
+                print_r($e); die();
                 $transaction::rollback();
                  throw $e;
             }
@@ -315,7 +405,8 @@ class EnvioController extends Controller
                 $latitud = $post['Envio']['latitude'];	
                 $longitud = $post['Envio']['longitude'];
                 $model->latitud= $latitud;
-                $model->longitud= $longitud;                    
+                $model->longitud= $longitud;     
+                $model->modo_envio= 2;
                 $model->save();                 
             $transaction->commit();           
             }catch(\Exception $e)
@@ -391,6 +482,7 @@ class EnvioController extends Controller
                      $envio->celular = $celular;
                      $envio->observacion = $observacion;
                      $envio->estado_envio_id = 1;
+                     $envio->modo_envio= 3;
                      $envio->tipo_envio_id = $tipo_envio_id;
                      $envio->dimensiones_id = $dimensiones_id;
                      $envio->fecha_registro = $fechas[$cont];
@@ -440,21 +532,31 @@ class EnvioController extends Controller
     public function actionDetalles()
     {
         $model = new Envio;
+        
         $dist_origen_primer_punto = Yii::$app->request->get('dist_origen_primer_punto');
         $dist_resto_puntos=Yii::$app->request->get('dist_resto_puntos');
         $valor_distancia_retornos =Yii::$app->request->get('valor_distancia_retornos');
         $valor_distancia_retorno_inicio =Yii::$app->request->get('valor_distancia_retorno_inicio');
-        $total  =Yii::$app->request->get('total');
+        $total  = Yii::$app->request->get('total');
         $valor_km =      Yii::$app->request->get('valor_km'); 
         $latitud_origen =      Yii::$app->request->get('latitud_origen'); 
         $longitud_origen =      Yii::$app->request->get('longitud_origen'); 
         
         //Traigo los ultimos registros por cada mensajero (si hay varios registros traera el mas actual)
-        $mensajeros = (new \yii\db\Query())
-        ->select(['t1.id', 't1.user_id', 't1.longitud', 't1.latitud', 't1.fecha'])
-        ->from('tracking t1')
-        ->where('t1.fecha = (SELECT MAX(t2.fecha)FROM tracking t2 WHERE t2.user_id = t1.user_id)')
-        ->all();
+            $mensajeros = (new \yii\db\Query())
+            ->select(['t1.id', 't1.user_id', 't1.longitud', 't1.latitud', 't1.fecha'])
+            ->from('tracking t1')
+            ->where('t1.fecha = (SELECT MAX(t2.fecha)FROM tracking t2 WHERE t2.user_id = t1.user_id)')
+            ->all();
+            
+            //Mensajeros con status 1 (Disponible)
+            $mensajeros_disponibles = (new \yii\db\Query())
+            ->select(['t1.id', 't1.user_id', 't1.longitud', 't1.latitud', 't1.fecha'])
+            ->from('tracking t1, user u')
+            ->where('t1.fecha = (SELECT MAX(t2.fecha)FROM tracking t2 WHERE t2.user_id = t1.user_id)')
+            ->andWhere('u.id = t1.user_id')
+            ->andWhere('u.status_id = 1')
+            ->all();
         
         $r = \app\models\Opciones::find()->select('radio')->asArray()->one();
         $radio = $r['radio'];        //print_r($radio); die();
@@ -468,6 +570,7 @@ class EnvioController extends Controller
             'latitud_origen'=>$latitud_origen,
             'longitud_origen'=>$longitud_origen,
             'mensajeros' => $mensajeros,
+            'mensajeros_disponibles' => $mensajeros_disponibles,
             'radio' => $radio,
             'model' => $model,
         ]);
@@ -663,7 +766,6 @@ class EnvioController extends Controller
             ]);
         }
     }
-    
 
     /**
      * Deletes an existing Envio model.
@@ -673,9 +775,24 @@ class EnvioController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+//        $this->findModel($id)->delete();
+        ?><?php //Yii::$app->session->setFlash('success', '<h3>Origen eliminado correctamente</h3>'); ?><?php  
+//        return $this->redirect(['index']);                
+        $query = \app\models\Destino::find()->where(['envio_id'=>$id])->asArray()->all();
+        if(!empty($query)){
+            foreach($query as $q){
+                \app\models\Destino::deleteAll(['id' => $q['id'], 'envio_id' => $id]);
+            }
+            $this->findModel($id)->delete();
+             ?><?php Yii::$app->session->setFlash('success', '<h3>Origen y destinos eliminados correctamente</h3>'); ?><?php  
+            return $this->redirect(['index']);
+        }
+        else{
+            $this->findModel($id)->delete();
+            ?><?php Yii::$app->session->setFlash('success', '<h3>Origen eliminado correctamente</h3>'); ?><?php  
+            return $this->redirect(['index']);
+        }
+        //return $this->redirect(Yii::$app->request->referrer); 
     }
 
     /**
@@ -713,4 +830,15 @@ class EnvioController extends Controller
     }
     
     
+            public function actionTiemporeal(){
+                $time = \app\models\Opciones::find()->select(['tiempo_refresco'])->asArray()->one();
+                $tiempo_refresco = $time['tiempo_refresco']; 
+//                 return $this->render('tiemporeal');
+                 return $this->render('tiemporeal', [
+                'tiempo_refresco' => $tiempo_refresco,
+            ]);
+            }
+    
+    
 }
+

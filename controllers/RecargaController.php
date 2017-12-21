@@ -51,8 +51,11 @@ class RecargaController extends Controller
      */
     public function actionView($id)
     {
+        $user_id = Yii::$app->request->get('id');  
+        print_r($this->findModel($id)); die();
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'user_id' => $user_id,
         ]);
     }
 
@@ -123,8 +126,12 @@ class RecargaController extends Controller
     }
     
 //    
-//    public function actionRecarga()
-//    {
-//        return $this->render('recarga');
-//    }
+    public function actionDetalles()
+    {
+        $user_id = Yii::$app->request->get('id');  
+        return $this->render('detalles', [
+            'user_id' => $user_id,
+        ]);
+//        return $this->render('detalles');
+    }
 }

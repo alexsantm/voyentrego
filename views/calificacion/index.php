@@ -80,6 +80,22 @@ echo GridView::widget([
 //            ],
 //            'filterInputOptions'=>['placeholder'=>'Any category']
         ],
+                [
+            'attribute'=>'', 
+            'label'=>'Fecha de Finalización',
+            'hAlign' => 'center',
+            'vAlign' => 'middle',
+            'value'=>function ($model, $key, $index, $widget) {
+                $query = app\models\Envio::find()->select(['fecha_fin_envio'])->where(['id'=>$model->envio_id])->asArray()->one();
+                return $query['fecha_fin_envio'] ? $query['fecha_fin_envio'] : '-';
+            },
+//            'filterType'=>GridView::FILTER_SELECT2,
+//            'filter'=>ArrayHelper::map(Categories::find()->orderBy('category_name')->asArray()->all(), 'id', 'category_name'), 
+//            'filterWidgetOptions'=>[
+//                'pluginOptions'=>['allowClear'=>true],
+//            ],
+//            'filterInputOptions'=>['placeholder'=>'Any category']
+        ],
         [
             'attribute'=>'user_id',
             'label'=>'Usuario',

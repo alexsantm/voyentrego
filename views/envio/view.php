@@ -25,6 +25,8 @@ use dosamigos\google\maps\layers\BicyclingLayer;
 $this->title = $model->direccion_origen;
 //$this->title = $model->id;
 $envio_id =$model->id;
+$modo_envio =$model->modo_envio;
+
 $this->params['breadcrumbs'][] = ['label' => 'Envios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -32,6 +34,7 @@ $flag_programado = Yii::$app->request->get('prog');
 //print_r($flag_programado); die();
 
 ?>
+<div class="seccion_tomate_pasos"><center><span class="numero_pasos">2</span></center></div>
 <div class="envio-view">
     <div class="row">
         <div class="col-lg-10">
@@ -40,16 +43,18 @@ $flag_programado = Yii::$app->request->get('prog');
         <div class="col-lg-2"><br>
             <p>
                 <?php
-                if(!empty($flag_programado)){
+                $modo_envio = $model->modo_envio;
+                //print_r($model->modo_envio); die();
+                if($modo_envio == 2){
                     echo Html::a('Actualizar Programado', ['updateprog', 'id' => $model->id], ['class' => 'btn btn-primary']);
-                }
+                }                
                 else{
                     ?><?= Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?><?php
                 }                
                 ?><?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
-                        'confirm' => 'Are you sure you want to delete this item?',
+                        'confirm' => '¿Está seguro que desea eliminar el Origen de su envio con todos sus destinos?',
                         'method' => 'post',
                     ],
                 ]) ?>
@@ -129,6 +134,7 @@ if(!empty($destinos_completos)){
                             //            'optimizeWaypoints'=> true,
                                         'travelMode' => TravelMode::DRIVING
                                     ]);
+                                    
                             }
                             else{
                                     // setup just one waypoint (Google allows a max of 8)
@@ -139,19 +145,20 @@ if(!empty($destinos_completos)){
                             //            'optimizeWaypoints'=> true,
                                         'travelMode' => TravelMode::DRIVING
                                     ]);
+                                   
                             }
 
                             // Now the renderer
                             $directionsRenderer = new DirectionsRenderer([
                                 'map' => $map->getName(),
                             ]);
-
+                                                      
                             // Finally the directions service
                             $directionsService = new DirectionsService([
                                 'directionsRenderer' => $directionsRenderer,
                                 'directionsRequest' => $directionsRequest
                             ]);
-
+                             
                             // Thats it, append the resulting script to the map
                             $map->appendScript($directionsService->getJs());
 
@@ -159,18 +166,18 @@ if(!empty($destinos_completos)){
                             $bikeLayer = new BicyclingLayer(['map' => $map->getName()]);
 
                             // Append its resulting script
-                            $map->appendScript($bikeLayer->getJs());
+                            $map->appendScript($bikeLayer->getJs());                           
 
                             // Display the map -finally :)
                             echo $map->display(); 
 }
 else{
-                        //Cuando existe unicamente el destino, se lo grafica a traves de uno solo Marker
+                        //Cuando existe unicamente el origen, se lo grafica a traves de uno solo Marker
                             echo yii2mod\google\maps\markers\GoogleMaps::widget([
                             'userLocations' => [
                                 [
                                     'location' => [
-                        //                'address' => 'Shuaras, Quito 170104, Ecuador',
+//                                        'address' => 'Shuaras, Quito 170104, Ecuador',
                                         'lat'=>$latitud_origen,
                                         'long'=>$longitud_origen
                         //                'country' => 'Ukraine',
@@ -197,12 +204,7 @@ else{
 <!--/*****************************************************GRIDVIEW DE  DESTINOS**************************************************************/-->
 <div class="geo-destino-index">
     <br><br>
-<!--    <p style="text-align: right"> <?php // Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Nuevo Destino',
-//            ['destino/create', 'id'=>$model->id],
-//            ['class'=>'btn btn-success btn-lg modalButton', 
-//             'title'=>'Haga click aquí para agregar un Nuevo Destino', ]
-//            );?>
-    </p>-->
+
     <!--<h2>Destinos:</h2>-->
     <?php // Verifico si existe Dataprovider para que aparezca el Grid
     if ($dataProvider->totalCount > 0) {
@@ -310,13 +312,13 @@ else{
                                         'update' => function ($url, $model) {     
                                             $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/update/'.$model->id,  'id_envio' => $model->envio_id]);    
                                             return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [
-                                                      'class'=>'btn btn-warning btn-md','title' => Yii::t('yii', 'Update'),
+                                                      'class'=>'modalButton btn btn-warning btn-md','title' => Yii::t('yii', 'Update'),
                                           ]); 
                                         },
                                         'delete' => function($url, $model) {
-                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['destino/'.$model->id]);    
-                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['delete', 'id' => $model['id']], ['class'=>'btn btn-warning btn-md',
-                                            'title' => Yii::t('app', 'Deletee'), 'data-confirm' => Yii::t('app', 'Are you sure you want to delete this Record?'),'data-method' => 'post']);        
+                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['//destino/'.$model->id]);    
+                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['//destino/delete', 'id' => $model['id']], ['class'=>'btn btn-warning btn-md ',
+                                            'title' => Yii::t('app', 'Deletee'), 'data-confirm' => Yii::t('app', '¿Seguro que desea eliminar el destino?'),'data-method' => 'post', 'visible' => 'visible'] );        
                                         }        
                                 ]                                      
                             ],           
@@ -366,7 +368,14 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                         $primer_lugar = array_shift($lugares); //Extraigo primer elemento de array
                         $ultimo_lugar = array_pop($lugares);    //Extraigo ultimo elemento de array
                         $detalle_distancia_envio = $primer_lugar.' - '.$ultimo_lugar;
-//                        print_r($detalle_distancia_envio);
+                        
+                        
+            // ************************** CALCULO DE TIEMPO ESTIMADO**********************************/
+            $envio_id =$model->id;                  
+            $model=new \app\models\Envio;
+            $tiempo_estimado = $model->tiempoestimado($envio_id);
+            // ************************** FIN CALCULO DE TIEMPO APROXIMADO**********************************/             
+
     /*******************************************************************************************/                    
                         
                          //Distancia entre puntos:   
@@ -394,62 +403,57 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                             }
 
                         //Calculo de retornos entre puntos
-                            $resultados = \app\models\Destino::find()->where(['!=', 'retorno_destino_id', 0])->andWhere(['envio_id'=>$model->id])->asArray()->all();
+                            $resultados = \app\models\Destino::find()->where(['!=', 'retorno_destino_id', 0])->andWhere(['envio_id'=>$envio_id])->asArray()->all();
+//                            print_r($resultados); die();
                             $valor_distancia_retornos = 0;
                             if(!empty($resultados)){
                                         foreach($resultados as $r){
                                                 $id_retorno_origen = $r['id'];
                                                 $id_retorno_destino = $r['retorno_destino_id'];
-
                                         $coord_orig = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_origen])->one();
                                             $lat_orig=$coord_orig['latitud'];    
                                             $long_orig=$coord_orig['longitud'];    
                                             $lugar_orig=$coord_orig['direccion_destino']; 
 
                                         $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
+                                       
                                             $lat_dest= $coord_dest['latitud'];    
                                             $long_dest= $coord_dest['longitud'];    
                                             $lugar_dest=$coord_dest['direccion_destino']; 
 
                                         $valor_distancia_ret = $model->calculo_distancia($lat_orig, $long_orig, $lat_dest, $long_dest);
                                         $valor_distancia_retornos = $valor_distancia_retornos + $valor_distancia_ret;
-
     //                                    echo('<br>'); echo("<h3>Retornos : ". $valor_distancia_ret.'</h3>' );   
                                        } 
     //                                   echo('<br>'); echo("<h2>Valor de retornos es: ". $valor_distancia_retornos.'</h2>' );   
                             }
                             else{
                                         $valor_distancia_retornos = 0;
-    //                                    print_r("no hay retornos");
                             }
 
+                            
                         //Calculo de retornos al inicio
-                            $resultados = \app\models\Destino::find()->where(['retorno_inicio'=> 1])->andWhere(['envio_id'=>$model->id])->asArray()->all();
-                            $valor_distancia_retorno_inicio = 0;
-//                            print_r($resultados);
+                            $resultados = \app\models\Destino::find()->where(['retorno_inicio'=> 1])->andWhere(['envio_id'=>$envio_id])->asArray()->all();
+                            $valor_distancia_retorno_inicio = 0;                              
                             if(!empty($resultados)){
-//                                print_r("si hay resultados");
-                                        foreach($resultados as $r){
+                                        foreach($resultados as $r){                                           
                                             //  $latitud_origen  coordenada de inicio
                                             //  $longitud_origen coordenada de inicio
-
-                                        $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
+                                        $id_retorno_origen = $r['id'];
+                                        $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_origen])->one();
+//                                          print_r($coord_dest); die();
+                                         
                                             $lat_dest= $coord_dest['latitud'];    
                                             $long_dest= $coord_dest['longitud'];    
                                             $lugar_dest=$coord_dest['direccion_destino']; 
 
                                         $valor_distancia_ret_ini = $model->calculo_distancia($latitud_origen, $longitud_origen, $lat_dest, $long_dest);
                                         $valor_distancia_retorno_inicio = $valor_distancia_retorno_inicio + $valor_distancia_ret_ini;
-
-//                                        echo('<br>'); echo("<h3>Retorno al inicio : ". $valor_distancia_ret_ini.'</h3>' );   
+//                                        echo('<br>'); echo("<h3>Retorno al inicio : ". $valor_distancia_retorno_inicio.'</h3>' );   die();
                                        } 
-//                                       echo('<br>'); echo("<h2>Valor de retornos del inicio: ". $valor_distancia_retorno_inicio.'</h2>' );   
-//                                       die();
                             }
                             else{
-//                                print_r("no hay resultados");
                                         $valor_distancia_retorno_inicio = 0;
-    //                                    print_r("no hay retorno al inicio");
                             }
 
                          //Distancia sumada de los 2 primeros puntos + el resto 
@@ -498,6 +502,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
           </td>
         <tr>
             <?php
+//            echo("variable2: "); print_r($envio_id); echo("<br> ");
              for($i = 0; $i<count($destinos_completos); $i++){          
                                   $punto[] = [$destinos_completos[$i]['latitud'] , $destinos_completos[$i]['longitud']];
                                   $lugar[] = [$destinos_completos[$i]['direccion_destino']];
@@ -559,6 +564,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
 
             <!---------------------------------------------CONTINUAR---------------------------------------------------------------->
     <?php
+//    echo("variable3: "); print_r($envio_id); echo("<br> ");
     //Datos para la factura
     $profile = Yii::$app->user->identity->profile;
         $nombre = $profile->full_name;
@@ -571,39 +577,39 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
     $id_usuario = Yii::$app->user->identity['id'];
     $query= app\models\Recarga::find()->where(['user_id'=>$id_usuario])->asArray()->one();
         $valor_recarga = $query['valor_recarga'];
-    
-    
-//    print_r($nombre);echo('<br>');
-//    print_r($direccion);echo('<br>');
-//    print_r($telefono);echo('<br>');
-//    print_r($cedula);echo('<br>');
-//    print_r($email);echo('<br>');
-//    print_r($valor_recarga);echo('<br>');
-    
+   
     
     if($valor_recarga > $valor_km){
+        //$envio_id =$model->id;
+//        var_dump($model->id); die();
+//        echo("variable4: "); print_r($envio_id); echo("<br> ");
+//        die();
     ?>
     <div class="row">        
     <div class="col-lg-5  col-md-offset-3">
             <div class="panel panel-info">
-                <div class="panel-heading"> <center><h2><strong>Condiciones de Aceptación</strong></h2></center></div>
+                <div class="panel-heading"> <center><h2><strong>Aceptar y Continuar</strong></h2></center></div>
                 <div class="panel-body">   
-                    <p>Al aceptar, se generará la factura correspondiente con sus datos y se descontará de su saldo de Recarga</p>
+                    <p>Al aceptar, se continuará con el proceso y se debitará automáticamente de su Saldo de Recarga</p>
                     <div class="row">
                             <center>   
                                 <div class="col-lg-6">
                             <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
                                         ['envio/detalles', 
                                             //Datos para Factura:
+                                            //'envio_id'=>$model->id,
+                                            'envio_id'=>$envio_id,
+                                            'modo_envio'=>$modo_envio,
                                             'detalle_distancia_envio'=>$detalle_distancia_envio,
                                             'total_km'=>$total_km,
                                             'valor_km'=>$valor_km, 
-                                            'nombre'=>$nombre, 
-                                            'direccion'=>$direccion, 
-                                            'telefono'=>$telefono, 
-                                            'cedula'=>$cedula, 
-                                            'email'=>$email, 
-                                            'valor_recarga'=>$valor_recarga, 
+//                                            'nombre'=>$nombre, 
+//                                            'direccion'=>$direccion, 
+//                                            'telefono'=>$telefono, 
+//                                            'cedula'=>$cedula, 
+//                                            'email'=>$email, 
+//                                            'valor_recarga'=>$valor_recarga, 
+                                            'tiempo_estimado' =>$tiempo_estimado,
 
                                             //Datos para dibujar el Google Maps:                                    
                                             'dist_origen_primer_punto'=>$dist_origen_primer_punto,
@@ -658,7 +664,7 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
 <?php
 }
 else {
-    echo('<center><h3 class="alert alert-danger">Agregue mas Destinos para poder visualizar detalle de distancia aproximada y costos</h3></center>');
+    echo('<center><h3 class="alert alert-danger">Por favor agrege uno o varios destinos</h3></center>');
 }
 ?>
 <style>

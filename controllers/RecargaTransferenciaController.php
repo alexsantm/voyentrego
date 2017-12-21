@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\helpers\Json;
+use kartik\mpdf\Pdf;
 
 //use yii\web\Response; // Add This line
 //use yii\widgets\ActiveForm; //Add This Line
@@ -168,6 +169,37 @@ class RecargaTransferenciaController extends Controller
         $model->attributes = \Yii::$app->request->post('RecargaTransferencia');
         if ($model->load(Yii::$app->request->post())) {
             
+            
+            //****************************************** Datos Factura **********************************/
+          $post = Yii::$app->request->post();  
+          $user_id = $model->attributes['user_id'];
+          $valor = $post['RecargaTransferencia']['valor'];
+          $consulta_perfil = \app\models\Profile::find()->where(['user_id'=>$user_id])->asArray()->all();
+          $consulta = \app\models\User::find()->select(['email'])->where(['id'=>$user_id])->asArray()->one();
+          $correo = $consulta['email'];
+          foreach($consulta_perfil as $c){
+            $nombre =      $c['full_name']; 
+            $cedula =      $c['cedula']; 
+            $direccion =   $c['direccion']; 
+            $telefono =    $c['telefono']; 
+            $email =       $correo; 
+          }
+        if(empty($nombre) || empty($cedula) || empty($direccion) || empty($telefono) || empty($email))
+    {
+                    ?><?php
+                    Yii::$app->session->setFlash('danger',
+                    '<h4>ERROR EN LOS DATOS DE FACTURACION</h4>'
+                    . 'Revise los siguientes campos:<br>'
+                    . '<li>Nombre</li>'
+                    . '<li>Cédula</li>'
+                    . '<li>Dirección</li>'
+                    . '<li>Teléfono</li>'
+                    . '<li>Email</li>'
+                    . 'Complete la información en MI PERFIL y vuelva a intentarlo'); ?><?php  
+                    return $this->redirect(Yii::$app->request->referrer); 
+    }
+            //****************************************** Fin Datos Factura **********************************/
+            
             $post = Yii::$app->request->post();
             $codigo_promo = $post['RecargaTransferencia']['codigo_promocion'];            
             
@@ -198,7 +230,15 @@ class RecargaTransferenciaController extends Controller
                                     $model->save();
                                     if ($model->save()) {             
                                          ?><?= Yii::$app->session->setFlash('success', 'BIEN HECHO: Se ha añadido una promoción a su recarga');  ?><?php  
-                                        return $this->redirect(Yii::$app->request->referrer); 
+//                                        return $this->redirect(Yii::$app->request->referrer); 
+                                        return $this->render('detallefactura', [
+                                            'nombre'=>$nombre, 
+                                            'cedula'=>$cedula, 
+                                            'direccion'=>$direccion,   
+                                            'telefono'=>$telefono,   
+                                            'email'=>$email,   
+                                            'valor'=>$valor,   
+                                        ]);
                                     }  
                                     else {
                                         var_dump ($model->getErrors()); die();
@@ -207,7 +247,15 @@ class RecargaTransferenciaController extends Controller
                 else{
                                      $model->save();
                                     if ($model->save()) {             
-                                        return $this->redirect(Yii::$app->request->referrer); 
+//                                        return $this->redirect(Yii::$app->request->referrer); 
+                                        return $this->render('detallefactura', [
+                                            'nombre'=>$nombre, 
+                                            'cedula'=>$cedula, 
+                                            'direccion'=>$direccion,   
+                                            'telefono'=>$telefono,   
+                                            'email'=>$email,   
+                                            'valor'=>$valor,   
+                                        ]);
                                     }  
                                     else {
                                         var_dump ($model->getErrors()); die();
@@ -218,8 +266,16 @@ class RecargaTransferenciaController extends Controller
                 $model->valor_promo = 0;                
                                     $model->save();
                                     if ($model->save()) {             
-                                         ?><?= Yii::$app->session->setFlash('success', 'BIEN HECHO: Recarga realizada con éxito');  ?><?php  
-                                        return $this->redirect(Yii::$app->request->referrer); 
+                                         ?><?= Yii::$app->session->setFlash('success', 'BIEN HECHO: Recarga realizada con éxito');  ?><?php                                           
+//                                        return $this->redirect(Yii::$app->request->referrer); 
+                                        return $this->render('detallefactura', [
+                                            'nombre'=>$nombre, 
+                                            'cedula'=>$cedula, 
+                                            'direccion'=>$direccion,   
+                                            'telefono'=>$telefono,   
+                                            'email'=>$email,   
+                                            'valor'=>$valor,   
+                                        ]);
                                     }  
                                     else {
                                         var_dump ($model->getErrors()); die();
@@ -240,6 +296,108 @@ class RecargaTransferenciaController extends Controller
                   'model' => $model,
               ]);     
     } 
+    
+    
+         public function actionCreateplan()
+    {
+        $model = new RecargaTransferencia();                        
+//        $model->scenario = 'recarga_plan';
+        $model->fecha = date("Y-m-d H:i");
+        $model->estado_id = 2; 
+        
+        
+//        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+//            Yii::$app->response->format = Response::FORMAT_JSON;
+//            return ActiveForm::validate($model);
+//        }
+        $model->attributes = \Yii::$app->request->post('RecargaTransferencia');
+        if ($model->load(Yii::$app->request->post())) {
+            
+            //****************************************** Datos Factura **********************************/
+          $post = Yii::$app->request->post();  
+          $user_id = $model->attributes['user_id'];
+          $valor = $post['RecargaTransferencia']['valor'];
+          $consulta_perfil = \app\models\Profile::find()->where(['user_id'=>$user_id])->asArray()->all();
+          $consulta = \app\models\User::find()->select(['email'])->where(['id'=>$user_id])->asArray()->one();
+          $correo = $consulta['email'];
+          foreach($consulta_perfil as $c){
+            $nombre =      $c['full_name']; 
+            $cedula =      $c['cedula']; 
+            $direccion =   $c['direccion']; 
+            $telefono =    $c['telefono']; 
+            $email =       $correo; 
+          }
+        if(empty($nombre) || empty($cedula) || empty($direccion) || empty($telefono) || empty($email))
+    {
+                    ?><?php
+                    Yii::$app->session->setFlash('danger',
+                    '<h4>ERROR EN LOS DATOS DE FACTURACION</h4>'
+                    . 'Revise los siguientes campos:<br>'
+                    . '<li>Nombre</li>'
+                    . '<li>Cédula</li>'
+                    . '<li>Dirección</li>'
+                    . '<li>Teléfono</li>'
+                    . '<li>Email</li>'
+                    . 'Complete la información en MI PERFIL y vuelva a intentarlo'); ?><?php  
+                    return $this->redirect(Yii::$app->request->referrer); 
+    }
+            //****************************************** Fin Datos Factura **********************************/
+            
+            $post = Yii::$app->request->post();
+//            $codigo_promo = $post['RecargaTransferencia']['codigo_promocion'];  
+            $codigo_valor_plan = $post['RecargaTransferencia']['plan'];
+            $query = \app\models\PlanesRecarga::find(['valor', 'valor_promo'])->where(['id'=>$codigo_valor_plan])->asArray()->one();
+            $valor_plan = $query['valor'];
+            $valor_promo = $query['valor_promo'];
+
+            /*****************************************************************/
+          $image = UploadedFile::getInstance($model, 'doc_referencia');
+          if (!is_null($image)) {
+             $model->doc_referencia = $image->name;
+             //$ext = end((explode(".", $image->name)));
+            $tmp = explode('.', $image->name);
+             $ext = end($tmp);
+			 			 
+              // generate a unique file name to prevent duplicate filenames
+              $model->doc_referencia = Yii::$app->security->generateRandomString().".{$ext}";
+              // the path to save file, you can set an uploadPath
+              // in Yii::$app->params (as used in example below)                       
+              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/images/transferencias/';
+              $path = Yii::$app->params['uploadPath'] . $model->doc_referencia;
+               $image->saveAs($path);
+            }
+            /*****************************************************************/
+            $model->valor = $valor_plan;
+            $model->valor_promo = $valor_promo;
+            if((!empty($valor_plan)) && (!empty($model->valor))){                
+                                    $model->save();
+                                    if ($model->save()) {             
+                                         ?><?= Yii::$app->session->setFlash('success', 'BIEN HECHO: Tu plan ha sido registrado correctamente');  ?><?php  
+//                                        return $this->redirect(Yii::$app->request->referrer); 
+                                        return $this->render('detallefactura', [
+                                            'nombre'=>$nombre, 
+                                            'cedula'=>$cedula, 
+                                            'direccion'=>$direccion,   
+                                            'telefono'=>$telefono,   
+                                            'email'=>$email,   
+                                            'valor'=>$valor,   
+                                        ]);
+                                    }  
+                                    else {
+                                        var_dump ($model->getErrors()); die();
+                                    }
+              
+            }
+            else{
+                ?><?= Yii::$app->session->setFlash('danger', 'ERROR: Uno o mas valores se encuentran vacios');  ?><?php                                           
+                return $this->redirect(Yii::$app->request->referrer); 
+            }
+        }    
+              return $this->renderAjax('createplan', [
+                  'model' => $model,
+              ]);     
+    }
+    
 
 
     /**
@@ -289,33 +447,26 @@ class RecargaTransferenciaController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+ /***************************************************************************************************************************/   
+      public function actionDetalleFactura()
+    {
+        return $this->redirect(['detallefactura']);
+    }
     
-    
-//      public function actionCreate()
-//    {
-//        
-//        $model = new VentasDistribuidores();
-//        $model->fecha = date("Y-m-d H:i"); 
-////        $model->file = UploadedFile::getInstance($model, 'file');
-//        
-//         if ($model->load(Yii::$app->request->post())) {
-//        $model->file = UploadedFile::getInstance($model, 'file');
-////        $ext = substr(strrchr($model->file, '.'), 1);     //duplica la extension
-//                if ($model->validate()) {
-////                     if ($ext != null) {
-////                        $newfname = $model->file . '.' . $ext;
-//                         $newfname = $model->file;
-//                        $model->file->saveAs(Yii::getAlias('@webroot') . '/archivosventas/' . $model->file = $newfname);  
-//                         $model->save();
-//                        return $this->redirect(['view', 'id' => $model->id]);
-////                    }
-////                        $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);                       
-//                }
-//        }
-//            else {
-//            return $this->render('create', [
-//                'model' => $model,
-//            ]);
-//        }
-//    }
+            public function actionFactura() {
+    $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
+            'content' => $this->renderPartial('factura'),
+            'options' => [
+                'title' => 'Factura',
+                'subject' => 'Factura Generada por VoyEntrego'
+            ],
+            'methods' => [
+                'SetHeader' => ['Generada por VoyEntrego||Fecha: ' . date("r")],
+                'SetFooter' => ['|Page {PAGENO}|'],
+            ]
+        ]);
+        return $pdf->render();
+    }
+
 }

@@ -18,6 +18,8 @@ use Yii;
  */
 class RecargaTransferencia extends \yii\db\ActiveRecord
 {
+    public $plan;
+    
     /**
      * @inheritdoc
      */
@@ -37,6 +39,8 @@ class RecargaTransferencia extends \yii\db\ActiveRecord
             [['valor', 'valor_promo'], 'number'],
             [['fecha'], 'string', 'max' => 45],
             [['doc_referencia'], 'string', 'max' => 100],
+            
+            [['plan'], 'number'],
         ];
     }
 

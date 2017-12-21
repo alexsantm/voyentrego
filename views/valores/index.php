@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nuevo Valor', ['/valores/create'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Nuevo Valor', ['/valores/create'], ['class' => 'btn btn-warning modalButton']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -34,14 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            ['class' => 'yii\grid\ActionColumn'],
              ['class' => 'kartik\grid\ActionColumn',
-                          'template'=>'{view}{update}{delete}',
+                          'template'=>'{update}{delete}',
                             'buttons'=>[
-                                    'view' => function ($url, $model) {     
-                                                return Html::a( '<i class="glyphicon glyphicon-eye-open" style="color:white"></i>',
-                                                        ['valores/view', 'id'=>$model->id],
-                                                        ['class'=>'btn btn-warning btn-md modalButton', 'title'=>'view/edit', ]
-                                                ); 
-                                    },
                                     'update' => function ($url, $model) {     
                                     return Html::a( '<i class="glyphicon glyphicon-pencil" style="color:white"></i>',
                                                         ['valores/update', 'id'=>$model->id],
@@ -61,7 +55,27 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 </div>
 
+<?php
+ yii\bootstrap\Modal::begin([
+        //'header' => 'Formulario Recepción de Pedido',
+        'id'=>'editModalId',
+        'class' =>'modal',
+        'size' => 'modal-sm',
+		'footer' => '<a href="#" class="btn btn-danger" data-dismiss="modal">Cerrar</a>',
+    ]);
+        echo "<div class='modalContent'></div>";
+    yii\bootstrap\Modal::end();
 
+        $this->registerJs(
+        "$(document).on('ready pjax:success', function() {
+                $('.modalButton').click(function(e){
+                   e.preventDefault(); //for prevent default behavior of <a> tag.
+                   var tagname = $(this)[0].tagName;
+                   $('#editModalId').modal('show').find('.modalContent').load($(this).attr('href'));
+               });
+            });
+        ");
+?>
 
 
 <style>

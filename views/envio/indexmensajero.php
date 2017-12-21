@@ -95,6 +95,13 @@ use kartik\editable\Editable;
 //             'fecha_fin_envio',
              'total_km',
              'valor_total',
+            [
+                'label' => 'Tiempo Estimado (m)',
+                'attribute' => 'tiempo_estimado',
+                'hAlign' => 'center',
+                'vAlign' => 'middle',
+                'filter'=>false        
+            ],
 //             'observacion:html',
 //            [
 //                'attribute' => 'observacion',
@@ -122,18 +129,18 @@ use kartik\editable\Editable;
 //             'tipo_envio_id',
 //             'dimensiones_id',
 //             'mensajero_id',
-             [
-                'label' => "Mensajero",
-                'attribute' => 'mensajero_id',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-                'value'=>function($model, $key, $index, $column) {
-                            $service = app\models\Profile::find()->select('full_name')->where(['user_id'=>$model->mensajero_id])->asArray()->one();
-                            $full_name = $service['full_name'];
-                            return $full_name ? $full_name : '-';
-                         },                                
-                'filter'=>false        
-            ],   
+//             [
+//                'label' => "Mensajero",
+//                'attribute' => 'mensajero_id',
+//                'hAlign' => 'center',
+//                'vAlign' => 'middle',
+//                'value'=>function($model, $key, $index, $column) {
+//                            $service = app\models\Profile::find()->select('full_name')->where(['user_id'=>$model->mensajero_id])->asArray()->one();
+//                            $full_name = $service['full_name'];
+//                            return $full_name ? $full_name : '-';
+//                         },                                
+//                'filter'=>false        
+//            ],   
                                  
 //            [
 //                'label' => "",
@@ -174,35 +181,35 @@ use kartik\editable\Editable;
                     
 
                     
-            [
-                'label' => "Calificación",
-                'attribute' => '',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-                'value' => function($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
-                    //return $service ? $service['calificacion'] : '-';                    
-                    return $service ? $service['calificacion'] : '-'; 
-//                        return '';
-                },        
-                      'contentOptions' => function ($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
-                    //return $service ? $service['calificacion'] : '-';  
-                    $calificacion = $service['calificacion'];
-                   if(($calificacion == 1) || ($calificacion == 2)){
-                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-                   }
-                   else if(($calificacion == 4) || ($calificacion == 5)){
-                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-                   }
-                   else if(($calificacion == 3)){ 
-                        return ['id' => 'circle',
-                            
-                        ]; 
-                   }
-            },
-                'filter'=>false        
-            ],
+//            [
+//                'label' => "Calificación",
+//                'attribute' => '',
+//                'hAlign' => 'center',
+//                'vAlign' => 'middle',
+//                'value' => function($model, $key, $index, $column) {
+//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
+//                    //return $service ? $service['calificacion'] : '-';                    
+//                    return $service ? $service['calificacion'] : '-'; 
+////                        return '';
+//                },        
+//                      'contentOptions' => function ($model, $key, $index, $column) {
+//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
+//                    //return $service ? $service['calificacion'] : '-';  
+//                    $calificacion = $service['calificacion'];
+//                   if(($calificacion == 1) || ($calificacion == 2)){
+//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 4) || ($calificacion == 5)){
+//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else if(($calificacion == 3)){ 
+//                        return ['id' => 'circle',
+//                            
+//                        ]; 
+//                   }
+//            },
+//                'filter'=>false        
+//            ],
                     
 
         ],          

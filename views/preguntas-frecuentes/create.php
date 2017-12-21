@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\PreguntasFrecuentes */
 
-$this->title = 'Create Preguntas Frecuentes';
+$this->title = 'Nueva Pregunta';
 $this->params['breadcrumbs'][] = ['label' => 'Preguntas Frecuentes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

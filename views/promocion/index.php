@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nueva Promocion', ['create'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Nueva Promocion', ['create'], ['class' => 'btn btn-warning modalButton']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -38,14 +38,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            ['class' => 'yii\grid\ActionColumn'],
             ['class' => 'kartik\grid\ActionColumn',
-                          'template'=>'{view}{update}{delete}',
+                          'template'=>'{update}{delete}',
                           //  'template'=>'{delete}',
                             'buttons'=>[
-                                    'view' => function ($url, $model) {     
-                                    return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
-                                              'class'=>'btn btn-warning btn-md modalButton','title' => Yii::t('yii', 'View'),
-                                      ]); 
-                                    },
+//                                    'view' => function ($url, $model) {     
+//                                    return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
+//                                              'class'=>'btn btn-warning btn-md modalButton','title' => Yii::t('yii', 'View'),
+//                                      ]); 
+//                                    },
                                     'update' => function ($url, $model) {     
                                     return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [
                                               'class'=>'btn btn-warning btn-md','title' => Yii::t('yii', 'Update'),
@@ -61,3 +61,26 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>
+
+
+<?php
+ yii\bootstrap\Modal::begin([
+        //'header' => 'Formulario Recepción de Pedido',
+        'id'=>'editModalId',
+        'class' =>'modal',
+        'size' => 'modal-lg',
+		'footer' => '<a href="#" class="btn btn-danger" data-dismiss="modal">Cerrar</a>',
+    ]);
+        echo "<div class='modalContent'></div>";
+    yii\bootstrap\Modal::end();
+
+        $this->registerJs(
+        "$(document).on('ready pjax:success', function() {
+                $('.modalButton').click(function(e){
+                   e.preventDefault(); //for prevent default behavior of <a> tag.
+                   var tagname = $(this)[0].tagName;
+                   $('#editModalId').modal('show').find('.modalContent').load($(this).attr('href'));
+               });
+            });
+        ");
+?>

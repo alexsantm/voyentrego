@@ -18,8 +18,9 @@ class OpcionesSearch extends Opciones
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'dia_pago_mensajeros', 'envios_tomados_por_dia'], 'integer'],
             [['radio'], 'number'],
+            [['foto_promocion'], 'safe'],
         ];
     }
 
@@ -61,7 +62,11 @@ class OpcionesSearch extends Opciones
         $query->andFilterWhere([
             'id' => $this->id,
             'radio' => $this->radio,
+            'dia_pago_mensajeros' => $this->dia_pago_mensajeros,
+            'envios_tomados_por_dia' => $this->envios_tomados_por_dia,
         ]);
+
+        $query->andFilterWhere(['like', 'foto_promocion', $this->foto_promocion]);
 
         return $dataProvider;
     }

@@ -38,6 +38,7 @@ class Destino extends \yii\db\ActiveRecord
     public $destino_check;
     public $inicio_check;
     public $destino_opc;
+//    public $default;
     /**
      * @inheritdoc
      */
@@ -89,9 +90,10 @@ class Destino extends \yii\db\ActiveRecord
             'observacion' => Yii::t('app', 'Observacion'),
             'estado_envio_id' => Yii::t('app', 'Estado Envio ID'),
             'retorno_destino_id' => Yii::t('app', 'Retorno Destino ID'),
-            'retorno_inicio' => Yii::t('app', 'Retorno Inicio'),
+            'retorno_inicio' => Yii::t('app', '¿Debe retornar al Destino?'),
             'tipo_envio_id' => Yii::t('app', 'Tipo Envio ID'),
             'dimensiones_id' => Yii::t('app', 'Dimensiones ID'),
+//            'default' => Yii::t('app', 'Sin retornos'),
         ];
     }
 
@@ -135,3 +137,4 @@ class Destino extends \yii\db\ActiveRecord
         return $this->hasOne(TipoEnvio::className(), ['id' => 'tipo_envio_id']);
     }
 }
+

@@ -152,13 +152,36 @@ $this->title = 'Detalle de Envíos';
 <?php Pjax::end(); ?>
 
 <?php 
-        $user_id = Yii::$app->user->identity['id'];
         $searchModel = new \app\models\EnvioSearch();
+        $user_id = Yii::$app->user->identity['id'];
+        
+        $searchModel->user_id = $user_id;
+        $searchModel->estado_envio_id = 1;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);        
+        $iniciados = $this->render('/envio/indexiniciado', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+
+        $searchModel->user_id = $user_id;
+        $searchModel->estado_envio_id = 2;
+        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);        
+        $enproceso = $this->render('/envio/indexproceso', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+
         $searchModel->user_id = $user_id;
         $searchModel->estado_envio_id = 3;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);        
         $exitosos = $this->render('/envio/indexexitoso', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+                
+        $dataProvider = $searchModel->searchmensajerofavorito(Yii::$app->request->queryParams);        
+        $mensajerofavorito = $this->render('/envio/indexmensajerofavorito', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -195,24 +218,50 @@ $this->title = 'Detalle de Envíos';
 <?php
 echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
-    'align' => TabsX::ALIGN_LEFT,
+    'align' => TabsX::ALIGN_CENTER,
     'encodeLabels'=>false,
     'enableStickyTabs'=>true,
 //    'position'=>TabsX::POS_RIGHT,
     'items' => [
         [
-            'label' => '<i class="glyphicon glyphicon-list-alt"></i> ENVIOS REALIZADOS',
-            'content' => $realizados,
+            'label' => '<i class="glyphicon glyphicon-share-alt"></i> ENVIOS INICIADOS',
+            'content' => $iniciados,
             'active' => true,
             'bordered'=>true,
+            'options' => ['id' => 'iniciado'],
             'height'=>TabsX::SIZE_LARGE,
             'headerOptions' => ['style'=>'font-weight:bold; font-size:18px;'],
         ],
+        [
+            'label' => '<i class="glyphicon glyphicon-sort"></i> ENVIOS EN PROCESO',
+            'content' => $enproceso,
+            'bordered'=>true,
+            'options' => ['id' => 'proceso'],
+            'height'=>TabsX::SIZE_LARGE,
+            'headerOptions' => ['style'=>'font-weight:bold; font-size:18px;'],
+        ],
+//        [
+//            'label' => '<i class="glyphicon glyphicon-list-alt"></i> ENVIOS REALIZADOS',
+//            'content' => $realizados,
+//            'active' => true,
+//            'bordered'=>true,
+//            'height'=>TabsX::SIZE_LARGE,
+//            'headerOptions' => ['style'=>'font-weight:bold; font-size:18px;'],
+//        ],
         [
             'label' => '<i class="glyphicon glyphicon-ok"></i> ENVIOS EXITOSOS',
             'content' => $exitosos,
             'headerOptions' => ['style'=>'font-weight:bold; font-size:18px;'],
             'options' => ['id' => 'opciones'],
+            'height'=>TabsX::SIZE_LARGE,
+            'bordered'=>true,
+        ],
+        
+         [
+            'label' => '<i class="glyphicon glyphicon-user"></i> MENSAJEROS FAVORITOS',
+            'content' => $mensajerofavorito,
+            'headerOptions' => ['style'=>'font-weight:bold; font-size:18px;'],
+            'options' => ['id' => 'mensajerofavorito'],
             'height'=>TabsX::SIZE_LARGE,
             'bordered'=>true,
         ],
@@ -235,4 +284,14 @@ echo TabsX::widget([
 ]);
 ?>
 
+
+<style>    
+    .nav-tabs > li > a {
+            color: #E08E0B !important;
+    }
+        
+    #w23 > li.active > a:hover{
+        color: #d58512 !important;
+    }    
+</style>
 

@@ -80,7 +80,7 @@ class PromocionController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
 //            print_r($model->errors);die();
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }

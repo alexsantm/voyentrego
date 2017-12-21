@@ -14,12 +14,25 @@ $user_id = Yii::$app->user->identity['id'];
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'user_id')->label('Seleccione un Usuario:')
-        ->dropDownList(
-                    ArrayHelper::map(amnah\yii2\user\models\User::find()->where(['responsable_id'=>$user_id])
-                    ->all(),'id','username')
-                    ,['prompt' => '--Seleccione el Usuario--']) 
+    <?php 
+//    $form->field($model, 'user_id')->label('Seleccione un Usuario:')
+//        ->dropDownList(
+//                    ArrayHelper::map(amnah\yii2\user\models\User::find()->where(['responsable_id'=>$user_id])
+//                    ->all(),'id','username')
+//                    ,['prompt' => '--Seleccione el Usuario--']) 
     ?>	
+    
+    <?php // $form->field($model, 'user_id')->hiddenInput(['maxlength' => true, 'value'=>$user_id])->label(false) ?>
+                        <?php
+                    $rol_id = Yii::$app->user->identity['role_id'];
+                    $user_id = Yii::$app->user->identity['id'];
+                    if($rol_id == 5){
+                        echo $form->field($model, 'user_id')->hiddenInput(['value'=>NULL])->label(false);
+                        
+                    }else{
+                        echo $form->field($model, 'user_id')->hiddenInput(['value'=>$user_id])->label(false);
+                    }
+                    ?>
 
     <?= $form->field($model, 'marca')->textInput(['maxlength' => true]) ?>
 
@@ -31,7 +44,7 @@ $user_id = Yii::$app->user->identity['id'];
     
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-warning']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

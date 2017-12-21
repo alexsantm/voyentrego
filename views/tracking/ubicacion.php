@@ -11,77 +11,80 @@ use dosamigos\google\maps\Map;
 use dosamigos\google\maps\services\DirectionsRequest;
 use dosamigos\google\maps\overlays\Polygon;
 use dosamigos\google\maps\layers\BicyclingLayer;
+use yii\widgets\Pjax;
+use yii\helpers\Url;
+use yii\helpers\Html;
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-    
-    
-    
-echo '<h3>Map with a Marker</h3>';
+echo '<h3>Mensajeros</h3>';
+$this->title = 'Ubicación de Mensajeros';
+echo("<p>A continuación se presentan todos los mensajeros con su respectivo status</p>");
 
-//    foreach($mensajeros as $d){   
-//        $user_id=$d['user_id'];
-//        $destino_longitud =$d['longitud'];
-//        $destino_latitud=$d['latitud'];
-//        $userLocationsdestinos[]=array('location'=>array('lat' => $destino_latitud, 'long' => $destino_longitud), 'htmlContent' => $user_id);
-//   
-//
-////$coord = new LatLng(['lat' => 39.720089311812094, 'lng' => 2.91165944519042]);
-// $coord = new LatLng(['lat' => $destino_latitud, 'lng' => $destino_longitud]);
-//$map[] = new Map([
-//    'center' => $coord,
-//    'zoom' => 14,
-//]);
-// 
-//// Lets add a marker now
-//$marker = new Marker([
-//    'position' => $coord,
-//    'title' => 'My Home Town',
-//]);
-// 
-//// Provide a shared InfoWindow to the marker
-//$marker->attachInfoWindow(
-//    new InfoWindow([
-//        'content' => '<p>This is my home town</p>'
-//    ])
-//);
-//$map->addOverlay($marker);
-//
-// }
-// // Display the map -finally :)
-//echo $map->display();
- 
- 
-
-
-
-
+Pjax::begin(['id' => 'myPjax']);
 //$coord = new LatLng(['lat' => $latitud_origen, 'lng' => $longitud_origen]);
-$coord = new LatLng(['lat' => -1.831239, 'lng' => -78.18340599999999]);
+//$coord = new LatLng(['lat' => -1.831239, 'lng' => -78.18340599999999]);
+$coord = new LatLng(['lat' => -0.19928890, 'lng' => -78.50644730]);
 $map = new Map([
     'center' => $coord,
-    'zoom' => 10,
-    'width' => '100%'
+    'zoom' => 13,
+    'width' => '100%',
+    'containerOptions' => [
+        'id' => 'mapa'
+    ]
 ]);
 
 foreach ($mensajeros as $f) {
+    $query = \app\models\Profile::find()->select(['full_name', 'foto'])->where(['user_id'=>$f['user_id']])->asArray()->one();
+    $full_name = $query['full_name'];
+    $foto = $query['foto'];
+    
+        if(empty($foto)){
+            $foto = Yii::$app->request->BaseUrl.'/images/fotos/default.jpg';
+        }else{
+            $foto = Yii::$app->request->BaseUrl.'/images/fotos/'.$foto;
+        }
+        
+        
     $coord = new LatLng(['lat' => $f['latitud'], 'lng' => $f['longitud']]);
+    
+    //Estraigo status y seteo el icono de la tabla StatusMensajero
+  $query = \amnah\yii2\user\models\User::find()->where(['id'=>$f['user_id']])->asArray()->one();
+  $status = $query['status_id'];
+  $quey_status = app\models\StatusMensajero::find()->where(['id'=>$status])->asArray()->one();
+  $icono_status = $quey_status['icono'];
+  
+     $html = '
+        <div class="container" style="width:100%;">
+            <div class="row">
+                <div class="col-sm-12"><center><img src="'.$foto.'" width="50" height="50" /><br><h5>'.$full_name.'</h5></div></center>
+            </div>
+        </div>
+    ';
+  
     $marker = new Marker([
                 'position' => $coord,
-                'title' => $f['user_id'],
+                'title' => $full_name,
                 'animation' => 'google.maps.Animation.DROP',
-                'visible'=>'true'
+                'visible'=>'true',
+                'icon'=>\yii\helpers\Url::base().'/images/markers/estados_mensajeros/'.$icono_status,
             ]);
-     $marker->attachInfoWindow(new InfoWindow(['content' => $f['user_id']]));
+     //$marker->attachInfoWindow(new InfoWindow(['content' => $full_name]));
+     $marker->attachInfoWindow(new InfoWindow(['content' => $html]));
      $map->addOverlay($marker);
 }    
-
 echo $map->display();
- 
- 
 
+Pjax::end();
 
-
+$script = <<< JS
+$(mapa).ready(function() {
+    setInterval(function() {     
+      $.pjax.reload({container:'#myPjax'});
+    }, $tiempo_refresco); 
+});
+JS;
+$this->registerJs($script);

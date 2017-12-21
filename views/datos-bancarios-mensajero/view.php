@@ -12,7 +12,11 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Datos Bancarios Mensajeros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $id_usuario = Yii::$app->user->identity['id']; ?>
+<?php 
+//print_r(Yii::$app->request->get()); die();
+$id_usuario = Yii::$app->user->identity['id']; 
+
+?>
 <div class="datos-bancarios-mensajero-view">
 
     <h1><?= Html::encode($this->title) ?></h1>    
@@ -26,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     else{
     ?>
-            <div class="alert alert-warning"><h4>Uste aún no registra un método para la cancelación de sus honoriarios. Por favor registre uno seleccionando el método de pago</h4></div>
+            <div class="alert alert-warning"><h4>Usted aún no registra un método para la cancelación de sus honoriarios. Por favor registre uno seleccionando el método de pago</h4></div>
      <?php
     }
     ?>        

@@ -49,12 +49,25 @@ class DatosBancariosMensajeroController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView()
     {
-//        print_r($id); die();
+////        print_r($id); die();
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//        
+//        $user_id = Yii::$app->request->get('id');  
+//        print_r($this->findModel(0)); die();
+//        return $this->render('view', [
+//            'model' => $this->findModel($user_id),
+//            'id' => $user_id,
+//        ]);
+        
+        $model = new DatosBancariosMensajero();
         return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+                'model' => $model,
+            ]);
+
     }
 
     /**

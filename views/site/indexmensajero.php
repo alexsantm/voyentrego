@@ -5,6 +5,9 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 
 $this->title = 'VoyVengo - Mensajero';
+$user_id = Yii::$app->user->identity['id'];
+
+
 ?>
 <!--<div class="container" style="border: solid 1px red;">-->
     <!-- Content Header (Page header) -->
@@ -23,13 +26,19 @@ $this->title = 'VoyVengo - Mensajero';
     <section class="contenedor_principal">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        <div class="col-lg-3 col-xs-6">
+          
+          
+          
+        <div class="col-lg-3  col-md-3 col-sm-12 col-xs-12">
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>150</h3>
+                <div class="icon">
+                    <i class="glyphicon glyphicon-thumbs-up"></i>
+                </div>
+              <h3><?= $favoritismo?></h3>
 
-              <p>New Orders</p>
+              <p>Favoritismo</p>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
@@ -38,62 +47,82 @@ $this->title = 'VoyVengo - Mensajero';
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        
+        <div class="col-lg-3  col-md-3 col-sm-12 col-xs-12">
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-              <p>Bounce Rate</p>
+                <div class="icon">
+                    <i class="glyphicon glyphicon-ok"></i>
+                </div>
+              <!--<h3><sup style="font-size: 20px">%</sup></h3>-->
+              <h3><?= $no_envios_exitosos?></h3>
+              <p>Envios Finalizados</p>
             </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!--<a href="#" class="small-box-footer">Más Información <i class="fa fa-arrow-circle-right"></i></a>-->
+            <?= Html::a('Mas Información<i class="fa fa-arrow-circle-right" style="color:white"></i>',
+                        ['//envio/indexmensajero'],
+                        ['class'=>'small-box-footer']
+                );
+            ?>
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        
+        
+        
+<!--Envios Asignados-->        
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3>44</h3>
+               <div class="icon">
+                <i class="glyphicon glyphicon-list-alt"></i>
+                </div>  
+              <!--<h3>44</h3>-->
+              <h3><?= $no_envios_asignados?></h3>
 
-              <p>User Registrations</p>
+              <p>Envios Pendientes</p>
             </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!--<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+            <?= Html::a('Mas Información<i class="fa fa-arrow-circle-right" style="color:white"></i>',
+                                                        ['//envio/indexmensajero'],
+                                                        ['class'=>'small-box-footer']
+                                                );
+            ?>  
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        
+        
+<!--Calificacion-->
+        <div class="col-lg-3  col-md-3 col-sm-12 col-xs-12">
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-              <h3>65</h3>
-
-              <p>Unique Visitors</p>
-            </div>
+<!--              <h3>65</h3>-->
             <div class="icon">
-              <i class="ion ion-pie-graph"></i>
+              <i class="glyphicon glyphicon-star"></i>
             </div>
+                <h3><?= round($calificacion_mes, 2);?></h3>
+                <p>Reputación Mensual</p>
+            </div>            
             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
+
+
+
+
         <!-- ./col -->
       </div>
     </section>  
-    
-    
-    
     
             <section class="contenedor_principal">
         
         <div class="row">
                     <div class="col-lg-12">                
-                        <div id="contenedor" class="col-lg-4">                
+                        <div id="contenedor" class="col-lg-4 col-md-12 col-sm-12 col-xs-12">                
                              <a href="<?= Url::to(['envio/indexmensajero']) ?>">
                                 <section class="historial">
                                     <div class="col-lg-4 iconos"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></div>
@@ -106,8 +135,9 @@ $this->title = 'VoyVengo - Mensajero';
                                 </section>
                             </a>    
                         </div>
-                        <div id="contenedor" class="col-lg-4">
-                            <a href="<?= Url::to(['user/perfil#transferencia']) ?>">
+                        <div id="contenedor" class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                            <!--<a href="<?php // Url::to(['user/perfil#transferencia']) ?>">-->
+                            <a href="<?= Url::to(['datos-bancarios-mensajero/view', 'id'=>$user_id ]) ?>">
                                 <section class=" asesoria">
                                    <div class="col-lg-4  iconos"><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span></div>
                                    <div class="col-lg-8">
@@ -117,8 +147,9 @@ $this->title = 'VoyVengo - Mensajero';
                                </section>
                             </a>    
                         </div>
-                         <div id="contenedor" class="col-lg-4">
-                             <a href="<?= Url::to(['user/perfil#perfil']) ?>">
+                         <div id="contenedor" class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                             <!--<a href="<?php // Url::to(['user/perfil#perfil']) ?>">-->
+                             <a href="<?= Url::to(['user/profile']) ?>">
                                 <section class="cuenta">
                                    <div class="col-lg-4 iconos"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
                                    <div class="col-lg-8">
@@ -231,7 +262,7 @@ $this->title = 'VoyVengo - Mensajero';
     }
     else{
     ?>
-          <div class="alert alert-info"><center><h4>No existen envíos para el dia de hoy</h4></center></div>
+          <div style="background-color: #FF5515; color:white; padding:10px 10px;"><center><h3>No existen envíos para el dia de hoy</h3></center></div>
     <?php
     }    
     ?>      
@@ -242,15 +273,54 @@ $this->title = 'VoyVengo - Mensajero';
       </section>
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
 </section>
     <!-- /.content -->
   <!--</div>-->
+  
+  
+  
+  <style>
+      .icon{
+          color:white !important;
+          top: 5px !important;
+          /*right: 81px !important;*/
+      }
+      
+      
+          @media (max-width: 1198px) {
+                .iconos {
+                  display: none;
+                }
+                .items {
+                  text-align: right;
+                }
+
+            /*Centrar horizontalmente las cajas*/  
+              #contenedor {
+              /*IMPORTANTE*/
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+              }
+              h2{
+                  text-align: center;
+              }
+    }
+    
+     @media (max-width: 990px) {
+        .historial, .asesoria, .cuenta {
+            width: 100%;
+        }
+        #contenedor {
+              /*IMPORTANTE*/
+                  display: block;
+              }
+    }
+
+    @media (max-width: 768px) {
+        .historial, .asesoria, .cuenta {
+            width: 100%;
+        }
+    }
+      
+</style>      

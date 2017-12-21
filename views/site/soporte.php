@@ -61,10 +61,10 @@ echo("<center><h2>Soporte Voyentrego</h2></center>");
 
 echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
-    'align' => TabsX::ALIGN_LEFT,
+    'align' => TabsX::ALIGN_CENTER,
     'encodeLabels'=>false,
     'enableStickyTabs'=>true,
-    'position'=>TabsX::POS_LEFT,
+//    'position'=>TabsX::POS_RIGHT,
     'items' => [
 
         [
@@ -98,4 +98,14 @@ echo TabsX::widget([
     .nav-tabs > li > a {
     text-align: center;
 }    
+
+ .nav-tabs > li > a {
+            color: #E08E0B !important;
+    }
+        
+    #w23 > li.active > a:hover{
+        color: #d58512 !important;
+    } 
+
+
 </style>    

@@ -184,12 +184,19 @@ class DestinoController extends Controller
     {
         $model = $this->findModel($id);        
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {            
+            $post = Yii::$app->request->post();
+            $destino_opc = $post['Destino']['destino_opc'];
+            if($destino_opc ==1){
+                $model->retorno_inicio = NULL;
+                $model->retorno_destino_id = NULL;
+            }            
+            $model->save();            
             ?><?= Yii::$app->session->setFlash('success', '<h4>BIEN HECHO</h4> Destino Actualizado Correctamente');  ?><?php  
 //             return $this->redirect(Yii::$app->request->referrer);
             return $this->redirect(['/envio/view', 'id' => $model->envio_id]);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
@@ -205,7 +212,13 @@ class DestinoController extends Controller
         $connection = \Yii::$app->db;
 //        $model->fecha_registro = date("Y-m-d H:i");
         $model->estado_envio_id = 1;
-        if ($model->load(Yii::$app->request->post())) {     
+        if ($model->load(Yii::$app->request->post())) {  
+             $post = Yii::$app->request->post();
+            $destino_opc = $post['Destino']['destino_opc'];
+            if($destino_opc ==1){
+                $model->retorno_inicio = NULL;
+                $model->retorno_destino_id = NULL;
+            }
             try{
                 $post=Yii::$app->request->post();
 //                print_r($post); die();
@@ -307,14 +320,29 @@ class DestinoController extends Controller
      */
     public function actionDelete($id)
     {
+//        print_r("dekete"); die();
         $this->findModel($id)->delete();
-        $array_id = Yii::$app->request->get('array_id');
-        $direccion_destino = Yii::$app->request->get('direccion_destino');
-        foreach($array_id as $id){
-                \app\models\Destino::deleteAll(['envio_id' => $id, 'direccion_destino' => $direccion_destino]);
-        }        
-        return $this->redirect(Yii::$app->request->referrer);
+        if(!empty(Yii::$app->request->get('array_id') && !empty(Yii::$app->request->get('direccion_destino')))){        
+                $array_id = Yii::$app->request->get('array_id');
+                $direccion_destino = Yii::$app->request->get('direccion_destino');
+                foreach($array_id as $id){
+                        \app\models\Destino::deleteAll(['envio_id' => $id, 'direccion_destino' => $direccion_destino]);
+                }        
+                ?><?php Yii::$app->session->setFlash('success', '<h3>Registros Eliminados Correctamente</h3>'); ?><?php  
+                return $this->redirect(Yii::$app->request->referrer);
+        }
+        else{
+            ?><?php Yii::$app->session->setFlash('success', '<h3>Registro Eliminado Correctamente</h3>'); ?><?php  
+            return $this->redirect(Yii::$app->request->referrer); 
+        }
 //        return $this->redirect(['index']);
+    }
+    
+        public function actionDeletesingle($id)
+    {
+        $this->findModel($id)->delete();
+        ?><?php Yii::$app->session->setFlash('success', '<h3>Registro Eliminado Correctamente</h3>'); ?><?php  
+        return $this->redirect(Yii::$app->request->referrer); 
     }
 
     /**

@@ -35,7 +35,9 @@ class GrupoUsuariosController extends Controller
      */
     public function actionIndex()
     {
+        $user_id = Yii::$app->user->identity['id'];
         $searchModel = new GrupoUsuariosSearch();
+        $searchModel->responsable_user_id = $user_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

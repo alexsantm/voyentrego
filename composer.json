@@ -22,7 +22,7 @@
         "amnah/yii2-user": " 5.0",
         "dmstr/yii2-adminlte-asset": "2.*",
         "kartik-v/yii2-checkbox-x": "*",
-        "yiisoft/yii2-httpclient": "*",
+        "yiisoft/yii2-httpclient": "^2.0",
         "2amigos/yii2-ckeditor-widget": "^2.1",
         "kalyabin/yii2-select-google-map-location": "*",
         "kartik-v/yii2-grid": "@dev",
@@ -45,7 +45,13 @@
         "sjaakp/yii2-bandoneon": "*",
         "kartik-v/yii2-detail-view": "^1.7",
         "kartik-v/yii2-widget-activeform": "@dev",
-        "kartik-v/yii2-widget-growl": "*"
+        "kartik-v/yii2-widget-growl": "*",
+        "unclead/yii2-multiple-input": "~2.0",
+        "wbraganca/yii2-dynamicform": "dev-master",
+        "valerian/google-distance-matrix": "^0.0.1",
+        "cirovargas/google-distance-matrix": "^0.0.8",
+        "kartik-v/yii2-widget-spinner": "@dev",
+        "omnilight/yii2-scheduling": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

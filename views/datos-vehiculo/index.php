@@ -19,13 +19,14 @@ $responsable_id = Yii::$app->user->identity['id'];
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Registrar Datos de nuevo Vehiculo', ['create'], ['class' => 'btn btn-success modalButton']) ?>
+        <?= Html::a('Registrar Datos de nuevo Vehiculo', ['create'], ['class' => 'btn btn-warning modalButton']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'panel' => [
             'type' => GridView::TYPE_WARNING,
+            'heading'=>'Agregue un Vehículo'
         ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -69,7 +70,7 @@ $responsable_id = Yii::$app->user->identity['id'];
         'id'=>'editModalId',
         'class' =>'modal',
         'size' => 'modal-md',
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Cerrar</a>',
+		'footer' => '<a href="#" class="btn btn-danger" data-dismiss="modal">Cerrar</a>',
     ]);
         echo "<div class='modalContent'></div>";
     yii\bootstrap\Modal::end();

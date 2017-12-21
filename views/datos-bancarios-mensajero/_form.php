@@ -13,9 +13,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class='row'>
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <?= $form->field($model, 'tipo_transferencia')->textInput(['value'=>'TRANSFERENCIA', 'readonly' => true]) ?>
         </div>
+        <div class="col-lg-6"><?= $form->field($model, 'tipo_cuenta')->dropdownList(
+            ['AHORROS' => 'TRANSFERENCIA', 'CORRIENTE' => 'CORRIENTE'], 
+            ['prompt' => '-Selecione Estado-']) ?> 
+        </div>     
         <div class="col-lg-6"><?= $form->field($model, 'numero_cuenta')->textInput(['maxlength' => true]) ?></div>
         <div class="col-lg-6"><?= $form->field($model, 'nombre_banco')->textInput(['maxlength' => true]) ?></div>
         <div class="col-lg-6"><?= $form->field($model, 'nombre_completo')->textInput(['maxlength' => true]) ?></div>

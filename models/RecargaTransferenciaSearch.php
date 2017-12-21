@@ -46,8 +46,19 @@ class RecargaTransferenciaSearch extends RecargaTransferencia
 
         // add conditions that should always apply here
 
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => $query,
+//        ]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'fecha' => SORT_DESC,
+                ]
+            ],
         ]);
 
         $this->load($params);
@@ -68,7 +79,7 @@ class RecargaTransferenciaSearch extends RecargaTransferencia
 
         $query->andFilterWhere(['like', 'fecha', $this->fecha])
             ->andFilterWhere(['like', 'doc_referencia', $this->doc_referencia]);
-        $dataProvider->pagination->pageSize=10;
+//        $dataProvider->pagination->pageSize=10;
         return $dataProvider;
     }
 }

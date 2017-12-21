@@ -101,17 +101,40 @@ use kartik\editable\Editable;
 //                'format'=>'html',
 //                'filter'=>false
 //            ],                      
+//            [
+//                'label' => "Estado",
+//                'attribute' => 'estado_envio_id',
+//                'hAlign' => 'center',
+//                'vAlign' => 'middle',
+//                'value' => function($model, $key, $index, $column) {
+//                    $service = app\models\EstadoEnvio::findOne($model->estado_envio_id);
+//                    return $service ? $service->estado : '-';
+//                },
+//                'filter'=>false        
+//            ],
+                        
             [
-                'label' => "Estado",
-                'attribute' => 'estado_envio_id',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-                'value' => function($model, $key, $index, $column) {
-                    $service = app\models\EstadoEnvio::findOne($model->estado_envio_id);
-                    return $service ? $service->estado : '-';
+                'label'=>'Envio de tipo',
+                'attribute' => 'modo_envio',
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
+                'value'=>function($model, $key, $index, $column) {
+                             if($model->modo_envio ==1){
+                                 return "Envío Normal";
+                             }
+                             else if($model->modo_envio ==2){
+                                 return "Envío Programado";
+                             }
+                             else if($model->modo_envio ==3){
+                                 return "Envío Recurrente";
+                             }
+                             else{
+                                 return " ";
+                             }
+                             
                 },
-                'filter'=>false        
-            ],
+                'filter'=>false
+            ],             
 //             'tipo_envio_id',
 //             'dimensiones_id',
 //             'mensajero_id',
@@ -141,59 +164,21 @@ use kartik\editable\Editable;
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
-                    //return $service ? $service['calificacion'] : '-';                    
-//                    return $service ? $service['calificacion'] : '-'; 
+                    $service = \app\models\Calificacion::find()
+                            ->where(['mensajero_id'=>$model->mensajero_id])
+                            ->andWhere(['envio_id'=>$model->id])
+                            ->asArray()->one();
                         return '';
                 },        
-//                'contentOptions' => function ($model, $key, $index, $column) {
-//                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
-//                    //return $service ? $service['calificacion'] : '-';  
-//                    $calificacion = $service['calificacion'];
-//                   if(($calificacion == 1) || ($calificacion == 2)){
-//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 4) || ($calificacion == 5)){
-//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 3)){ 
-//                        return ['class' => 'rating-static rating-'.$calificacion,
-//                            
-//                        ]; 
-//                   }
-//            },
                       'contentOptions' => function ($model, $key, $index, $column) {
-                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->one();
-                    //return $service ? $service['calificacion'] : '-';  
+                    $service = \app\models\Calificacion::find()->where(['mensajero_id'=>$model->mensajero_id])->andWhere(['envio_id'=>$model->id])->asArray()->one();
                     $calificacion = $service['calificacion'];
-//                   if(($calificacion == 1) || ($calificacion == 2)){
-//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 4) || ($calificacion == 5)){
-//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 3)){ 
-//                        return ['class' => 'rating-static rating-'.$calificacion,
-//                            
-//                        ]; 
-//                   }
                     if(!empty($calificacion)){
                         return ['class' => 'rating-static rating-'.$calificacion];
                     }
-//                   if(($calificacion == 1)){
-//                       
-//                           
-//                           ($calificacion == 2)){
-//                        return ['class' => 'alert alert-danger', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 4) || ($calificacion == 5)){
-//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-//                   }
-//                   else if(($calificacion == 3)){ 
-//                        return ['class' => 'rating-static rating-'.$calificacion,
-//                            
-//                        ]; 
-//                   }
+                    else{
+                        return '';
+                    }
             },
                 'filter'=>false        
             ],   
@@ -230,7 +215,7 @@ use kartik\editable\Editable;
                     
              ['class' => 'kartik\grid\ActionColumn',
                     'template'=>'{custom_view}',
-                    'header'=>'Calificar Mensajero',
+                    'header'=>'Calificar <br>Mensajero',
                     'hAlign' => 'center',
                     'vAlign' => 'middle',
                     'buttons' => 
@@ -242,7 +227,7 @@ use kartik\editable\Editable;
                                         ->andWhere(['envio_id'=>$model['id']])
                                         ->asArray()->one();
                                 if(empty($query)){  
-                                        return Html::a( '<i class="glyphicon glyphicon-certificate" style="color:white"></i>',
+                                        return Html::a( '<i class="glyphicon glyphicon-check" style="color:white"></i>',
                                                         ['/calificacion/create', 
                                                             'user_id'=>$model['user_id'],
                                                             'mensajero_id'=>$model['mensajero_id'],    
@@ -259,41 +244,41 @@ use kartik\editable\Editable;
                     ]
             ], 
                                 
-            [
-                'class'=>'kartik\grid\EditableColumn',  
-                'attribute'=>'favorito',
-                'header'=>'Mensajero Favorito',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-                'format'=>'raw',      
-                'value' => function($model, $key, $index, $column) {
-                    $service = \app\models\Favoritos::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->count();
-                    if($service >0){
-                        return "Mensajero Favorito";
-                    }
-                    else{
-                        return "-";
-                    }
-                },        
-                'contentOptions' => function ($model, $key, $index, $column) {
-                    $service = \app\models\Favoritos::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->count();
-                   if($service > 0){
-                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
-                   }
-                   else {
-                        return ['class' => 'alert alert-primary', 'style'=>'border-radius: 10px;'];                           
-                   }                   
-            }, 
-                'editableOptions' => [
-                    'header' => 'Favorito',
-                    'placement'=> 'left',  
-                    'format' => Editable::FORMAT_BUTTON,
-                    'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                    'editableValueOptions' => ['class' => 'text-success h4', 'style'=>'color: white'],
-                    'data' => ['SI' => 'SI', 'NO' => 'NO',]
-                ],  
-                'filter'=> false, 
-            ], 
+//            [
+//                'class'=>'kartik\grid\EditableColumn',  
+//                'attribute'=>'favorito',
+//                'header'=>'Mensajero <br>Favorito',
+//                'hAlign' => 'center',
+//                'vAlign' => 'middle',
+//                'format'=>'raw',      
+//                'value' => function($model, $key, $index, $column) {
+//                    $service = \app\models\Favoritos::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->count();
+//                    if($service >0){
+//                        return "Favorito";
+//                    }
+//                    else{
+//                        return "-";
+//                    }
+//                },        
+//                'contentOptions' => function ($model, $key, $index, $column) {
+//                    $service = \app\models\Favoritos::find()->where(['mensajero_id'=>$model->mensajero_id])->asArray()->count();
+//                   if($service > 0){
+//                        return ['class' => 'alert alert-success', 'style'=>'border-radius: 10px;'];                           
+//                   }
+//                   else {
+//                        return ['class' => 'alert alert-primary', 'style'=>'border-radius: 10px;'];                           
+//                   }                   
+//            }, 
+//                'editableOptions' => [
+//                    'header' => 'Favorito',
+//                    'placement'=> 'left',  
+//                    'format' => Editable::FORMAT_BUTTON,
+//                    'inputType' => Editable::INPUT_DROPDOWN_LIST,
+//                    'editableValueOptions' => ['class' => 'text-success h4', 'style'=>'color: white'],
+//                    'data' => ['SI' => 'SI', 'NO' => 'NO',]
+//                ],  
+//                'filter'=> false, 
+//            ], 
 
         ],          
                     

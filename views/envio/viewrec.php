@@ -25,6 +25,7 @@ use dosamigos\google\maps\layers\BicyclingLayer;
 $this->title = $model->direccion_origen;
 //$this->title = $model->id;
 $envio_id =$model->id;
+$modo_envio =$model->modo_envio;
 $this->params['breadcrumbs'][] = ['label' => 'Envios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -367,6 +368,14 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                         $ultimo_lugar = array_pop($lugares);    //Extraigo ultimo elemento de array
                         $detalle_distancia_envio = $primer_lugar.' - '.$ultimo_lugar;
 //                        print_r($detalle_distancia_envio);
+                        
+    // ************************** CALCULO DE TIEMPO ESTIMADO**********************************/
+                        $envio_id = $model->id;
+                        $model = new \app\models\Envio;
+                        $tiempo_estimado = $model->tiempoestimado($envio_id);
+    // ************************** FIN CALCULO DE TIEMPO APROXIMADO**********************************/    
+                        
+                        
     /*******************************************************************************************/                    
                         
                          //Distancia entre puntos:   
@@ -394,7 +403,7 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                             }
 
                         //Calculo de retornos entre puntos
-                            $resultados = \app\models\Destino::find()->where(['!=', 'retorno_destino_id', 0])->andWhere(['envio_id'=>$model->id])->asArray()->all();
+                            $resultados = \app\models\Destino::find()->where(['!=', 'retorno_destino_id', 0])->andWhere(['envio_id'=>$envio_id])->asArray()->all();
                             $valor_distancia_retornos = 0;
                             if(!empty($resultados)){
                                         foreach($resultados as $r){
@@ -424,7 +433,7 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                             }
 
                         //Calculo de retornos al inicio
-                            $resultados = \app\models\Destino::find()->where(['retorno_inicio'=> 1])->andWhere(['envio_id'=>$model->id])->asArray()->all();
+                            $resultados = \app\models\Destino::find()->where(['retorno_inicio'=> 1])->andWhere(['envio_id'=>$envio_id])->asArray()->all();
                             $valor_distancia_retorno_inicio = 0;
 //                            print_r($resultados);
                             if(!empty($resultados)){
@@ -432,8 +441,8 @@ if(!empty($destinos_completos)){ //Unicamente funciona cuando existe solo un ini
                                         foreach($resultados as $r){
                                             //  $latitud_origen  coordenada de inicio
                                             //  $longitud_origen coordenada de inicio
-
-                                        $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_destino])->one();
+                                        $id_retorno_origen = $r['id'];    
+                                        $coord_dest = \app\models\Destino::find()->select(['latitud', 'longitud'])->where(['id'=> $id_retorno_origen])->one();
                                             $lat_dest= $coord_dest['latitud'];    
                                             $long_dest= $coord_dest['longitud'];    
                                             $lugar_dest=$coord_dest['direccion_destino']; 
@@ -576,17 +585,10 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
     $id_usuario = Yii::$app->user->identity['id'];
     $query= app\models\Recarga::find()->where(['user_id'=>$id_usuario])->asArray()->one();
         $valor_recarga = $query['valor_recarga'];
-    
-    
-//    print_r($nombre);echo('<br>');
-//    print_r($direccion);echo('<br>');
-//    print_r($telefono);echo('<br>');
-//    print_r($cedula);echo('<br>');
-//    print_r($email);echo('<br>');
-//    print_r($valor_recarga);echo('<br>');
-    
+   
     
     if($valor_recarga > $valor_km){
+//        print_r($array_id); die();        
     ?>
     <div class="row">        
     <div class="col-lg-5  col-md-offset-3">
@@ -597,18 +599,23 @@ if(!empty($dist_origen_primer_punto) || !empty($dist_resto_puntos)){
                     <div class="row">
                             <center>   
                                 <div class="col-lg-6">
-                            <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
+                           <p> <?= Html::a( '<i class="glyphicon glyphicon-plus" style="color:white"></i>Aceptar y Continuar',
                                         ['envio/detalles', 
                                             //Datos para Factura:
+                                            //'envio_id'=>$model->id,
+                                            'envios'=>$array_id,
+                                            'envio_id'=>$envio_id,
+                                            'modo_envio'=>$modo_envio,
                                             'detalle_distancia_envio'=>$detalle_distancia_envio,
                                             'total_km'=>$total_km,
                                             'valor_km'=>$valor_km, 
-                                            'nombre'=>$nombre, 
-                                            'direccion'=>$direccion, 
-                                            'telefono'=>$telefono, 
-                                            'cedula'=>$cedula, 
-                                            'email'=>$email, 
-                                            'valor_recarga'=>$valor_recarga, 
+//                                            'nombre'=>$nombre, 
+//                                            'direccion'=>$direccion, 
+//                                            'telefono'=>$telefono, 
+//                                            'cedula'=>$cedula, 
+//                                            'email'=>$email, 
+//                                            'valor_recarga'=>$valor_recarga, 
+                                            'tiempo_estimado' =>$tiempo_estimado,
 
                                             //Datos para dibujar el Google Maps:                                    
                                             'dist_origen_primer_punto'=>$dist_origen_primer_punto,

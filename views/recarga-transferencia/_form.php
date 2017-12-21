@@ -12,19 +12,11 @@ $user_id = Yii::$app->user->identity['id'];
 ?>
 
 <div class="recarga-transferencia-form">
-
     <?php $form = ActiveForm::begin([
             'id' => 'recarga',
-//            'enableAjaxValidation' => true,
             'enableClientValidation'=>true,
-//            'enableAjaxValidation'=>true,
-//            'validateOnSubmit' => true,
-//            'validateOnBlur' => true,
-//            'validateOnChange' => true,
-//            'validationUrl'=> Url::toRoute('RecargaTransferencia/validation'),
             'options' => [ 'enctype' => 'multipart/form-data']
-    ]); ?>
-        
+    ]); ?>        
         <div class="panel panel-info">
             <div class="panel-heading">Ingrese el código de Promoción (opcional)</div>
             <div class="panel-body">
@@ -35,16 +27,11 @@ $user_id = Yii::$app->user->identity['id'];
 
     <?php 
     echo $form->field($model, 'doc_referencia')->widget(\kartik\widgets\FileInput::classname(), [
-//        'model' => $model,
-//        'name' => 'doc_referencia',
         'options' => ['multiple' => false],
         'pluginOptions' => [
-//            'previewFileType' => 'image',
+            'browseClass' => 'btn btn-warning',  
             'showUpload' => false,
             'showPreview' => false,
-//            'initialPreview'=> [
-//                '<img src="'.$model->path.'" class="file-preview-image">',
-//            ],
             'initialCaption'=> $model->doc_referencia,
         ],
     ])->hint("Debe adjuntar el documento de pago de transferencia para hacerla efectiva"); 
@@ -53,9 +40,8 @@ $user_id = Yii::$app->user->identity['id'];
     <?= $form->field($model, 'user_id')->hiddenInput(['value'=>$user_id])->label(false) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <center><?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg' : 'btn btn-warning btn-lg']) ?></center>
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>

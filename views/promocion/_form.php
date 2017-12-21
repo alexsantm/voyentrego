@@ -44,7 +44,7 @@ use kartik\date\DatePicker;
 </div><br><br>
 <div class="row">     
     <center><div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Registrar Promoción' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Registrar Promoción' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-warning']) ?>
     </div></center>
    
 

@@ -41,7 +41,7 @@ class DatosBancariosMensajero extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             [['tipo_transferencia'], 'string', 'max' => 20],
             [['fecha'], 'string'],
-            [['numero_cuenta', 'identificacion'], 'string', 'max' => 10],
+            [['numero_cuenta', 'identificacion','tipo_cuenta'], 'string', 'max' => 10],
             [['nombre_banco', 'email'], 'string', 'max' => 45],
             [['nombre_completo'], 'string', 'max' => 100],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],

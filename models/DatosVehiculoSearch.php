@@ -73,4 +73,39 @@ class DatosVehiculoSearch extends DatosVehiculo
 
         return $dataProvider;
     }
+    
+       public function searchsuperadmin($params)
+    {
+        $query = DatosVehiculo::find()->where(['user_id'=>NULL]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'anio' => $this->anio,
+            'responsable_user_id' => $this->responsable_user_id,
+            'estado_id' => $this->estado_id,
+        ]);
+
+        $query->andFilterWhere(['like', 'marca', $this->marca])
+            ->andFilterWhere(['like', 'modelo', $this->modelo])
+            ->andFilterWhere(['like', 'placa', $this->placa])
+            ->andFilterWhere(['like', 'fecha', $this->fecha]);
+
+        return $dataProvider;
+    }
 }

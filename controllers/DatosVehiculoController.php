@@ -35,10 +35,38 @@ class DatosVehiculoController extends Controller
      */
     public function actionIndex()
     {
+        $user_id = Yii::$app->user->identity['id'];
         $searchModel = new DatosVehiculoSearch();
+        $searchModel->user_id = $user_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+     public function actionIndexadminflota()
+    {
+        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new DatosVehiculoSearch();
+        $searchModel->responsable_user_id = $user_id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('indexadminflota', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+      public function actionIndexsuperadmin()
+    {
+//        $user_id = Yii::$app->user->identity['id'];
+        $searchModel = new DatosVehiculoSearch();
+        //$searchModel->responsable_user_id = $user_id;
+        $dataProvider = $searchModel->searchsuperadmin(Yii::$app->request->queryParams);
+
+        return $this->render('indexsuperadmin', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -77,6 +105,22 @@ class DatosVehiculoController extends Controller
             ]);
         }
     }
+        public function actionCreateadminflota()
+    {
+        $model = new DatosVehiculo();
+        $model->fecha= date("Y-m-d H:i");
+        $model->responsable_user_id= Yii::$app->user->identity['id'];
+        $model->estado_id= 5;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            return $this->renderAjax('createadminflota', [
+                'model' => $model,
+            ]);
+        }
+    }
 
     /**
      * Updates an existing DatosVehiculo model.
@@ -92,6 +136,33 @@ class DatosVehiculoController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+     public function actionUpdateadminflota($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('updateadminflota', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+      public function actionUpdatesuperadmin($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Yii::$app->request->referrer); 
+        } else {
+            return $this->renderAjax('updatesuperadmin', [
                 'model' => $model,
             ]);
         }

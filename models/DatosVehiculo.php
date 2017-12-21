@@ -36,7 +36,7 @@ class DatosVehiculo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'marca', 'modelo', 'placa', 'responsable_user_id', 'estado_id'], 'required'],
+            [['marca', 'modelo', 'placa', 'responsable_user_id', 'estado_id'], 'required'],
             [['user_id', 'anio', 'responsable_user_id', 'estado_id'], 'integer'],
             [['marca', 'modelo', 'fecha'], 'string', 'max' => 45],
             [['placa'], 'string', 'max' => 8],

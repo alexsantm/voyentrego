@@ -11,7 +11,7 @@ use dosamigos\ckeditor\CKEditor;
 <?php $id_usuario = Yii::$app->user->identity['id']; ?>
 
     <div class="col-lg-12">
-            <input id="searchInput" class="controls" type="text" placeholder="Ingrese una dirección">
+            <input id="searchInput" class="controls" type="text" placeholder="Ingrese una dirección destino (Ej. Parque la Carolina)" required>
             <div id="map"></div>
             <ul id="geoData">
                 <li>Full Address: <span id="location"></span></li>
@@ -24,13 +24,13 @@ use dosamigos\ckeditor\CKEditor;
 
 <div class="col-lg-12">
         <div class="geo-destino-form">
-            <?php $form = ActiveForm::begin(); ?>            
-                <div class="col-lg-6"><?= $form->field($model, 'ciudad_id')->dropDownList(ArrayHelper::map(app\models\Ciudad::find()->all(), 'id', 'ciudad'),  ['prompt' => '--Seleccione una Ciudad--'])->label('Ciudad')?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'direccion_destino')->textInput(['maxlength' => true]) ?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'destinatario')->textInput(['maxlength' => true]) ?></div>            
-                <div class="col-lg-6"><?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'tipo_envio_id')->dropDownList(ArrayHelper::map(app\models\TipoEnvio::find()->all(), 'id', 'tipo_envio'),  ['prompt' => '--Seleccione una Tipo de Envìo--'])->label('Tipo de Envio')?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'dimensiones_id')->dropDownList(ArrayHelper::map(app\models\Dimensiones::find()->all(), 'id', 'dimension'),  ['prompt' => '--Seleccione una Dimensión--'])->label('Dimensiones')?></div>            
+                <?php $form = ActiveForm::begin(); ?>        
+                <div class="col-lg-4"><?= $form->field($model, 'ciudad_id')->dropDownList(ArrayHelper::map(app\models\Ciudad::find()->all(), 'id', 'ciudad'),  ['prompt' => '--Seleccione una Ciudad--'])->label('Ciudad')?></div>
+                <div class="col-lg-4"><?= $form->field($model, 'direccion_destino')->textInput(['maxlength' => true]) ?></div>
+                <div class="col-lg-4"><?= $form->field($model, 'destinatario')->textInput(['maxlength' => true]) ?></div>            
+                <div class="col-lg-4"><?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?></div>
+                <div class="col-lg-4"><?= $form->field($model, 'tipo_envio_id')->dropDownList(ArrayHelper::map(app\models\TipoEnvio::find()->all(), 'id', 'tipo_envio'),  ['prompt' => '--Seleccione una Tipo de Envìo--'])->label('Tipo de Envio')?></div>
+                <div class="col-lg-4"><?= $form->field($model, 'dimensiones_id')->dropDownList(ArrayHelper::map(app\models\Dimensiones::find()->all(), 'id', 'dimension'),  ['prompt' => '--Seleccione una Dimensión--'])->label('Dimensiones')?></div>            
                 
                 <!--<input type="checkbox" id="manual" name="manual" value="0">¿Retorno?<br>-->
 <!--                <form action="">
@@ -40,12 +40,15 @@ use dosamigos\ckeditor\CKEditor;
                 <div class="col-lg-12">
                     <fieldset class="retorno">
                       <legend class="retorno_legend">Retorno</legend>
-                            <div class="col-lg-6"><?= $form->field($model, 'destino_opc')->radioList(array('1'=>'Elegir Destino',2=>'Retorna al Origen'))->label(false); ?></div>                                
-                            <div class="col-lg-6"><?= $form->field($model, 'retorno_destino_id')->dropDownList(ArrayHelper::map(app\models\Destino::find()
+                      <p>Seleccione una opción:</p>
+                            <!--<div class="col-lg-6"><?php // $form->field($model, 'destino_opc')->radioList(array('1'=>'Elegir Destino','2'=>'Retorna al Origen', '3'=>'Sin retornos'))->label(false); ?></div>-->                                
+                            <?php $model->destino_opc = 1; ?> 
+                            <div class="col-lg-7"><?= $form->field($model, 'destino_opc')->radioList(array('1'=>'Sin retornos', '2'=>'Elegir Destino','3'=>'Retorna al Origen', ))->label(false); ?></div>                                
+                            <div class="col-lg-5"><?= $form->field($model, 'retorno_destino_id')->dropDownList(ArrayHelper::map(app\models\Destino::find()
                                     ->where(['envio_id'=>$id_envio])
                                     ->all(), 'id', 'direccion_destino'), 
                                     ['prompt' => '--Escoga un lugar de retorno--'])->label('Destino de Retorno');?>
-                                    <?= $form->field($model, 'retorno_inicio')->checkbox(['uncheck' => 'NO', 'checked' => 1]); ?>
+                                    <?= $form->field($model, 'retorno_inicio')->checkbox(['uncheck' => 'NO', 'checked' => 1])->label (false); ?>
                             </div>                        
                     </fieldset>                   
                 </div>
@@ -68,7 +71,7 @@ use dosamigos\ckeditor\CKEditor;
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <center><?= Html::submitButton($model->isNewRecord ? 'Registrar Destino' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-primary']) ?></center>
+                        <center><?= Html::submitButton($model->isNewRecord ? 'Registrar Destino' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg' : 'btn btn-primary']) ?></center>
                     </div>
                 </div>
             </div> 
@@ -77,7 +80,9 @@ use dosamigos\ckeditor\CKEditor;
 </div>    
 
 <?php $this->registerJsFile('@web/js/mapa.js',['depends' => [\yii\web\JqueryAsset::className()]]);?>
+ 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpBQgBTtXqWdWIbJDvKrqO-g5_CvSlaS8&libraries=places&callback=initMap" async defer></script>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>-->
 
 <style>
     #map {
@@ -131,14 +136,36 @@ legend.retorno_legend {
 </style>  
 
 <script>
+//Validacion de Dirección    
+    $('form').submit(function () {
+    // Get the Login Name value and trim it
+    var direccion = $.trim($('#searchInput').val());
+
+    // Check if empty of not
+    if (direccion  === '') {
+        alert('Por favor ingrese una direccion Destino.');
+        return false;
+    }
+});
+</script>    
+
+
+<script>
 $(document).ready(function () {
      $('input[name="Destino[destino_opc]"]').change(function () {
          if ($.trim($(this).val()) == "1") {
+               $('.field-destino-retorno_inicio').hide();
+               $('.field-destino-retorno_destino_id').hide();
+               $('#destino-retorno_destino_id').val('');
+               $('#destino-retorno_inicio').val('');             
+          }
+          //else {
+          else if ($.trim($(this).val()) == "2") {    
               $('.field-destino-retorno_destino_id').show();
               $('.field-destino-retorno_inicio').hide();
-              $('#destino-retorno_inicio').attr('checked', false);              
+              $('#destino-retorno_inicio').attr('checked', false);       
           }
-          else {
+          else if ($.trim($(this).val()) == "3") {    
                $('.field-destino-retorno_inicio').show();
                $('.field-destino-retorno_destino_id').hide();
                $('#destino-retorno_destino_id').val('');

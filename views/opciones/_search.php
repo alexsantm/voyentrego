@@ -19,6 +19,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'radio') ?>
 
+    <?= $form->field($model, 'dia_pago_mensajeros') ?>
+
+    <?= $form->field($model, 'envios_tomados_por_dia') ?>
+
+    <?= $form->field($model, 'foto_promocion') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>

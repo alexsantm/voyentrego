@@ -35,18 +35,20 @@ $user = Yii::$app->user->identity;
                             </a>    
                         </div>
                         <div id="contenedor" class="col-lg-6">
-                             <section class=" asesoria">
-                                <div class="col-lg-4  iconos"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></div>
-                                <div class="col-lg-8">
-                                        <h2 class="texto_tomate">ASESORIA</h2>
-                                        <span class="texto_tomate">Preguntas Frecuentes</span><br>
-                                        <span class="texto_tomate">Calificación de mensajeros</span><br>
-                                        <span class="texto_tomate">Reportar una queja</span><br>
-                                </div>
-                            </section>
+                            <a href="<?= Url::to(['site/soporte']) ?>">
+                                <section class=" asesoria">
+                                   <div class="col-lg-4  iconos"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></div>
+                                   <div class="col-lg-8">
+                                           <h2 class="texto_tomate">ASESORIA</h2>
+                                           <span class="texto_tomate">Preguntas Frecuentes</span><br>
+                                           <span class="texto_tomate">Calificación de mensajeros</span><br>
+                                           <span class="texto_tomate">Reportar una queja</span><br>
+                                   </div>
+                               </section>
+                            </a> 
                         </div>
                         <div id="contenedor" class=" col-lg-6">
-                            <a href="<?= Url::to(['user/perfil#recarga']) ?>">
+                            <a href="<?= Url::to(['recarga/detalles']) ?>">
                                 <section class="saldo">
                                     <div class="col-lg-4 iconos"><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span></div>
                                     <div class="col-lg-8">
@@ -58,41 +60,41 @@ $user = Yii::$app->user->identity;
                             </a>     
                         </div>
                         <div id="contenedor" class="col-lg-6">
-                             <section class="cuenta">
-                                <div class="col-lg-4 iconos"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
-                                <div class="col-lg-8">
-                                    <h2 class="texto_tomate">MI CUENTA</h2>
-                                    <span class="texto_tomate">Mi perfil</span><br>
-                                    <span class="texto_tomate">Cambio Contraseña</span><br>
-                                    <span class="texto_tomate">Empresas</span>
-                                </div>
-                            </section>
+                            <a href="<?= Url::to(['user/profile']) ?>">
+                                <section class="cuenta">
+                                   <div class="col-lg-4 iconos"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+                                   <div class="col-lg-8">
+                                       <h2 class="texto_tomate">MI CUENTA</h2>
+                                       <span class="texto_tomate">Mi perfil</span><br>
+                                       <span class="texto_tomate">Cambio Contraseña</span><br>
+                                       <span class="texto_tomate">Empresas</span>
+                                   </div>
+                               </section>
+                            </a>    
                         </div>                
                     </div>
             
                     <div class=" row col-lg-4">
-                        <!--<center>-->
-                            <!--<div class="promociones">-->
                                  <?php 
-//                                $fecha_actual = date("Y-m-d"); 
-//                                $model = new \app\models\Descuento;
-////                                 if ($model->check_in_range($fecha_inicio, $fecha_fin, $fecha_actual)) {
-////                                     print_r("si esta dentro del rango");
-////                                 }
-////                                 else{
-////                                     print_r("no esta dentro del rango");
-////                                 }
-//                                 if((!empty($foto_promocion)) && ($model->check_in_range($fecha_inicio, $fecha_fin, $fecha_actual))){
-//                                        echo Html::img('@web/images/promociones/'.$foto_promocion, ['style'=>'width:100%; height:357px;']);
-//                                    }
-//                                    else{
-//                                        echo Html::img('@web/images/promociones/no_promocion.png', ['style'=>'width:100%; height:357px;']);
-//                                    }
-                                    
-                                    echo Html::img('@web/images/promociones/no_promocion.png', ['style'=>'width:100%; height:357px;']);
+                                 //FOTOGRAFIA DE PROMOCION
+                                $model = new \app\models\Promocion;
+                                $fecha_actual = date("Y-m-d"); 
+                                $consulta_foto = \app\models\Opciones::find()->select(['foto_promocion'])->asArray()->one();
+                                $foto_promocion = $consulta_foto['foto_promocion'];
+                                
+                                $query = \app\models\Promocion::find()->select(['fecha_inicio' , 'fecha_fin'])
+                                        ->orderBy(['id'=>SORT_DESC])
+                                        ->limit(1)
+                                        ->asArray()->one();
+                                $fecha_inicio = $query['fecha_inicio'];
+                                $fecha_fin = $query['fecha_fin'];
+                                 if((!empty($foto_promocion)) && ($model->check_in_range($fecha_inicio, $fecha_fin, $fecha_actual))){
+                                        echo Html::img('@web/images/promociones/'.$foto_promocion, ['style'=>'width:100%; height:357px;']);
+                                    }
+                                    else{
+                                        echo Html::img('@web/images/promociones/no_promocion.png', ['style'=>'width:100%; height:357px;']);
+                                    }
                                 ?>
-                            <!--</div>-->
-                        <!--</center>-->    
                     </div>            
         </div>
         
@@ -117,7 +119,7 @@ $user = Yii::$app->user->identity;
                     'columns' => [
             //            ['class' => 'yii\grid\SerialColumn'],
 
-//                        'id',
+                        'id',
 //                        'ciudad_id',
                         [
                             'label' => "Ciudad",
@@ -151,7 +153,9 @@ $user = Yii::$app->user->identity;
                             'value' => function($model, $key, $index, $column) {
                                 $envio_id = $model->id;
                                 $fechaactual = date("Y-m-d");
-                                $destino_count = app\models\Destino::find()->where(['envio_id'=>$envio_id])->andWhere(['fecha_registro'=>$fechaactual])->asArray()->count();
+                                $destino_count = app\models\Destino::find()->where(['envio_id'=>$envio_id])
+//                                        ->andWhere(['fecha_registro'=>$fechaactual])
+                                        ->asArray()->count();
                                 return $destino_count;
                                 //return $service ? $service->estado : '-';
                             },
@@ -182,7 +186,7 @@ $user = Yii::$app->user->identity;
     }
     else{
     ?>
-          <div class="alert alert-info"><center><h4>No existen envíos para el dia de hoy</h4></center></div>
+          <div style="background-color: #FF5515; color:white; padding:10px 10px;"><center><h3>No existen envíos para el dia de hoy</h3></center></div>
     <?php
     }    
     ?>      
@@ -222,10 +226,14 @@ $user = Yii::$app->user->identity;
                   text-align: center;
               }
     }
-
-    @media (max-width: 765px) {
+    
+    @media (max-width: 768px) {
         .historial, .asesoria, .saldo, .cuenta {
             width: 100%;
         }
+           #contenedor {
+              /*IMPORTANTE*/
+                  display: block;
+              }
     }
 </style>
